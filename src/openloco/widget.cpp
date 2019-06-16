@@ -59,7 +59,7 @@ namespace openloco::ui::widget
             return;
         }
 
-        if (window->min_height == window->max_height || window->min_width == window->max_width)
+        if (window->min_height == window->max_height && window->min_width == window->max_width)
         {
             return;
         }
