@@ -66,7 +66,7 @@ namespace openloco::ui::widget
 
         int16_t x = widget->right + window->x - 18;
         int16_t y = widget->bottom + window->y - 18;
-        uint32_t image = 0x20000000 | 2305 | (colour << 19);
+        uint32_t image = gfx::recolour(2305, colour);
         gfx::draw_image(dpi, x, y, image);
     }
 
@@ -147,11 +147,11 @@ namespace openloco::ui::widget
             uint32_t image;
             if (window->flags & window_flags::flag_11)
             {
-                image = 0x20000000 | 2322 | ((colour & 0x7F) << 19);
+                image = gfx::recolour(2322, colour);
             }
             else
             {
-                image = 0x20000000 | 2323 | ((colour & 0x7F) << 19);
+                image = gfx::recolour(2323, colour);
             }
             gfx::draw_image(clipped, 0, 0, image);
         }

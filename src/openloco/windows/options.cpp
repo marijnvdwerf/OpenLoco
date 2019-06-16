@@ -922,10 +922,10 @@ namespace openloco::ui::options
 
             gfx::draw_string_494B3F(*dpi, w->x + 183, w->y + w->widgets[widx::volume].top + 7, 0, string_ids::volume, nullptr);
 
-            gfx::draw_image(dpi, w->x + w->widgets[widx::volume].left, w->y + w->widgets[widx::volume].top, 0x20000000 | (w->colours[1] << 19) | image_ids::volume_slider_track);
+            gfx::draw_image(dpi, w->x + w->widgets[widx::volume].left, w->y + w->widgets[widx::volume].top, gfx::recolour(image_ids::volume_slider_track, w->colours[1]));
 
             int16_t x = 90 + (config::get().volume / 32);
-            gfx::draw_image(dpi, w->x + w->widgets[widx::volume].left + x, w->y + w->widgets[widx::volume].top, 0x20000000 | (w->colours[1] << 19) | image_ids::volume_slider_thumb);
+            gfx::draw_image(dpi, w->x + w->widgets[widx::volume].left + x, w->y + w->widgets[widx::volume].top, gfx::recolour(image_ids::volume_slider_thumb, w->colours[1]));
         }
 
         static void on_mouse_up(window* w, widget_index wi)

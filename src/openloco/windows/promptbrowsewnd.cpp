@@ -509,7 +509,7 @@ namespace openloco::ui::prompt_browse
         else
         {
             // Randomly generated landscape
-            auto imageId = image_ids::random_map_watermark | (window.colours[1] << 19) | 0x20000000;
+            auto imageId = gfx::recolour(image_ids::random_map_watermark, window.colours[1]);
             gfx::draw_image(&dpi, x, y, imageId);
             gfx::point_t origin = { (int16_t)(x + 64), (int16_t)(y + 60) };
             gfx::draw_string_centred_wrapped(&dpi, &origin, 128, 0, string_ids::randomly_generated_landscape);
