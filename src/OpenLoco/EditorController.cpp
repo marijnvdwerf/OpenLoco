@@ -133,7 +133,7 @@ namespace OpenLoco::EditorController
         Gfx::render();
 
         // blocking
-        auto result = PromptBrowse::open(PromptBrowse::browse_type::save, path, "*.SC5", title);
+        auto result = PromptBrowse::open(PromptBrowse::browse_type::save, path, S5::filterSC5, title);
 
         Audio::unpauseSound();
         call(0x004072EC);
@@ -252,19 +252,17 @@ namespace OpenLoco::EditorController
                 call(0x0046F910);
 
                 auto path = fs::path(scenarioFilename.get());
-                path.replace_extension(".SC5");
+                path.replace_extension(S5::extensionSC5);
                 strncpy(activeSavePath, path.u8string().c_str(), 257); // Or 256?
-                int eax = 2;
+                S5::SaveFlags saveFlags = S5::SaveFlags::scenario;
                 if (Config::get().flags & Config::flags::export_objects_with_saves)
                 {
-                    eax |= 1;
+                    saveFlags |= S5::SaveFlags::packCustomObjects;
                 }
 
-                registers regs;
-                regs.eax = eax;
-                auto result = call(0x00441C26, regs);
+                bool success = save(path, saveFlags);
 
-                if (result & (1 << 8))
+                if (!success)
                 {
                     showError(StringIds::str_1711);
                     _editorStep = Step::scenarioOptions;
