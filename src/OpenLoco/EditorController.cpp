@@ -60,9 +60,9 @@ namespace OpenLoco::EditorController
     static void sub_440165()
     {
         S5::Options& options = S5::getOptions();
-        options.scenarioText.type = 0xFF;
+        //        options.scenarioText.type = 0xFF;
 
-        auto obj = ObjectManager::get<scenario_text_object>();
+        auto obj = ObjectManager::get<ScenarioTextObject>();
         if (obj != nullptr)
         {
             // TODO: copy text object string + header
@@ -93,8 +93,8 @@ namespace OpenLoco::EditorController
         options.objectiveTimeLimitYears = objectiveTimeLimitYears;
 
         // TODO: copy object headers
-        options.objectiveDeliveredCargo = ObjectManager::header();
-        options.currency = ObjectManager::header();
+        options.objectiveDeliveredCargo = ObjectHeader();
+        options.currency = ObjectHeader();
     }
 
     // 0x0043EE25
@@ -218,11 +218,11 @@ namespace OpenLoco::EditorController
                 }
 
                 int eax = S5::getOptions().objectiveDeliveredCargoType;
-                if (ObjectManager::get<cargo_object>(eax) == nullptr)
+                if (ObjectManager::get<CargoObject>(eax) == nullptr)
                 {
                     for (size_t i = 0; i < ObjectManager::getMaxObjects(object_type::cargo); i++)
                     {
-                        if (ObjectManager::get<cargo_object>(i) != nullptr)
+                        if (ObjectManager::get<CargoObject>(i) != nullptr)
                         {
                             S5::getOptions().objectiveDeliveredCargoType = static_cast<uint8_t>(i);
                             break;
@@ -254,13 +254,13 @@ namespace OpenLoco::EditorController
                 auto path = fs::path(scenarioFilename.get());
                 path.replace_extension(S5::extensionSC5);
                 strncpy(activeSavePath, path.u8string().c_str(), 257); // Or 256?
-                S5::SaveFlags saveFlags = S5::SaveFlags::scenario;
+                uint32_t saveFlags = S5::SaveFlags::scenario;
                 if (Config::get().flags & Config::flags::export_objects_with_saves)
                 {
                     saveFlags |= S5::SaveFlags::packCustomObjects;
                 }
 
-                bool success = save(path, saveFlags);
+                bool success = S5::save(path, saveFlags);
 
                 if (!success)
                 {

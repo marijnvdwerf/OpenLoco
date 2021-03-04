@@ -250,13 +250,14 @@ namespace OpenLoco::S5
         char scenarioName[64];            // 0x0002BC (0x005260D4)
         char scenarioDetails[256];        // 0x0002FC (0x00526114)
         uint8_t pad_03FC[0xB96C - 0x3FC]; // 0x0003FC
-        Company companies[15];            // 0x00B96C (0x00531784)
-        Town towns[80];                   // 0x092444 (0x005B825C)
-        Industry industries[128];         // 0x09E744 (0x005C455C)
-        Station stations[1024];           // 0x0C10C4 (0x005E6EDC)
-        Entity entities[20000];           // 0x1B58C4 (0x006DB6DC)
-        Animation animations[8192];       // 0x4268C4 (0x0094C6DC)
-        uint8_t pad_4328C4[0x6DD80];      // 0x4328C4 (0x009586DC)
+
+        Company companies[15];       // 0x00B96C (0x00531784)
+        Town towns[80];              // 0x092444 (0x005B825C)
+        Industry industries[128];    // 0x09E744 (0x005C455C)
+        Station stations[1024];      // 0x0C10C4 (0x005E6EDC)
+        Entity entities[20000];      // 0x1B58C4 (0x006DB6DC)
+        Animation animations[8192];  // 0x4268C4 (0x0094C6DC)
+        uint8_t pad_4328C4[0x6DD80]; // 0x4328C4 (0x009586DC)
     };
 #pragma pack(pop)
     static_assert(sizeof(GameState) == 0x4A0644);
