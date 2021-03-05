@@ -15,4 +15,7 @@ jobs:
       - shell: bash
         run: xcversion install 9.4.1
         env:
+          # Pass non-empty values (https://github.com/xcpretty/xcode-install/issues/395#issuecomment-772979886)
+          XCODE_INSTALL_USER: "User"
+          XCODE_INSTALL_PASSWORD: "Password" 
           FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
