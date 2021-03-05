@@ -10,8 +10,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Build OpenLoco
-        shell: bash
-        run: |
-          gem install xcode-install
-          xcversion list
+      - shell: bash
+        run: gem install xcode-install
+      - shell: bash
+        run: xcversion list
+      - shell: bash
+        run: xcversion install 9.4.1
+          
+          
