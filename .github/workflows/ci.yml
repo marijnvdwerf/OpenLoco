@@ -14,3 +14,4 @@ jobs:
         shell: bash
         run: |
           gem install xcode-install
+          xcversion list
