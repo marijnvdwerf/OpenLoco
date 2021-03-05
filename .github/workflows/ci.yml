@@ -16,5 +16,8 @@ jobs:
         run: xcversion list
       - shell: bash
         run: xcversion install 9.4.1
+        env:
+          XCODE_INSTALL_USER: ${{ secrets.APPLE_USER }}
+          XCODE_INSTALL_PASSWORD: ${{ secrets.APPLE_PASS }}
           
           
