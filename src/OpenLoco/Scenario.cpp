@@ -208,7 +208,7 @@ namespace OpenLoco::Scenario
             filename = reinterpret_cast<const char*>(-1);
 
         registers regs;
-        regs.ebx = reinterpret_cast<int32_t>(filename);
+        regs.ebx = (loco_ptr)filename;
         call(0x0044400C, regs);
     }
 

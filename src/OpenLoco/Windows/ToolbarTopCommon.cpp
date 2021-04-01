@@ -193,7 +193,7 @@ namespace OpenLoco::Ui::Windows::ToolbarTop::Common
     {
         // Load objects.
         registers regs;
-        regs.edi = (uint32_t)&available_objects[0];
+        regs.edi = (loco_ptr)&available_objects[0];
         call(0x00478265, regs);
 
         // Sanity check: any objects available?

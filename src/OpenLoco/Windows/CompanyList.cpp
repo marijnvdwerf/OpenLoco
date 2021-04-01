@@ -1705,8 +1705,8 @@ namespace OpenLoco::Ui::Windows::CompanyList
         static void drawGraph(window* self, Gfx::drawpixelinfo_t* dpi)
         {
             registers regs;
-            regs.esi = (uint32_t)self;
-            regs.edi = (uint32_t)dpi;
+            regs.esi = (loco_ptr)self;
+            regs.edi = (loco_ptr)dpi;
             call(0x004CF824, regs);
         }
 

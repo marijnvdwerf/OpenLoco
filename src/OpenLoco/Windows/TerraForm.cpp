@@ -304,8 +304,8 @@ namespace OpenLoco::Ui::Windows::Terraform
             {
                 registers regs;
                 regs.edx = widgetIndex;
-                regs.esi = (uint32_t)self;
-                regs.edi = (int32_t)&self->widgets[widgetIndex];
+                regs.esi = (loco_ptr)self;
+                regs.edi = (loco_ptr)&self->widgets.get()[widgetIndex];
                 call(0x004BBD59, regs);
             }
         }
@@ -409,7 +409,7 @@ namespace OpenLoco::Ui::Windows::Terraform
         static void onToolUpdate(window& self, const widget_index widgetIndex, const int16_t x, const int16_t y)
         {
             registers regs;
-            regs.esi = uint32_t(&self);
+            regs.esi = (loco_ptr)&self;
             regs.dx = widgetIndex;
             regs.ax = x;
             regs.bx = y;
@@ -420,7 +420,7 @@ namespace OpenLoco::Ui::Windows::Terraform
         static void onToolDown(window& self, const widget_index widgetIndex, const int16_t x, const int16_t y)
         {
             registers regs;
-            regs.esi = uint32_t(&self);
+            regs.esi = (loco_ptr)&self;
             regs.dx = widgetIndex;
             regs.ax = x;
             regs.bx = y;
@@ -821,7 +821,7 @@ namespace OpenLoco::Ui::Windows::Terraform
         static void onToolUpdate(window& self, const widget_index widgetIndex, const int16_t x, const int16_t y)
         {
             registers regs;
-            regs.esi = int32_t(&self);
+            regs.esi = (loco_ptr)&self;
             regs.dx = widgetIndex;
             regs.ax = x;
             regs.bx = y;
@@ -1435,7 +1435,7 @@ namespace OpenLoco::Ui::Windows::Terraform
         static void onToolUpdate(window& self, const widget_index widgetIndex, const int16_t x, const int16_t y)
         {
             registers regs;
-            regs.esi = int32_t(&self);
+            regs.esi = (loco_ptr)&self;
             regs.dx = widgetIndex;
             regs.ax = x;
             regs.bx = y;
@@ -1446,7 +1446,7 @@ namespace OpenLoco::Ui::Windows::Terraform
         static void onToolDown(window& self, const widget_index widgetIndex, const int16_t x, const int16_t y)
         {
             registers regs;
-            regs.esi = int32_t(&self);
+            regs.esi = (loco_ptr)&self;
             regs.dx = widgetIndex;
             regs.ax = x;
             regs.bx = y;
@@ -1796,7 +1796,7 @@ namespace OpenLoco::Ui::Windows::Terraform
         static void onToolUpdate(window& self, const widget_index widgetIndex, const int16_t x, const int16_t y)
         {
             registers regs;
-            regs.esi = int32_t(&self);
+            regs.esi = (loco_ptr)&self;
             regs.dx = widgetIndex;
             regs.ax = x;
             regs.bx = y;
@@ -1807,7 +1807,7 @@ namespace OpenLoco::Ui::Windows::Terraform
         static void onToolDown(window& self, const widget_index widgetIndex, const int16_t x, const int16_t y)
         {
             registers regs;
-            regs.esi = int32_t(&self);
+            regs.esi = (loco_ptr)&self;
             regs.dx = widgetIndex;
             regs.ax = x;
             regs.bx = y;

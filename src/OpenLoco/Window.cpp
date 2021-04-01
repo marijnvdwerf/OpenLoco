@@ -404,7 +404,7 @@ namespace OpenLoco::Ui
     void window::invalidatePressedImageButtons()
     {
         registers regs;
-        regs.esi = (int32_t)this;
+        regs.esi = (loco_ptr)this;
         call(0x004C99B9, regs);
     }
 
@@ -517,7 +517,7 @@ namespace OpenLoco::Ui
     {
         registers regs;
         regs.eax = (int32_t)_disabled_widgets;
-        regs.esi = (int32_t)this;
+        regs.esi = (loco_ptr)this;
         call(0x004CC7CB, regs);
     }
 
@@ -743,7 +743,7 @@ namespace OpenLoco::Ui
     void window::viewportRotateRight()
     {
         registers regs;
-        regs.esi = (uintptr_t)this;
+        regs.esi = (loco_ptr)this;
         call(0x0045F04F, regs);
     }
 
@@ -751,7 +751,7 @@ namespace OpenLoco::Ui
     void window::viewportRotateLeft()
     {
         registers regs;
-        regs.esi = (uintptr_t)this;
+        regs.esi = (loco_ptr)this;
         call(0x0045F0ED, regs);
     }
 
@@ -900,7 +900,7 @@ namespace OpenLoco::Ui
         if (isInteropEvent(event_handlers->on_close))
         {
             registers regs;
-            regs.esi = (int32_t)this;
+            regs.esi = (loco_ptr)this;
             call((uint32_t)this->event_handlers->on_close, regs);
             return;
         }
@@ -980,7 +980,7 @@ namespace OpenLoco::Ui
         if (isInteropEvent(event_handlers->on_tool_update))
         {
             registers regs;
-            regs.esi = (int32_t)this;
+            regs.esi = (loco_ptr)this;
             regs.dx = widget_index;
             regs.ax = xPos;
             regs.bx = yPos;
@@ -1121,7 +1121,7 @@ namespace OpenLoco::Ui
         {
             registers regs;
             regs.edx = widgetIndex;
-            regs.esi = (uint32_t)this;
+            regs.esi = (loco_ptr)this;
 
             // Not sure if this is used
             regs.edi = (uint32_t) & this->widgets[widgetIndex];
@@ -1232,7 +1232,7 @@ namespace OpenLoco::Ui
         {
             registers regs;
             regs.ax = scroll_index;
-            regs.esi = (int32_t)this;
+            regs.esi = (loco_ptr)this;
             regs.cx = xPos;
             regs.dx = yPos;
             call((uint32_t)this->event_handlers->scroll_mouse_down, regs);
@@ -1251,7 +1251,7 @@ namespace OpenLoco::Ui
         {
             registers regs;
             regs.ax = scroll_index;
-            regs.esi = (int32_t)this;
+            regs.esi = (loco_ptr)this;
             regs.cx = xPos;
             regs.dx = yPos;
             call((uint32_t)this->event_handlers->scroll_mouse_drag, regs);
@@ -1270,7 +1270,7 @@ namespace OpenLoco::Ui
         {
             registers regs;
             regs.ax = scroll_index;
-            regs.esi = (int32_t)this;
+            regs.esi = (loco_ptr)this;
             regs.cx = xPos;
             regs.dx = yPos;
             call((uint32_t)this->event_handlers->scroll_mouse_over, regs);
@@ -1289,7 +1289,7 @@ namespace OpenLoco::Ui
         {
             registers regs;
             regs.dx = caller;
-            regs.esi = (int32_t)this;
+            regs.esi = (loco_ptr)this;
             regs.cl = 1;
             regs.edi = (uintptr_t)buffer;
             call((uintptr_t)this->event_handlers->text_input, regs);
@@ -1346,7 +1346,7 @@ namespace OpenLoco::Ui
             registers regs;
             regs.cx = xPos;
             regs.dx = yPos;
-            regs.esi = (int32_t)this;
+            regs.esi = (loco_ptr)this;
             call(reinterpret_cast<int32_t>(this->event_handlers->on_move), regs);
         }
         this->event_handlers->on_move(*this, xPos, yPos);
@@ -1360,7 +1360,7 @@ namespace OpenLoco::Ui
         if (isInteropEvent(event_handlers->prepare_draw))
         {
             registers regs;
-            regs.esi = (int32_t)this;
+            regs.esi = (loco_ptr)this;
             call((int32_t)this->event_handlers->prepare_draw, regs);
             return;
         }
@@ -1376,8 +1376,8 @@ namespace OpenLoco::Ui
         if (isInteropEvent(this->event_handlers->draw))
         {
             registers regs;
-            regs.esi = (int32_t)this;
-            regs.edi = (int32_t)dpi;
+            regs.esi = (loco_ptr)this;
+            regs.edi = (loco_ptr)dpi;
             call((int32_t)this->event_handlers->draw, regs);
             return;
         }
@@ -1394,8 +1394,8 @@ namespace OpenLoco::Ui
         {
             registers regs;
             regs.ax = scrollIndex;
-            regs.esi = (int32_t)this;
-            regs.edi = (int32_t)dpi;
+            regs.esi = (loco_ptr)this;
+            regs.edi = (loco_ptr)dpi;
             call((int32_t)event_handlers->draw_scroll, regs);
             return;
         }

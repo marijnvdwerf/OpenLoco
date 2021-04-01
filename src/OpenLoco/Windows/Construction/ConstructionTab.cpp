@@ -126,7 +126,7 @@ namespace OpenLoco::Ui::Windows::Construction::Construction
     {
         registers regs;
         regs.edx = widgetIndex;
-        regs.esi = (int32_t)self;
+        regs.esi = (loco_ptr)self;
         call(0x0049F92D, regs);
     }
 
@@ -135,7 +135,7 @@ namespace OpenLoco::Ui::Windows::Construction::Construction
     {
         registers regs;
         regs.edx = widgetIndex;
-        regs.esi = (int32_t)self;
+        regs.esi = (loco_ptr)self;
         call(0x004A0121, regs);
     }
 
@@ -1616,7 +1616,7 @@ namespace OpenLoco::Ui::Windows::Construction::Construction
     static void onToolUpdate(window& self, const widget_index widgetIndex, const int16_t x, const int16_t y)
     {
         registers regs;
-        regs.esi = (int32_t)&self;
+        regs.esi = (loco_ptr)&self;
         regs.dx = widgetIndex;
         regs.ax = x;
         regs.bx = y;

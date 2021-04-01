@@ -71,7 +71,7 @@ namespace OpenLoco::Vehicles
     int32_t VehicleBody::update()
     {
         registers regs;
-        regs.esi = (int32_t)this;
+        regs.esi = (loco_ptr)this;
 
         if (mode == TransportMode::air || mode == TransportMode::water)
         {

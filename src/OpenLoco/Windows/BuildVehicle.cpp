@@ -386,7 +386,7 @@ namespace OpenLoco::Ui::BuildVehicle
                 registers backup = regs;
                 auto window = open(regs.eax, regs.eax);
                 regs = backup;
-                regs.esi = (int32_t)window;
+                regs.esi = (loco_ptr)window;
                 return 0;
             });
     }

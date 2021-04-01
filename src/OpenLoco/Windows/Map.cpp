@@ -216,7 +216,7 @@ namespace OpenLoco::Ui::Windows::Map
     static void sub_46C544(window* self)
     {
         registers regs;
-        regs.esi = (int32_t)self;
+        regs.esi = (loco_ptr)self;
         call(0x0046C544, regs);
     }
 

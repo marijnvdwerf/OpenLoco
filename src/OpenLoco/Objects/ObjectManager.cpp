@@ -387,7 +387,7 @@ namespace OpenLoco::ObjectManager
     void getScenarioText(ObjectHeader& object)
     {
         registers regs;
-        regs.ebp = reinterpret_cast<int32_t>(&object);
+        regs.ebp = (loco_ptr)&object;
         call(0x0047176D, regs);
     }
 
@@ -474,7 +474,7 @@ namespace OpenLoco::ObjectManager
 
                 registers regs;
                 regs.al = static_cast<uint8_t>(proc);
-                regs.esi = reinterpret_cast<uint32_t>(obj);
+                regs.esi = (loco_ptr)obj;
                 return (call(objectProc, regs) & X86_FLAG_CARRY) != 0;
             }
         }

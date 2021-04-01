@@ -687,7 +687,7 @@ namespace OpenLoco::Ui::Windows::TownList
         static void onToolUpdate(window& self, const widget_index widgetIndex, const int16_t x, const int16_t y)
         {
             registers regs;
-            regs.esi = (int32_t)&self;
+            regs.esi = (loco_ptr)&self;
             regs.dx = widgetIndex;
             regs.ax = x;
             regs.bx = y;
@@ -698,7 +698,7 @@ namespace OpenLoco::Ui::Windows::TownList
         static void onToolDown(window& self, const widget_index widgetIndex, const int16_t x, const int16_t y)
         {
             registers regs;
-            regs.esi = (int32_t)&self;
+            regs.esi = (loco_ptr)&self;
             regs.dx = widgetIndex;
             regs.ax = x;
             regs.bx = y;
@@ -709,8 +709,8 @@ namespace OpenLoco::Ui::Windows::TownList
         static void populateTownSizeSelect(window* self, widget_t* widget)
         {
             registers regs;
-            regs.edi = (int32_t)widget;
-            regs.esi = (int32_t)self;
+            regs.edi = (loco_ptr)widget;
+            regs.esi = (loco_ptr)self;
 
             call(0x0049A69E, regs);
         }
@@ -967,7 +967,7 @@ namespace OpenLoco::Ui::Windows::TownList
         static void onToolUpdate(window& self, const widget_index widgetIndex, const int16_t x, const int16_t y)
         {
             registers regs;
-            regs.esi = (int32_t)&self;
+            regs.esi = (loco_ptr)&self;
             regs.dx = widgetIndex;
             regs.ax = x;
             regs.bx = y;
@@ -978,7 +978,7 @@ namespace OpenLoco::Ui::Windows::TownList
         static void onToolDown(window& self, const widget_index widgetIndex, const int16_t x, const int16_t y)
         {
             registers regs;
-            regs.esi = (int32_t)&self;
+            regs.esi = (loco_ptr)&self;
             regs.dx = widgetIndex;
             regs.ax = x;
             regs.bx = y;
@@ -992,8 +992,8 @@ namespace OpenLoco::Ui::Windows::TownList
             {
                 registers regs;
                 regs.edx = widgetIndex;
-                regs.esi = (int32_t)self;
-                regs.edi = (int32_t)&self->widgets[widgetIndex];
+                regs.esi = (loco_ptr)self;
+                regs.edi = (loco_ptr)&self->widgets.get()[widgetIndex];
                 call(0x0049AB72, regs);
             }
         }

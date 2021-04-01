@@ -143,7 +143,7 @@ namespace OpenLoco::Ui::NewsWindow::Ticker
         regs.cx = x;
         regs.dx = y;
         regs.ebp = ebp;
-        regs.edi = (int32_t)clipped;
+        regs.edi = (loco_ptr)clipped;
         call(0x004950EF, regs);
     }
 

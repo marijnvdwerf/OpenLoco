@@ -30,6 +30,37 @@ namespace OpenLoco
         constexpr uint16_t pauseOverrideEnabled = 1 << 8; // new in OpenLoco
     }
 
+#pragma pack(push, 1)
+    struct loco_ptr
+    {
+        uintptr_t _ptr;
+        loco_ptr(const void* x)
+        {
+            _ptr = reinterpret_cast<uintptr_t>(x);
+        }
+        loco_ptr(int32_t x)
+        {
+            _ptr = x;
+        }
+        operator int32_t() const
+        {
+            assert(_ptr < UINT32_MAX);
+            return (int32_t)_ptr;
+        }
+        operator uint32_t() const
+        {
+            assert(_ptr < UINT32_MAX);
+            return (uint32_t)_ptr;
+        }
+#ifndef __i386__
+        operator uintptr_t() const
+        {
+            return _ptr;
+        }
+#endif
+    };
+#pragma pack(pop)
+
     extern const char version[];
 
     std::string getVersionInfo();

@@ -172,7 +172,7 @@ namespace OpenLoco::Vehicles
     static void liftUpVehicle(VehicleHead* const head)
     {
         registers regs{};
-        regs.esi = reinterpret_cast<uint32_t>(head);
+        regs.esi = (loco_ptr)head;
         call(0x004B08DD, regs);
     }
 
@@ -422,7 +422,7 @@ namespace OpenLoco::Vehicles
     static void sub_4B7CC3(VehicleHead* const head)
     {
         registers regs{};
-        regs.esi = reinterpret_cast<int32_t>(head);
+        regs.esi = (loco_ptr)head;
         call(0x004B7CC3, regs);
     }
 
@@ -729,7 +729,7 @@ namespace OpenLoco::Vehicles
     static void sub_4AF7A4(VehicleHead* const veh0)
     {
         registers regs{};
-        regs.esi = reinterpret_cast<int32_t>(veh0);
+        regs.esi = (loco_ptr)veh0;
         call(0x004AF7A4, regs);
     }
 
@@ -737,7 +737,7 @@ namespace OpenLoco::Vehicles
     static void placeDownVehicle(VehicleHead* const head, const coord_t x, const coord_t y, const uint8_t baseZ, const uint16_t unk1, const uint16_t unk2)
     {
         registers regs{};
-        regs.esi = reinterpret_cast<int32_t>(head);
+        regs.esi = (loco_ptr)head;
         regs.ax = x;
         regs.cx = y;
         regs.bx = unk2;

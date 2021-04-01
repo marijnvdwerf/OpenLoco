@@ -336,7 +336,7 @@ namespace OpenLoco::Ui::Dropdown
         static uint16_t getStringWidth(char* buffer)
         {
             registers regs;
-            regs.esi = (int32_t)buffer;
+            regs.esi = (loco_ptr)buffer;
             call(0x004955BC, regs);
 
             return regs.cx;

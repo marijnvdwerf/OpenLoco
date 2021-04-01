@@ -31,7 +31,7 @@ namespace OpenLoco::Paint
     {
         registers regs;
         regs.bx = stringId;
-        regs.edi = reinterpret_cast<int32_t>(y_offsets);
+        regs.edi = (loco_ptr)y_offsets;
         regs.si = offset_x;
         regs.eax = amount;
         regs.cx = y;
@@ -45,7 +45,7 @@ namespace OpenLoco::Paint
     {
         registers regs;
         regs.bx = stringId;
-        regs.edi = reinterpret_cast<int32_t>(y_offsets);
+        regs.edi = (loco_ptr)y_offsets;
         regs.si = offset_x;
         regs.eax = amount;
         regs.cx = y;
@@ -461,7 +461,7 @@ namespace OpenLoco::Paint
         _paletteMap = paletteMap.data();
         registers regs{};
         regs.ebx = imageId;
-        regs.edi = reinterpret_cast<int32_t>(dpi);
+        regs.edi = (loco_ptr)dpi;
         regs.cx = coords.x;
         regs.dx = coords.y;
         call(0x00447A5F, regs);

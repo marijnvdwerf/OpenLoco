@@ -40,7 +40,7 @@ namespace OpenLoco
     void company::aiThink()
     {
         registers regs;
-        regs.esi = (int32_t)this;
+        regs.esi = (loco_ptr)this;
         call(0x00430762, regs);
     }
 

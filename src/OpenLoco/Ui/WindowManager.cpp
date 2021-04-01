@@ -127,7 +127,7 @@ namespace OpenLoco::Ui::WindowManager
                 registers backup = regs;
                 auto* w = Vehicle::Main::open(reinterpret_cast<Vehicles::VehicleBase*>(regs.edx));
                 regs = backup;
-                regs.esi = reinterpret_cast<int32_t>(w);
+                regs.esi = (loco_ptr)w;
                 return 0;
             });
 
@@ -801,7 +801,7 @@ namespace OpenLoco::Ui::WindowManager
     window* bringToFront(window* w)
     {
         registers regs;
-        regs.esi = (uint32_t)w;
+        regs.esi = (loco_ptr)w;
         call(0x004CC750, regs);
 
         return (window*)regs.esi;

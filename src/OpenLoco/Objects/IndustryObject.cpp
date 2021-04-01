@@ -98,8 +98,8 @@ namespace OpenLoco
         registers regs;
         regs.cx = x;
         regs.dx = y;
-        regs.edi = (uint32_t)clipped;
-        regs.ebp = (uint32_t)this;
+        regs.edi = (loco_ptr)clipped;
+        regs.ebp = (loco_ptr)this;
         call(0x00458C7F, regs);
     }
 }

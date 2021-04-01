@@ -374,7 +374,7 @@ namespace OpenLoco::Vehicles
     VehicleStatus VehicleHead::getStatus() const
     {
         registers regs = {};
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
 
         call(0x004B671C, regs);
 
@@ -662,7 +662,7 @@ namespace OpenLoco::Vehicles
     void VehicleHead::removeDanglingTrain()
     {
         registers regs;
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
         call(0x004AF06E, regs);
     }
 
@@ -767,7 +767,7 @@ namespace OpenLoco::Vehicles
     uint8_t VehicleHead::sub_4AA36A()
     {
         registers regs;
-        regs.esi = reinterpret_cast<uint32_t>(this);
+        regs.esi = (loco_ptr)this;
         call(0x004AA36A, regs);
         return regs.bl;
     }
@@ -1091,7 +1091,7 @@ namespace OpenLoco::Vehicles
     bool VehicleHead::landReverseFromSignal()
     {
         registers regs;
-        regs.esi = reinterpret_cast<uint32_t>(this);
+        regs.esi = (loco_ptr)this;
         return (call(0x004A8ED9, regs) & (1 << 8)) == 0;
     }
 
@@ -2083,7 +2083,7 @@ namespace OpenLoco::Vehicles
     void VehicleHead::updateLastJourneyAverageSpeed()
     {
         registers regs;
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
         call(0x004BACAF, regs);
     }
 
@@ -2345,7 +2345,7 @@ namespace OpenLoco::Vehicles
     void VehicleHead::updateUnloadCargo()
     {
         registers regs;
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
         call(0x004B9A2A, regs);
     }
 
@@ -2353,7 +2353,7 @@ namespace OpenLoco::Vehicles
     bool VehicleHead::updateLoadCargo()
     {
         registers regs;
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
         return call(0x004BA142, regs) & (1 << 8);
     }
 
@@ -2415,7 +2415,7 @@ namespace OpenLoco::Vehicles
     std::tuple<station_id_t, Map::map_pos, Map::map_pos3> VehicleHead::sub_427FC9()
     {
         registers regs;
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
         call(0x00427FC9, regs);
         Map::map_pos headTarget = { regs.ax, regs.cx };
         Map::map_pos3 stationTarget = { regs.di, regs.bp, regs.dl };
@@ -2442,7 +2442,7 @@ namespace OpenLoco::Vehicles
     void VehicleHead::sub_4AD778()
     {
         registers regs;
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
         call(0x004AD778, regs);
     }
 
@@ -2450,7 +2450,7 @@ namespace OpenLoco::Vehicles
     void VehicleHead::sub_4AA625()
     {
         registers regs;
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
         call(0x004AA625, regs);
     }
 
@@ -2458,7 +2458,7 @@ namespace OpenLoco::Vehicles
     std::tuple<uint8_t, uint8_t, station_id_t> VehicleHead::sub_4ACEE7(uint32_t unk1, uint32_t var_113612C)
     {
         registers regs;
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
         regs.eax = unk1;
         regs.ebx = var_113612C;
         call(0x004ACEE7, regs);
@@ -2470,7 +2470,7 @@ namespace OpenLoco::Vehicles
     bool VehicleHead::sub_4AC1C2()
     {
         registers regs;
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
         return call(0x004AC1C2, regs) & (1 << 8);
     }
 
@@ -2478,7 +2478,7 @@ namespace OpenLoco::Vehicles
     bool VehicleHead::sub_4AC0A3()
     {
         registers regs;
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
         return call(0x004AC0A3, regs) & (1 << 8);
     }
 
@@ -2486,7 +2486,7 @@ namespace OpenLoco::Vehicles
     bool VehicleHead::sub_4ACCDC()
     {
         registers regs;
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
         return call(0x004ACCDC, regs) & (1 << 8);
     }
 
@@ -2494,7 +2494,7 @@ namespace OpenLoco::Vehicles
     void VehicleHead::sub_4AD93A()
     {
         registers regs;
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
         call(0x004AD93A, regs);
     }
 
@@ -2568,7 +2568,7 @@ namespace OpenLoco::Vehicles
     void VehicleHead::sub_4ADB47(bool unk)
     {
         registers regs;
-        regs.esi = reinterpret_cast<int32_t>(this);
+        regs.esi = (loco_ptr)this;
         regs.eax = unk ? 1 : 0;
         call(0x004ADB47, regs);
     }

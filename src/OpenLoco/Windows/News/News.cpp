@@ -467,9 +467,9 @@ namespace OpenLoco::Ui::NewsWindow
         static void sub_42A136(window* self, Gfx::drawpixelinfo_t* dpi, message* news)
         {
             registers regs;
-            regs.edi = (int32_t)dpi;
-            regs.esi = (int32_t)self;
-            regs.ebp = (int32_t)news;
+            regs.edi = (loco_ptr)dpi;
+            regs.esi = (loco_ptr)self;
+            regs.ebp = (loco_ptr)news;
             call(0x0042A136, regs);
         }
 

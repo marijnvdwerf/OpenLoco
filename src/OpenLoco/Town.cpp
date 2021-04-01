@@ -32,7 +32,7 @@ namespace OpenLoco
     void town::update()
     {
         registers regs;
-        regs.esi = (int32_t)this;
+        regs.esi = (loco_ptr)this;
         call(0x0049742F, regs);
     }
 
@@ -40,7 +40,7 @@ namespace OpenLoco
     void town::updateLabel()
     {
         registers regs;
-        regs.esi = (int32_t)this;
+        regs.esi = (loco_ptr)this;
         call(0x00497616, regs);
     }
 

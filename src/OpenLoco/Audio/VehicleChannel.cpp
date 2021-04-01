@@ -10,7 +10,7 @@ using namespace OpenLoco::Interop;
 static std::pair<sound_id, channel_attributes> sub_48A590(const Vehicles::Vehicle2or6* v)
 {
     registers regs;
-    regs.esi = (int32_t)v;
+    regs.esi = (loco_ptr)v;
     call(0x0048A590, regs);
     return { static_cast<sound_id>(regs.eax), { regs.ecx, regs.edx, regs.ebx } };
 }

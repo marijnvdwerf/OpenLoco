@@ -262,7 +262,7 @@ namespace OpenLoco::Gfx
 
         registers regs;
         regs.di = width;
-        regs.esi = (int32_t)string;
+        regs.esi = (loco_ptr)string;
         call(0x004957C4, regs);
         return regs.cx;
     }
@@ -721,8 +721,8 @@ namespace OpenLoco::Gfx
         regs.bp = width;
         regs.cx = x;
         regs.dx = y;
-        regs.esi = (int32_t)args;
-        regs.edi = (int32_t)&dpi;
+        regs.esi = (loco_ptr)args;
+        regs.edi = (loco_ptr)&dpi;
         call(0x00495224, regs);
 
         return regs.dx;
@@ -748,8 +748,8 @@ namespace OpenLoco::Gfx
         regs.bx = stringId;
         regs.cx = x;
         regs.dx = y;
-        regs.esi = (int32_t)args;
-        regs.edi = (int32_t)&dpi;
+        regs.esi = (loco_ptr)args;
+        regs.edi = (loco_ptr)&dpi;
         call(0x00494B3F, regs);
     }
 
@@ -773,8 +773,8 @@ namespace OpenLoco::Gfx
         regs.bx = stringId;
         regs.cx = origin->x;
         regs.dx = origin->y;
-        regs.esi = (int32_t)args;
-        regs.edi = (int32_t)&dpi;
+        regs.esi = (loco_ptr)args;
+        regs.edi = (loco_ptr)&dpi;
         call(0x00494B3F, regs);
 
         origin->x = regs.cx;
@@ -803,8 +803,8 @@ namespace OpenLoco::Gfx
         regs.bx = stringId;
         regs.cx = x;
         regs.dx = y;
-        regs.esi = (int32_t)args;
-        regs.edi = (int32_t)&dpi;
+        regs.esi = (loco_ptr)args;
+        regs.edi = (loco_ptr)&dpi;
         regs.bp = width;
         call(0x00494BBF, regs);
     }
@@ -829,8 +829,8 @@ namespace OpenLoco::Gfx
         regs.bx = stringId;
         regs.cx = x;
         regs.dx = y;
-        regs.esi = (int32_t)args;
-        regs.edi = (int32_t)&dpi;
+        regs.esi = (loco_ptr)args;
+        regs.edi = (loco_ptr)&dpi;
         call(0x00494C78, regs);
     }
 
@@ -854,8 +854,8 @@ namespace OpenLoco::Gfx
         regs.bx = stringId;
         regs.cx = x;
         regs.dx = y;
-        regs.esi = (int32_t)args;
-        regs.edi = (int32_t)&dpi;
+        regs.esi = (loco_ptr)args;
+        regs.edi = (loco_ptr)&dpi;
         call(0x00494CB2, regs);
     }
 
@@ -879,8 +879,8 @@ namespace OpenLoco::Gfx
         regs.bx = stringId;
         regs.cx = x;
         regs.dx = y;
-        regs.esi = (int32_t)args;
-        regs.edi = (int32_t)&dpi;
+        regs.esi = (loco_ptr)args;
+        regs.edi = (loco_ptr)&dpi;
         call(0x00494D78, regs);
     }
 
@@ -904,8 +904,8 @@ namespace OpenLoco::Gfx
         regs.bx = stringId;
         regs.cx = x;
         regs.dx = y;
-        regs.esi = (int32_t)args;
-        regs.edi = (int32_t)&dpi;
+        regs.esi = (loco_ptr)args;
+        regs.edi = (loco_ptr)&dpi;
         call(0x00494DE8, regs);
     }
 
@@ -927,8 +927,8 @@ namespace OpenLoco::Gfx
         const void* args)
     {
         registers regs;
-        regs.edi = (int32_t)&dpi;
-        regs.esi = (int32_t)args;
+        regs.edi = (loco_ptr)&dpi;
+        regs.esi = (loco_ptr)args;
         regs.ebx = stringId;
         regs.cx = x;
         regs.dx = y;
@@ -956,8 +956,8 @@ namespace OpenLoco::Gfx
         const void* args)
     {
         registers regs;
-        regs.edi = (uintptr_t)context;
-        regs.esi = (uintptr_t)args;
+        regs.edi = (loco_ptr)context;
+        regs.esi = (loco_ptr)args;
         regs.cx = origin->x;
         regs.dx = origin->y;
         regs.bp = width;
@@ -986,8 +986,8 @@ namespace OpenLoco::Gfx
         const void* args)
     {
         registers regs;
-        regs.edi = (int32_t)&dpi;
-        regs.esi = (int32_t)args;
+        regs.edi = (loco_ptr)&dpi;
+        regs.esi = (loco_ptr)args;
         regs.cx = x;
         regs.dx = y;
         regs.al = colour;
@@ -1001,8 +1001,8 @@ namespace OpenLoco::Gfx
     uint16_t getStringWidthNewLined(const char* buffer)
     {
         registers regs;
-        regs.esi = (uintptr_t)buffer;
-        call(0x00495715, regs);
+        regs.esi = (loco_ptr)buffer;
+//        call(0x00495715, regs);
         return regs.cx;
     }
 
@@ -1010,7 +1010,7 @@ namespace OpenLoco::Gfx
     {
         // gfx_wrap_string
         registers regs;
-        regs.esi = (uintptr_t)buffer;
+        regs.esi = (loco_ptr)buffer;
         regs.di = stringWidth;
         call(0x00495301, regs);
 
@@ -1026,7 +1026,7 @@ namespace OpenLoco::Gfx
         regs.cx = top;
         regs.dx = bottom;
         regs.ebp = colour;
-        regs.edi = (uint32_t)dpi;
+        regs.edi = (loco_ptr)dpi;
         call(0x004474BA, regs);
     }
 
@@ -1049,7 +1049,7 @@ namespace OpenLoco::Gfx
         regs.cx = top;
         regs.dx = bottom;
         regs.ebp = colour;
-        regs.edi = (uint32_t)dpi;
+        regs.edi = (loco_ptr)dpi;
         regs.si = flags;
         call(0x004C58C7, regs);
     }
@@ -1069,7 +1069,7 @@ namespace OpenLoco::Gfx
         regs.cx = right;
         regs.dx = bottom;
         regs.ebp = colour;
-        regs.edi = (uint32_t)dpi;
+        regs.edi = (loco_ptr)dpi;
         call(0x00452DA4, regs);
     }
 
@@ -1169,7 +1169,7 @@ namespace OpenLoco::Gfx
         regs.cx = x;
         regs.dx = y;
         regs.ebx = image;
-        regs.edi = (uint32_t)dpi;
+        regs.edi = (loco_ptr)dpi;
         call(0x00448C79, regs);
     }
 
@@ -1218,7 +1218,7 @@ namespace OpenLoco::Gfx
         regs.cx = x;
         regs.dx = y;
         regs.ebx = image;
-        regs.edi = (uint32_t)dpi;
+        regs.edi = (loco_ptr)dpi;
         call(0x00448D90, regs);
     }
 
@@ -1227,7 +1227,7 @@ namespace OpenLoco::Gfx
         registers regs;
         regs.ax = x;
         regs.bx = width;
-        regs.edi = (int32_t)src;
+        regs.edi = (loco_ptr)src;
         regs.dx = height;
         regs.cx = y;
         call(0x4cec50, regs);
