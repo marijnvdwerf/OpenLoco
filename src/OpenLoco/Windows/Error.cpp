@@ -156,8 +156,8 @@ namespace OpenLoco::Ui::Windows::Error
                 error->widgets = Error::widgets;
             }
 
-            error->widgets[Error::widx::frame].right = frameWidth;
-            error->widgets[Error::widx::frame].bottom = frameHeight;
+            error->widgets.get()[Error::widx::frame].right = frameWidth;
+            error->widgets.get()[Error::widx::frame].bottom = frameHeight;
             error->var_846 = 0;
 
             if (!(_suppressErrorSound & (1 << 0)))
@@ -231,8 +231,8 @@ namespace OpenLoco::Ui::Windows::Error
             }
             else
             {
-                auto xPos = self->widgets[ErrorCompetitor::widx::innerFrame].left + self->x;
-                auto yPos = self->widgets[ErrorCompetitor::widx::innerFrame].top + self->y;
+                auto xPos = self->widgets.get()[ErrorCompetitor::widx::innerFrame].left + self->x;
+                auto yPos = self->widgets.get()[ErrorCompetitor::widx::innerFrame].top + self->y;
 
                 auto company = CompanyManager::get(_errorCompetitorId);
                 auto companyObj = ObjectManager::get<CompetitorObject>(company->id());

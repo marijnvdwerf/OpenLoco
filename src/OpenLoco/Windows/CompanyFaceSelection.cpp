@@ -219,10 +219,10 @@ namespace OpenLoco::Ui::Windows::CompanyFaceSelection
 
         {
             const auto colour = Colour::getShade(self->colours[1], 0);
-            const auto l = self->x + 1 + self->widgets[widx::face_frame].left;
-            const auto t = self->y + 1 + self->widgets[widx::face_frame].top;
-            const auto r = self->x - 1 + self->widgets[widx::face_frame].right;
-            const auto b = self->y - 1 + self->widgets[widx::face_frame].bottom;
+            const auto l = self->x + 1 + self->widgets.get()[widx::face_frame].left;
+            const auto t = self->y + 1 + self->widgets.get()[widx::face_frame].top;
+            const auto r = self->x - 1 + self->widgets.get()[widx::face_frame].right;
+            const auto b = self->y - 1 + self->widgets.get()[widx::face_frame].bottom;
             Gfx::fillRect(dpi, l, t, r, b, colour);
 
             const CompetitorObject* competitor = _loadedObject;
@@ -231,12 +231,12 @@ namespace OpenLoco::Ui::Windows::CompanyFaceSelection
         }
 
         {
-            const auto x = self->x + self->widgets[widx::face_frame].mid_x();
-            const auto y = self->y + self->widgets[widx::face_frame].bottom + 3;
-            const auto width = self->width - self->widgets[widx::scrollview].right - 6;
+            const auto x = self->x + self->widgets.get()[widx::face_frame].mid_x();
+            const auto y = self->y + self->widgets.get()[widx::face_frame].bottom + 3;
+            const auto width = self->width - self->widgets.get()[widx::scrollview].right - 6;
             auto str = const_cast<char*>(StringManager::getString(StringIds::buffer_2039));
             *str++ = ControlCodes::window_colour_2;
-            auto objectPtr = self->object;
+            auto objectPtr = self->object.get();
             strcpy(str, ObjectManager::object_index_entry::read(&objectPtr)._name);
             Gfx::drawStringCentredClipped(*dpi, x, y, width, Colour::black, StringIds::buffer_2039);
         }

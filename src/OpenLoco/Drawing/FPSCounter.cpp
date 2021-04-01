@@ -53,7 +53,7 @@ namespace OpenLoco::Drawing
         const int stringWidth = Gfx::getStringWidth(buffer);
         const auto x = Ui::width() / 2 - (stringWidth / 2);
         const auto y = 2;
-        Gfx::drawString(&dpi, x, y, Colour::black, buffer);
+        Gfx::drawString(&dpi, 0, 0, Colour::black, buffer);
 
         // Make area dirty so the text doesn't get drawn over the last
         Gfx::setDirtyBlocks(x - 16, y - 4, x + 16, 16);

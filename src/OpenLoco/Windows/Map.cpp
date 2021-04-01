@@ -410,21 +410,21 @@ namespace OpenLoco::Ui::Windows::Map
     static void leftAlignTabs(window* self, uint8_t firstTabIndex, uint8_t lastTabIndex)
     {
         auto disabledWidgets = self->disabled_widgets;
-        auto pos = self->widgets[firstTabIndex].left;
-        auto tabWidth = self->widgets[firstTabIndex].right - pos;
+        auto pos = self->widgets.get()[firstTabIndex].left;
+        auto tabWidth = self->widgets.get()[firstTabIndex].right - pos;
 
         for (auto index = firstTabIndex; index <= lastTabIndex; index++)
         {
-            self->widgets[index].type = widget_type::none;
+            self->widgets.get()[index].type = widget_type::none;
 
             if (!(disabledWidgets & (1ULL << index)))
             {
-                self->widgets[index].type = widget_type::wt_8;
+                self->widgets.get()[index].type = widget_type::wt_8;
 
-                self->widgets[index].left = pos;
+                self->widgets.get()[index].left = pos;
                 pos += tabWidth;
 
-                self->widgets[index].right = pos;
+                self->widgets.get()[index].right = pos;
                 pos++;
             }
         }
@@ -449,20 +449,20 @@ namespace OpenLoco::Ui::Windows::Map
         activatedWidgets |= (1ULL << currentWidget);
         self->activated_widgets = activatedWidgets;
 
-        self->widgets[widx::frame].right = self->width - 1;
-        self->widgets[widx::frame].bottom = self->height - 1;
-        self->widgets[widx::panel].right = self->width - 1;
-        self->widgets[widx::panel].bottom = self->height + 1;
+        self->widgets.get()[widx::frame].right = self->width - 1;
+        self->widgets.get()[widx::frame].bottom = self->height - 1;
+        self->widgets.get()[widx::panel].right = self->width - 1;
+        self->widgets.get()[widx::panel].bottom = self->height + 1;
 
-        self->widgets[widx::caption].right = self->width - 2;
-        self->widgets[widx::closeButton].left = self->width - 15;
-        self->widgets[widx::closeButton].right = self->width - 3;
-        self->widgets[widx::scrollview].bottom = self->height - 14;
-        self->widgets[widx::scrollview].right = self->width - 108;
+        self->widgets.get()[widx::caption].right = self->width - 2;
+        self->widgets.get()[widx::closeButton].left = self->width - 15;
+        self->widgets.get()[widx::closeButton].right = self->width - 3;
+        self->widgets.get()[widx::scrollview].bottom = self->height - 14;
+        self->widgets.get()[widx::scrollview].right = self->width - 108;
 
-        self->widgets[widx::statusBar].top = self->height - 12;
-        self->widgets[widx::statusBar].bottom = self->height - 3;
-        self->widgets[widx::statusBar].right = self->width - 14;
+        self->widgets.get()[widx::statusBar].top = self->height - 12;
+        self->widgets.get()[widx::statusBar].bottom = self->height - 3;
+        self->widgets.get()[widx::statusBar].right = self->width - 14;
 
         auto disabledWidgets = 0;
 
@@ -1001,9 +1001,9 @@ namespace OpenLoco::Ui::Windows::Map
                 break;
         }
 
-        auto x = self->x + self->widgets[widx::statusBar].left - 1;
-        auto y = self->y + self->widgets[widx::statusBar].top - 1;
-        auto width = self->widgets[widx::statusBar].width();
+        auto x = self->x + self->widgets.get()[widx::statusBar].left - 1;
+        auto y = self->y + self->widgets.get()[widx::statusBar].top - 1;
+        auto width = self->widgets.get()[widx::statusBar].width();
 
         Gfx::drawString_494BBF(*dpi, x, y, width, Colour::black, StringIds::black_stringid, &args);
     }
@@ -1253,7 +1253,7 @@ namespace OpenLoco::Ui::Windows::Map
         if (window == nullptr)
             return;
 
-        auto viewport = window->viewports[0];
+        auto viewport = window->viewports[0].get();
 
         if (viewport == nullptr)
             return;
@@ -1533,7 +1533,7 @@ namespace OpenLoco::Ui::Windows::Map
         if (mainWindow == nullptr)
             return;
 
-        auto viewport = mainWindow->viewports[0];
+        auto viewport = mainWindow->viewports[0].get();
 
         if (viewport == nullptr)
             return;

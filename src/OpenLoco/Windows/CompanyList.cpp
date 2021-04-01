@@ -423,26 +423,26 @@ namespace OpenLoco::Ui::Windows::CompanyList
         {
             Common::prepareDraw(self);
 
-            self->widgets[widx::scrollview].right = self->width - 4;
-            self->widgets[widx::scrollview].bottom = self->height - 14;
+            self->widgets.get()[widx::scrollview].right = self->width - 4;
+            self->widgets.get()[widx::scrollview].bottom = self->height - 14;
 
             // Reposition header buttons
-            self->widgets[widx::sort_name].right = std::min(178, self->width - 8);
+            self->widgets.get()[widx::sort_name].right = std::min(178, self->width - 8);
 
-            self->widgets[widx::sort_status].left = std::min(179, self->width - 8);
-            self->widgets[widx::sort_status].right = std::min(388, self->width - 8);
+            self->widgets.get()[widx::sort_status].left = std::min(179, self->width - 8);
+            self->widgets.get()[widx::sort_status].right = std::min(388, self->width - 8);
 
-            self->widgets[widx::sort_performance].left = std::min(389, self->width - 8);
-            self->widgets[widx::sort_performance].right = std::min(533, self->width - 8);
+            self->widgets.get()[widx::sort_performance].left = std::min(389, self->width - 8);
+            self->widgets.get()[widx::sort_performance].right = std::min(533, self->width - 8);
 
-            self->widgets[widx::sort_value].left = std::min(534, self->width - 8);
-            self->widgets[widx::sort_value].right = std::min(633, self->width - 8);
+            self->widgets.get()[widx::sort_value].left = std::min(534, self->width - 8);
+            self->widgets.get()[widx::sort_value].right = std::min(633, self->width - 8);
 
             // Set header button captions
-            self->widgets[widx::sort_name].text = self->sort_mode == SortMode::Name ? StringIds::table_header_company_name_desc : StringIds::table_header_company_name;
-            self->widgets[widx::sort_status].text = self->sort_mode == SortMode::Status ? StringIds::table_header_company_status_desc : StringIds::table_header_company_status;
-            self->widgets[widx::sort_performance].text = self->sort_mode == SortMode::Performance ? StringIds::table_header_company_performance_desc : StringIds::table_header_company_performance;
-            self->widgets[widx::sort_value].text = self->sort_mode == SortMode::Value ? StringIds::table_header_company_value_desc : StringIds::table_header_company_value;
+            self->widgets.get()[widx::sort_name].text = self->sort_mode == SortMode::Name ? StringIds::table_header_company_name_desc : StringIds::table_header_company_name;
+            self->widgets.get()[widx::sort_status].text = self->sort_mode == SortMode::Status ? StringIds::table_header_company_status_desc : StringIds::table_header_company_status;
+            self->widgets.get()[widx::sort_performance].text = self->sort_mode == SortMode::Performance ? StringIds::table_header_company_performance_desc : StringIds::table_header_company_performance;
+            self->widgets.get()[widx::sort_value].text = self->sort_mode == SortMode::Value ? StringIds::table_header_company_value_desc : StringIds::table_header_company_value;
         }
 
         // 0x00435E56
@@ -674,9 +674,9 @@ namespace OpenLoco::Ui::Windows::CompanyList
             Common::drawTabs(self, dpi);
 
             _graphLeft = self->x + 4;
-            _graphTop = self->y + self->widgets[Common::widx::panel].top + 4;
+            _graphTop = self->y + self->widgets.get()[Common::widx::panel].top + 4;
             _graphRight = 520;
-            _graphBottom = self->height - self->widgets[Common::widx::panel].top - 8;
+            _graphBottom = self->height - self->widgets.get()[Common::widx::panel].top - 8;
             _graphYOffset = 17;
             _graphXOffset = 40;
             _graphYAxisLabelIncrement = 20;
@@ -703,7 +703,7 @@ namespace OpenLoco::Ui::Windows::CompanyList
                 auto companyId = company.id();
                 auto companyColour = CompanyManager::getCompanyColour(companyId);
 
-                _graphYData[count] = reinterpret_cast<uint32_t>(&company.performance_index_history[0]);
+                _graphYData[count] = (loco_ptr)&company.performance_index_history[0];
                 _graphDataStart[count] = maxHistorySize - company.history_size;
                 _graphLineColour[count] = Colour::getShade(companyColour, 6);
                 _graphItemId[count] = companyId;
@@ -771,9 +771,9 @@ namespace OpenLoco::Ui::Windows::CompanyList
             Common::drawTabs(self, dpi);
 
             _graphLeft = self->x + 4;
-            _graphTop = self->y + self->widgets[Common::widx::panel].top + 4;
+            _graphTop = self->y + self->widgets.get()[Common::widx::panel].top + 4;
             _graphRight = 525;
-            _graphBottom = self->height - self->widgets[Common::widx::panel].top - 8;
+            _graphBottom = self->height - self->widgets.get()[Common::widx::panel].top - 8;
             _graphYOffset = 17;
             _graphXOffset = 45;
             _graphYAxisLabelIncrement = 25;
@@ -800,7 +800,7 @@ namespace OpenLoco::Ui::Windows::CompanyList
                 auto companyId = company.id();
                 auto companyColour = CompanyManager::getCompanyColour(companyId);
 
-                _graphYData[count] = reinterpret_cast<uint32_t>(&company.cargo_units_delivered_history[0]);
+                _graphYData[count] = (loco_ptr)&company.cargo_units_delivered_history[0];
                 _graphDataStart[count] = maxHistorySize - company.history_size;
                 _graphLineColour[count] = Colour::getShade(companyColour, 6);
                 _graphItemId[count] = companyId;
@@ -868,9 +868,9 @@ namespace OpenLoco::Ui::Windows::CompanyList
             Common::drawTabs(self, dpi);
 
             _graphLeft = self->x + 4;
-            _graphTop = self->y + self->widgets[Common::widx::panel].top + 4;
+            _graphTop = self->y + self->widgets.get()[Common::widx::panel].top + 4;
             _graphRight = 545;
-            _graphBottom = self->height - self->widgets[Common::widx::panel].top - 8;
+            _graphBottom = self->height - self->widgets.get()[Common::widx::panel].top - 8;
             _graphYOffset = 17;
             _graphXOffset = 65;
             _graphYAxisLabelIncrement = 25;
@@ -897,7 +897,7 @@ namespace OpenLoco::Ui::Windows::CompanyList
                 auto companyId = company.id();
                 auto companyColour = CompanyManager::getCompanyColour(companyId);
 
-                _graphYData[count] = reinterpret_cast<uint32_t>(&company.cargo_units_distance_history[0]);
+                _graphYData[count] = (loco_ptr)&company.cargo_units_distance_history[0];
                 _graphDataStart[count] = maxHistorySize - company.history_size;
                 _graphLineColour[count] = Colour::getShade(companyColour, 6);
                 _graphItemId[count] = companyId;
@@ -965,9 +965,9 @@ namespace OpenLoco::Ui::Windows::CompanyList
             Common::drawTabs(self, dpi);
 
             _graphLeft = self->x + 4;
-            _graphTop = self->y + self->widgets[Common::widx::panel].top + 4;
+            _graphTop = self->y + self->widgets.get()[Common::widx::panel].top + 4;
             _graphRight = 570;
-            _graphBottom = self->height - self->widgets[Common::widx::panel].top - 8;
+            _graphBottom = self->height - self->widgets.get()[Common::widx::panel].top - 8;
             _graphYOffset = 17;
             _graphXOffset = 90;
             _graphYAxisLabelIncrement = 25;
@@ -994,7 +994,7 @@ namespace OpenLoco::Ui::Windows::CompanyList
                 auto companyId = company.id();
                 auto companyColour = CompanyManager::getCompanyColour(companyId);
 
-                _graphYData[count] = reinterpret_cast<uint32_t>(&company.companyValueHistory[0]);
+                _graphYData[count] = (loco_ptr)&company.companyValueHistory[0];
                 _graphDataStart[count] = maxHistorySize - company.history_size;
                 _graphLineColour[count] = Colour::getShade(companyColour, 6);
                 _graphItemId[count] = companyId;
@@ -1096,9 +1096,9 @@ namespace OpenLoco::Ui::Windows::CompanyList
             Common::drawTabs(self, dpi);
 
             _graphLeft = self->x + 4;
-            _graphTop = self->y + self->widgets[Common::widx::panel].top + 14;
+            _graphTop = self->y + self->widgets.get()[Common::widx::panel].top + 14;
             _graphRight = 380;
-            _graphBottom = self->height - self->widgets[Common::widx::panel].top - 28;
+            _graphBottom = self->height - self->widgets.get()[Common::widx::panel].top - 28;
             _graphYOffset = 17;
             _graphXOffset = 80;
             _graphYAxisLabelIncrement = 25;
@@ -1113,7 +1113,7 @@ namespace OpenLoco::Ui::Windows::CompanyList
 
                 auto colour = _cargoLineColour[i];
 
-                _graphYData[count] = reinterpret_cast<uint32_t>(&_deliveredCargoPayment[i][0]);
+                _graphYData[count] = (loco_ptr)&_deliveredCargoPayment[i][0];
                 _graphDataStart[count] = 0;
                 _graphLineColour[count] = Colour::getShade(colour, 6);
                 _graphItemId[count] = i;
@@ -1161,7 +1161,7 @@ namespace OpenLoco::Ui::Windows::CompanyList
             drawGraphLegend(self, dpi, x, y);
 
             x = self->x + 8;
-            y = self->widgets[Common::widx::panel].top + self->y + 1;
+            y = self->widgets.get()[Common::widx::panel].top + self->y + 1;
 
             auto args = FormatArguments();
             args.push<uint16_t>(100);
@@ -1471,7 +1471,7 @@ namespace OpenLoco::Ui::Windows::CompanyList
         {
             // Reset tab widgets if needed
             const auto& tabWidgets = tabInformationByTabOffset[self->current_tab].widgets;
-            if (self->widgets != tabWidgets)
+            if (self->widgets.get() != tabWidgets)
             {
                 self->widgets = tabWidgets;
                 self->initScrollWidgets();
@@ -1481,16 +1481,16 @@ namespace OpenLoco::Ui::Windows::CompanyList
             self->activated_widgets &= ~((1ULL << tab_cargo_distance) | (1ULL << tab_cargo_units) | (1ULL << tab_company_list) | (1ULL << tab_payment_rates) | (1ULL << tab_performance) | (1ULL << tab_speed_records) | (1ULL << tab_values));
             self->activated_widgets |= (1ULL << Common::tabInformationByTabOffset[self->current_tab].widgetIndex);
 
-            self->widgets[Common::widx::frame].right = self->width - 1;
-            self->widgets[Common::widx::frame].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::frame].right = self->width - 1;
+            self->widgets.get()[Common::widx::frame].bottom = self->height - 1;
 
-            self->widgets[Common::widx::panel].right = self->width - 1;
-            self->widgets[Common::widx::panel].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::panel].right = self->width - 1;
+            self->widgets.get()[Common::widx::panel].bottom = self->height - 1;
 
-            self->widgets[Common::widx::caption].right = self->width - 2;
+            self->widgets.get()[Common::widx::caption].right = self->width - 2;
 
-            self->widgets[Common::widx::close_button].left = self->width - 15;
-            self->widgets[Common::widx::close_button].right = self->width - 3;
+            self->widgets.get()[Common::widx::close_button].left = self->width - 15;
+            self->widgets.get()[Common::widx::close_button].right = self->width - 3;
         }
 
         //0x004360FA
@@ -1654,8 +1654,8 @@ namespace OpenLoco::Ui::Windows::CompanyList
 
                 if (!(self->isDisabled(widx::tab_values)))
                 {
-                    auto x = self->widgets[widx::tab_values].left + self->x + 28;
-                    auto y = self->widgets[widx::tab_values].top + self->y + 14 + 1;
+                    auto x = self->widgets.get()[widx::tab_values].left + self->x + 28;
+                    auto y = self->widgets.get()[widx::tab_values].top + self->y + 14 + 1;
                     Gfx::drawString_494C78(*dpi, x, y, Colour::black, StringIds::currency_symbol);
                 }
             }
@@ -1670,8 +1670,8 @@ namespace OpenLoco::Ui::Windows::CompanyList
 
                 if (!(self->isDisabled(widx::tab_payment_rates)))
                 {
-                    auto x = self->widgets[widx::tab_payment_rates].left + self->x + 28;
-                    auto y = self->widgets[widx::tab_payment_rates].top + self->y + 14 + 1;
+                    auto x = self->widgets.get()[widx::tab_payment_rates].left + self->x + 28;
+                    auto y = self->widgets.get()[widx::tab_payment_rates].top + self->y + 14 + 1;
                     Gfx::drawString_494C78(*dpi, x, y, Colour::black, StringIds::currency_symbol);
                 }
             }

@@ -412,55 +412,55 @@ namespace OpenLoco::Ui::Windows::StationList
         *_common_format_args = company->name;
 
         // Set window title.
-        window->widgets[widx::caption].text = tabInformationByType[window->current_tab].windowTitleId;
+        window->widgets.get()[widx::caption].text = tabInformationByType[window->current_tab].windowTitleId;
 
         // Resize general window widgets.
-        window->widgets[widx::frame].right = window->width - 1;
-        window->widgets[widx::frame].bottom = window->height - 1;
+        window->widgets.get()[widx::frame].right = window->width - 1;
+        window->widgets.get()[widx::frame].bottom = window->height - 1;
 
-        window->widgets[widx::panel].right = window->width - 1;
-        window->widgets[widx::panel].bottom = window->height - 1;
+        window->widgets.get()[widx::panel].right = window->width - 1;
+        window->widgets.get()[widx::panel].bottom = window->height - 1;
 
-        window->widgets[widx::caption].right = window->width - 2;
+        window->widgets.get()[widx::caption].right = window->width - 2;
 
-        window->widgets[widx::close_button].left = window->width - 15;
-        window->widgets[widx::close_button].right = window->width - 3;
+        window->widgets.get()[widx::close_button].left = window->width - 15;
+        window->widgets.get()[widx::close_button].right = window->width - 3;
 
-        window->widgets[widx::scrollview].right = window->width - 4;
-        window->widgets[widx::scrollview].bottom = window->height - 14;
+        window->widgets.get()[widx::scrollview].right = window->width - 4;
+        window->widgets.get()[widx::scrollview].bottom = window->height - 14;
 
         // Reposition header buttons.
-        window->widgets[widx::sort_name].right = std::min(203, window->width - 4);
+        window->widgets.get()[widx::sort_name].right = std::min(203, window->width - 4);
 
-        window->widgets[widx::sort_status].left = std::min(204, window->width - 4);
-        window->widgets[widx::sort_status].right = std::min(403, window->width - 4);
+        window->widgets.get()[widx::sort_status].left = std::min(204, window->width - 4);
+        window->widgets.get()[widx::sort_status].right = std::min(403, window->width - 4);
 
-        window->widgets[widx::sort_total_waiting].left = std::min(404, window->width - 4);
-        window->widgets[widx::sort_total_waiting].right = std::min(493, window->width - 4);
+        window->widgets.get()[widx::sort_total_waiting].left = std::min(404, window->width - 4);
+        window->widgets.get()[widx::sort_total_waiting].right = std::min(493, window->width - 4);
 
-        window->widgets[widx::sort_accepts].left = std::min(494, window->width - 4);
-        window->widgets[widx::sort_accepts].right = std::min(613, window->width - 4);
+        window->widgets.get()[widx::sort_accepts].left = std::min(494, window->width - 4);
+        window->widgets.get()[widx::sort_accepts].right = std::min(613, window->width - 4);
 
         // Reposition company selection.
-        window->widgets[widx::company_select].left = window->width - 28;
-        window->widgets[widx::company_select].right = window->width - 3;
+        window->widgets.get()[widx::company_select].left = window->width - 28;
+        window->widgets.get()[widx::company_select].right = window->width - 3;
 
         // Set header button captions.
-        window->widgets[widx::sort_name].text = window->sort_mode == SortMode::Name ? StringIds::table_header_name_desc : StringIds::table_header_name;
-        window->widgets[widx::sort_status].text = window->sort_mode == SortMode::Status ? StringIds::table_header_status_desc : StringIds::table_header_status;
-        window->widgets[widx::sort_total_waiting].text = window->sort_mode == SortMode::TotalUnitsWaiting ? StringIds::table_header_total_waiting_desc : StringIds::table_header_total_waiting;
-        window->widgets[widx::sort_accepts].text = window->sort_mode == SortMode::CargoAccepted ? StringIds::table_header_accepts_desc : StringIds::table_header_accepts;
+        window->widgets.get()[widx::sort_name].text = window->sort_mode == SortMode::Name ? StringIds::table_header_name_desc : StringIds::table_header_name;
+        window->widgets.get()[widx::sort_status].text = window->sort_mode == SortMode::Status ? StringIds::table_header_status_desc : StringIds::table_header_status;
+        window->widgets.get()[widx::sort_total_waiting].text = window->sort_mode == SortMode::TotalUnitsWaiting ? StringIds::table_header_total_waiting_desc : StringIds::table_header_total_waiting;
+        window->widgets.get()[widx::sort_accepts].text = window->sort_mode == SortMode::CargoAccepted ? StringIds::table_header_accepts_desc : StringIds::table_header_accepts;
 
         // Reposition tabs (0x00491A39 / 0x00491A3F)
-        int16_t new_tab_x = window->widgets[widx::tab_all_stations].left;
-        int16_t tab_width = window->widgets[widx::tab_all_stations].right - new_tab_x;
+        int16_t new_tab_x = window->widgets.get()[widx::tab_all_stations].left;
+        int16_t tab_width = window->widgets.get()[widx::tab_all_stations].right - new_tab_x;
 
         for (auto& tabInfo : tabInformationByType)
         {
             if (window->isDisabled(tabInfo.widgetIndex))
                 continue;
 
-            widget_t& tab = window->widgets[tabInfo.widgetIndex];
+            widget_t& tab = window->widgets.get()[tabInfo.widgetIndex];
 
             tab.left = new_tab_x;
             new_tab_x += tab_width;
@@ -569,8 +569,8 @@ namespace OpenLoco::Ui::Windows::StationList
         auto company = CompanyManager::get(window->number);
         auto competitor = ObjectManager::get<CompetitorObject>(company->competitor_id);
         uint32_t image = Gfx::recolour(competitor->images[company->owner_emotion], company->mainColours.primary);
-        uint16_t x = window->x + window->widgets[widx::company_select].left + 1;
-        uint16_t y = window->y + window->widgets[widx::company_select].top + 1;
+        uint16_t x = window->x + window->widgets.get()[widx::company_select].left + 1;
+        uint16_t y = window->y + window->widgets.get()[widx::company_select].top + 1;
         Gfx::drawImage(dpi, x, y, image);
 
         // TODO: locale-based pluralisation.
@@ -623,7 +623,7 @@ namespace OpenLoco::Ui::Windows::StationList
     static void onMouseDown(Ui::window* window, widget_index widgetIndex)
     {
         if (widgetIndex == widx::company_select)
-            Dropdown::populateCompanySelect(window, &window->widgets[widgetIndex]);
+            Dropdown::populateCompanySelect(window, &window->widgets.get()[widgetIndex]);
     }
 
     // 0x00491785

@@ -110,26 +110,26 @@ namespace OpenLoco::Ui::Windows::TownList
         {
             Common::prepareDraw(self);
 
-            self->widgets[widx::scrollview].right = self->width - 4;
-            self->widgets[widx::scrollview].bottom = self->height - 14;
+            self->widgets.get()[widx::scrollview].right = self->width - 4;
+            self->widgets.get()[widx::scrollview].bottom = self->height - 14;
 
             // Reposition header buttons
-            self->widgets[widx::sort_town_name].right = std::min(203, self->width - 8);
+            self->widgets.get()[widx::sort_town_name].right = std::min(203, self->width - 8);
 
-            self->widgets[widx::sort_town_type].left = std::min(204, self->width - 8);
-            self->widgets[widx::sort_town_type].right = std::min(283, self->width - 8);
+            self->widgets.get()[widx::sort_town_type].left = std::min(204, self->width - 8);
+            self->widgets.get()[widx::sort_town_type].right = std::min(283, self->width - 8);
 
-            self->widgets[widx::sort_town_population].left = std::min(284, self->width - 8);
-            self->widgets[widx::sort_town_population].right = std::min(353, self->width - 8);
+            self->widgets.get()[widx::sort_town_population].left = std::min(284, self->width - 8);
+            self->widgets.get()[widx::sort_town_population].right = std::min(353, self->width - 8);
 
-            self->widgets[widx::sort_town_stations].left = std::min(354, self->width - 8);
-            self->widgets[widx::sort_town_stations].right = std::min(423, self->width - 8);
+            self->widgets.get()[widx::sort_town_stations].left = std::min(354, self->width - 8);
+            self->widgets.get()[widx::sort_town_stations].right = std::min(423, self->width - 8);
 
             // Set header button captions
-            self->widgets[widx::sort_town_name].text = self->sort_mode == SortMode::Name ? StringIds::table_header_name_desc : StringIds::table_header_name;
-            self->widgets[widx::sort_town_type].text = self->sort_mode == SortMode::Type ? StringIds::table_header_town_type_desc : StringIds::table_header_town_type;
-            self->widgets[widx::sort_town_population].text = self->sort_mode == SortMode::Population ? StringIds::table_header_population_desc : StringIds::table_header_population;
-            self->widgets[widx::sort_town_stations].text = self->sort_mode == SortMode::Stations ? StringIds::table_header_stations_desc : StringIds::table_header_stations;
+            self->widgets.get()[widx::sort_town_name].text = self->sort_mode == SortMode::Name ? StringIds::table_header_name_desc : StringIds::table_header_name;
+            self->widgets.get()[widx::sort_town_type].text = self->sort_mode == SortMode::Type ? StringIds::table_header_town_type_desc : StringIds::table_header_town_type;
+            self->widgets.get()[widx::sort_town_population].text = self->sort_mode == SortMode::Population ? StringIds::table_header_population_desc : StringIds::table_header_population;
+            self->widgets.get()[widx::sort_town_stations].text = self->sort_mode == SortMode::Stations ? StringIds::table_header_stations_desc : StringIds::table_header_stations;
 
             Common::repositionTabs(self);
         }
@@ -620,7 +620,7 @@ namespace OpenLoco::Ui::Windows::TownList
                 StringIds::town_size_8,
             };
 
-            self->widgets[widx::current_size].text = townSizeNames[_townSize];
+            self->widgets.get()[widx::current_size].text = townSizeNames[_townSize];
         }
 
         // 0x0049A627
@@ -629,7 +629,7 @@ namespace OpenLoco::Ui::Windows::TownList
             self->draw(dpi);
             Common::drawTabs(self, dpi);
 
-            Gfx::drawString_494B3F(*dpi, self->x + 3, self->y + self->widgets[widx::current_size].top + 1, Colour::black, StringIds::town_size_label);
+            Gfx::drawString_494B3F(*dpi, self->x + 3, self->y + self->widgets.get()[widx::current_size].top + 1, Colour::black, StringIds::town_size_label);
 
             Gfx::drawString_494B3F(*dpi, self->x + 3, self->y + self->height - 13, Colour::black, StringIds::select_town_size);
         }
@@ -719,7 +719,7 @@ namespace OpenLoco::Ui::Windows::TownList
         static void onMouseDown(window* self, widget_index widgetIndex)
         {
             if (widgetIndex == widx::select_size)
-                populateTownSizeSelect(self, &self->widgets[widgetIndex]);
+                populateTownSizeSelect(self, &self->widgets.get()[widgetIndex]);
         }
 
         // 0x0049A844
@@ -793,31 +793,31 @@ namespace OpenLoco::Ui::Windows::TownList
         // 0x0049A8A6
         static void prepareDraw(Ui::window* self)
         {
-            self->widgets[widx::object_colour].image = (1 << 30) | Gfx::recolour(ImageIds::colour_swatch_recolourable, _buildingColour);
-            self->widgets[widx::object_colour].type = widget_type::none;
+            self->widgets.get()[widx::object_colour].image = (1 << 30) | Gfx::recolour(ImageIds::colour_swatch_recolourable, _buildingColour);
+            self->widgets.get()[widx::object_colour].type = widget_type::none;
 
             if (self->row_hover != -1)
             {
                 auto buildingObj = ObjectManager::get<BuildingObject>(self->row_hover);
                 if (buildingObj->colours != 0)
-                    self->widgets[widx::object_colour].type = widget_type::wt_10;
+                    self->widgets.get()[widx::object_colour].type = widget_type::wt_10;
             }
 
             Common::prepareDraw(self);
 
-            self->widgets[widx::scrollview].right = self->width - 26;
-            self->widgets[widx::scrollview].bottom = self->height - 14;
+            self->widgets.get()[widx::scrollview].right = self->width - 26;
+            self->widgets.get()[widx::scrollview].bottom = self->height - 14;
 
-            self->widgets[widx::rotate_object].left = self->width - 25;
-            self->widgets[widx::rotate_object].right = self->width - 2;
+            self->widgets.get()[widx::rotate_object].left = self->width - 25;
+            self->widgets.get()[widx::rotate_object].right = self->width - 2;
 
-            self->widgets[widx::object_colour].left = self->width - 21;
-            self->widgets[widx::object_colour].right = self->width - 6;
+            self->widgets.get()[widx::object_colour].left = self->width - 21;
+            self->widgets.get()[widx::object_colour].right = self->width - 6;
 
-            self->widgets[Common::widx::caption].text = StringIds::title_build_new_buildings;
+            self->widgets.get()[Common::widx::caption].text = StringIds::title_build_new_buildings;
 
             if (self->current_tab == Common::widx::tab_build_misc_buildings - Common::widx::tab_town_list)
-                self->widgets[Common::widx::caption].text = StringIds::title_build_new_misc_buildings;
+                self->widgets.get()[Common::widx::caption].text = StringIds::title_build_new_misc_buildings;
 
             Common::repositionTabs(self);
         }
@@ -1319,7 +1319,7 @@ namespace OpenLoco::Ui::Windows::TownList
         {
             // Reset tab widgets if needed
             const auto& tabWidgets = tabInformationByTabOffset[self->current_tab].widgets;
-            if (self->widgets != tabWidgets)
+            if (self->widgets.get() != tabWidgets)
             {
                 self->widgets = tabWidgets;
                 self->initScrollWidgets();
@@ -1329,30 +1329,30 @@ namespace OpenLoco::Ui::Windows::TownList
             self->activated_widgets &= ~((1ULL << tab_town_list) | (1ULL << tab_build_town) | (1ULL << tab_build_buildings) | (1ULL << tab_build_misc_buildings));
             self->activated_widgets |= (1ULL << Common::tabInformationByTabOffset[self->current_tab].widgetIndex);
 
-            self->widgets[Common::widx::frame].right = self->width - 1;
-            self->widgets[Common::widx::frame].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::frame].right = self->width - 1;
+            self->widgets.get()[Common::widx::frame].bottom = self->height - 1;
 
-            self->widgets[Common::widx::panel].right = self->width - 1;
-            self->widgets[Common::widx::panel].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::panel].right = self->width - 1;
+            self->widgets.get()[Common::widx::panel].bottom = self->height - 1;
 
-            self->widgets[Common::widx::caption].right = self->width - 2;
+            self->widgets.get()[Common::widx::caption].right = self->width - 2;
 
-            self->widgets[Common::widx::close_button].left = self->width - 15;
-            self->widgets[Common::widx::close_button].right = self->width - 3;
+            self->widgets.get()[Common::widx::close_button].left = self->width - 15;
+            self->widgets.get()[Common::widx::close_button].right = self->width - 3;
         }
 
         // 0x0049B004 and 0x0049B00A
         static void repositionTabs(window* self)
         {
-            int16_t new_tab_x = self->widgets[widx::tab_town_list].left;
-            int16_t tab_width = self->widgets[widx::tab_town_list].right - new_tab_x;
+            int16_t new_tab_x = self->widgets.get()[widx::tab_town_list].left;
+            int16_t tab_width = self->widgets.get()[widx::tab_town_list].right - new_tab_x;
 
             for (auto& tabInfo : tabInformationByTabOffset)
             {
                 if (self->isDisabled(tabInfo.widgetIndex))
                     continue;
 
-                widget_t& tab = self->widgets[tabInfo.widgetIndex];
+                widget_t& tab = self->widgets.get()[tabInfo.widgetIndex];
 
                 tab.left = new_tab_x;
                 new_tab_x += tab_width;

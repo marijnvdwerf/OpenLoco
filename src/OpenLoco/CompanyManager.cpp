@@ -219,7 +219,7 @@ namespace OpenLoco::CompanyManager
         if (main == nullptr)
             return;
 
-        auto viewport = main->viewports[0];
+        auto viewport = main->viewports[0].get();
         if (viewport == nullptr)
             return;
 

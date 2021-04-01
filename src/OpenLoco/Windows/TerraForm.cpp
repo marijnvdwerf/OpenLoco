@@ -510,8 +510,8 @@ namespace OpenLoco::Ui::Windows::Terraform
             if (_treeClusterType == treeCluster::random)
                 self->activated_widgets |= (1ULL << widx::plant_cluster_random);
 
-            self->widgets[widx::rotate_object].type = widget_type::none;
-            self->widgets[widx::object_colour].type = widget_type::none;
+            self->widgets.get()[widx::rotate_object].type = widget_type::none;
+            self->widgets.get()[widx::object_colour].type = widget_type::none;
 
             if (self->row_hover != -1)
             {
@@ -519,29 +519,29 @@ namespace OpenLoco::Ui::Windows::Terraform
                 if (treeObj->name != 0xFFFF)
                 {
                     if (treeObj->num_rotations != 1)
-                        self->widgets[widx::rotate_object].type = widget_type::wt_9;
+                        self->widgets.get()[widx::rotate_object].type = widget_type::wt_9;
 
                     if (treeObj->colours != 0)
                     {
 
-                        self->widgets[widx::object_colour].image = (1 << 30) | Gfx::recolour(ImageIds::colour_swatch_recolourable, _treeColour);
-                        self->widgets[widx::object_colour].type = widget_type::wt_10;
+                        self->widgets.get()[widx::object_colour].image = (1 << 30) | Gfx::recolour(ImageIds::colour_swatch_recolourable, _treeColour);
+                        self->widgets.get()[widx::object_colour].type = widget_type::wt_10;
                     }
                 }
             }
 
-            self->widgets[widx::scrollview].right = self->width - 26;
-            self->widgets[widx::scrollview].bottom = self->height - 14;
+            self->widgets.get()[widx::scrollview].right = self->width - 26;
+            self->widgets.get()[widx::scrollview].bottom = self->height - 14;
 
-            self->widgets[widx::rotate_object].left = self->width - 25;
-            self->widgets[widx::object_colour].left = self->width - 25;
-            self->widgets[widx::plant_cluster_selected].left = self->width - 25;
-            self->widgets[widx::plant_cluster_random].left = self->width - 25;
+            self->widgets.get()[widx::rotate_object].left = self->width - 25;
+            self->widgets.get()[widx::object_colour].left = self->width - 25;
+            self->widgets.get()[widx::plant_cluster_selected].left = self->width - 25;
+            self->widgets.get()[widx::plant_cluster_random].left = self->width - 25;
 
-            self->widgets[widx::rotate_object].right = self->width - 2;
-            self->widgets[widx::object_colour].right = self->width - 2;
-            self->widgets[widx::plant_cluster_selected].right = self->width - 2;
-            self->widgets[widx::plant_cluster_random].right = self->width - 2;
+            self->widgets.get()[widx::rotate_object].right = self->width - 2;
+            self->widgets.get()[widx::object_colour].right = self->width - 2;
+            self->widgets.get()[widx::plant_cluster_selected].right = self->width - 2;
+            self->widgets.get()[widx::plant_cluster_random].right = self->width - 2;
 
             Common::repositionTabs(self);
         }
@@ -885,7 +885,7 @@ namespace OpenLoco::Ui::Windows::Terraform
 
             self->activated_widgets |= (1ULL << widx::tool_area);
 
-            self->widgets[widx::tool_area].image = _adjustToolSize + ImageIds::tool_area;
+            self->widgets.get()[widx::tool_area].image = _adjustToolSize + ImageIds::tool_area;
 
             Common::repositionTabs(self);
         }
@@ -902,10 +902,10 @@ namespace OpenLoco::Ui::Windows::Terraform
             if (_raiseLandCost == 0)
                 return;
 
-            auto xPos = self->widgets[widx::tool_area].left + self->widgets[widx::tool_area].right;
+            auto xPos = self->widgets.get()[widx::tool_area].left + self->widgets.get()[widx::tool_area].right;
             xPos /= 2;
             xPos += self->x;
-            auto yPos = self->widgets[widx::tool_area].bottom + self->y + 5;
+            auto yPos = self->widgets.get()[widx::tool_area].bottom + self->y + 5;
 
             auto args = FormatArguments();
             args.push<uint32_t>(_raiseLandCost);
@@ -1002,9 +1002,9 @@ namespace OpenLoco::Ui::Windows::Terraform
                     landCount++;
             }
 
-            auto xPos = self->widgets[widgetIndex].left + self->x;
-            auto yPos = self->widgets[widgetIndex].bottom + self->y;
-            auto heightOffset = self->widgets[widgetIndex].height() - 18;
+            auto xPos = self->widgets.get()[widgetIndex].left + self->x;
+            auto yPos = self->widgets.get()[widgetIndex].bottom + self->y;
+            auto heightOffset = self->widgets.get()[widgetIndex].height() - 18;
             auto colour = self->colours[1] | 0x80;
             auto count = Dropdown::getItemsPerRow(landCount);
 
@@ -1240,11 +1240,11 @@ namespace OpenLoco::Ui::Windows::Terraform
             if (newWidgetIndex == -1)
                 return;
 
-            auto widget = window->widgets[newWidgetIndex];
+            auto widget = window->widgets.get()[newWidgetIndex];
             if (widget.type != widget_type::viewport)
                 return;
 
-            auto viewport = window->viewports[0];
+            auto viewport = window->viewports[0].get();
             if (viewport == nullptr)
                 return;
 
@@ -1293,18 +1293,18 @@ namespace OpenLoco::Ui::Windows::Terraform
 
             self->activated_widgets |= (1ULL << widx::tool_area);
 
-            self->widgets[widx::tool_area].image = _adjustToolSize + ImageIds::tool_area;
+            self->widgets.get()[widx::tool_area].image = _adjustToolSize + ImageIds::tool_area;
 
-            self->widgets[widx::land_material].type = widget_type::none;
+            self->widgets.get()[widx::land_material].type = widget_type::none;
 
             // CHANGE: Allows the player to select which material is used in the adjust land tool outside of editor mode.
             if (_adjustToolSize != 0)
             {
-                self->widgets[widx::land_material].type = widget_type::wt_6;
+                self->widgets.get()[widx::land_material].type = widget_type::wt_6;
 
                 auto landObj = ObjectManager::get<LandObject>(_lastSelectedLand);
 
-                self->widgets[widx::land_material].image = landObj->var_16 + OpenLoco::Land::ImageIds::landscape_generator_tile_icon;
+                self->widgets.get()[widx::land_material].image = landObj->var_16 + OpenLoco::Land::ImageIds::landscape_generator_tile_icon;
             }
 
             Common::repositionTabs(self);
@@ -1316,10 +1316,10 @@ namespace OpenLoco::Ui::Windows::Terraform
             self->draw(dpi);
             Common::drawTabs(self, dpi);
 
-            auto xPos = self->widgets[widx::tool_area].left + self->widgets[widx::tool_area].right;
+            auto xPos = self->widgets.get()[widx::tool_area].left + self->widgets.get()[widx::tool_area].right;
             xPos /= 2;
             xPos += self->x;
-            auto yPos = self->widgets[widx::tool_area].bottom + self->y + 28;
+            auto yPos = self->widgets.get()[widx::tool_area].bottom + self->y + 28;
 
             if (_raiseLandCost != 0x80000000)
             {
@@ -1487,11 +1487,11 @@ namespace OpenLoco::Ui::Windows::Terraform
             if (newWidgetIndex == -1)
                 return;
 
-            auto widget = window->widgets[newWidgetIndex];
+            auto widget = window->widgets.get()[newWidgetIndex];
             if (widget.type != widget_type::viewport)
                 return;
 
-            auto viewport = window->viewports[0];
+            auto viewport = window->viewports[0].get();
             if (viewport == nullptr)
                 return;
 
@@ -1541,7 +1541,7 @@ namespace OpenLoco::Ui::Windows::Terraform
 
             self->activated_widgets |= (1ULL << widx::tool_area);
 
-            self->widgets[widx::tool_area].image = _adjustToolSize + ImageIds::tool_area;
+            self->widgets.get()[widx::tool_area].image = _adjustToolSize + ImageIds::tool_area;
 
             Common::repositionTabs(self);
         }
@@ -1552,10 +1552,10 @@ namespace OpenLoco::Ui::Windows::Terraform
             self->draw(dpi);
             Common::drawTabs(self, dpi);
 
-            auto xPos = self->widgets[widx::tool_area].left + self->widgets[widx::tool_area].right;
+            auto xPos = self->widgets.get()[widx::tool_area].left + self->widgets.get()[widx::tool_area].right;
             xPos /= 2;
             xPos += self->x;
-            auto yPos = self->widgets[widx::tool_area].bottom + self->y + 5;
+            auto yPos = self->widgets.get()[widx::tool_area].bottom + self->y + 5;
 
             if (_raiseWaterCost != 0x80000000)
             {
@@ -1887,8 +1887,8 @@ namespace OpenLoco::Ui::Windows::Terraform
         {
             Common::prepareDraw(self);
 
-            self->widgets[widx::scrollview].right = self->width - 4;
-            self->widgets[widx::scrollview].bottom = self->height - 14;
+            self->widgets.get()[widx::scrollview].right = self->width - 4;
+            self->widgets.get()[widx::scrollview].bottom = self->height - 14;
 
             Common::repositionTabs(self);
         }
@@ -2041,21 +2041,21 @@ namespace OpenLoco::Ui::Windows::Terraform
         // 0x004BCF29, 0x004BCF2F
         static void repositionTabs(window* self)
         {
-            int16_t xPos = self->widgets[widx::tab_clear_area].left;
-            const int16_t tabWidth = self->widgets[widx::tab_clear_area].right - xPos;
+            int16_t xPos = self->widgets.get()[widx::tab_clear_area].left;
+            const int16_t tabWidth = self->widgets.get()[widx::tab_clear_area].right - xPos;
 
             for (uint8_t i = widx::tab_clear_area; i <= widx::tab_build_walls; i++)
             {
                 if (self->isDisabled(i))
                 {
-                    self->widgets[i].type = widget_type::none;
+                    self->widgets.get()[i].type = widget_type::none;
                     continue;
                 }
 
-                self->widgets[i].type = widget_type::wt_8;
-                self->widgets[i].left = xPos;
-                self->widgets[i].right = xPos + tabWidth;
-                xPos = self->widgets[i].right + 1;
+                self->widgets.get()[i].type = widget_type::wt_8;
+                self->widgets.get()[i].left = xPos;
+                self->widgets.get()[i].right = xPos + tabWidth;
+                xPos = self->widgets.get()[i].right + 1;
             }
         }
 
@@ -2063,7 +2063,7 @@ namespace OpenLoco::Ui::Windows::Terraform
         {
             // Reset tab widgets if needed.
             auto tabWidgets = tabInformationByTabOffset[self->current_tab].widgets;
-            if (self->widgets != tabWidgets)
+            if (self->widgets.get() != tabWidgets)
             {
                 self->widgets = tabWidgets;
                 self->initScrollWidgets();
@@ -2073,16 +2073,16 @@ namespace OpenLoco::Ui::Windows::Terraform
             self->activated_widgets &= ~((1ULL << tab_adjust_land) | (1ULL << tab_adjust_water) | (1ULL << tab_build_walls) | (1ULL << tab_clear_area) | (1ULL << tab_plant_trees));
             self->activated_widgets |= (1ULL << tabInformationByTabOffset[self->current_tab].widgetIndex);
 
-            self->widgets[widx::frame].right = self->width - 1;
-            self->widgets[widx::frame].bottom = self->height - 1;
+            self->widgets.get()[widx::frame].right = self->width - 1;
+            self->widgets.get()[widx::frame].bottom = self->height - 1;
 
-            self->widgets[widx::panel].right = self->width - 1;
-            self->widgets[widx::panel].bottom = self->height - 1;
+            self->widgets.get()[widx::panel].right = self->width - 1;
+            self->widgets.get()[widx::panel].bottom = self->height - 1;
 
-            self->widgets[widx::caption].right = self->width - 2;
+            self->widgets.get()[widx::caption].right = self->width - 2;
 
-            self->widgets[widx::close_button].left = self->width - 15;
-            self->widgets[widx::close_button].right = self->width - 3;
+            self->widgets.get()[widx::close_button].left = self->width - 15;
+            self->widgets.get()[widx::close_button].right = self->width - 3;
         }
 
         // 0x004BCF7F
@@ -2252,7 +2252,7 @@ namespace OpenLoco::Ui::Windows::Terraform
         {
             if (!self->isDisabled(PlantTrees::widx::rotate_object))
             {
-                if (self->widgets[PlantTrees::widx::rotate_object].type != widget_type::none)
+                if (self->widgets.get()[PlantTrees::widx::rotate_object].type != widget_type::none)
                 {
                     self->callOnMouseUp(PlantTrees::widx::rotate_object);
                     return true;

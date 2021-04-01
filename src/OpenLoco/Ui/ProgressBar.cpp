@@ -49,12 +49,6 @@ namespace OpenLoco::Ui::ProgressBar
         call(0x004CF631, regs);
     }
 
-    // 0x004CF63B
-    void sub_4CF63B()
-    {
-        call(0x004CF63B);
-    }
-
     // 0x004CF621
     // eax: value
     void setProgress(int32_t value)

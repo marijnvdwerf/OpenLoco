@@ -81,7 +81,7 @@ namespace OpenLoco::Ui::Windows::ProgressBar
 
         _progressBarValue = value;
         WindowManager::invalidate(WindowType::progressBar);
-        Ui::ProgressBar::sub_4CF63B();
+        Gfx::render();
     }
 
     // 0x004CF78A

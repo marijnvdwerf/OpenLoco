@@ -53,7 +53,7 @@ namespace OpenLoco::Ui::Windows::Construction::Signal
                 while (_signalList[signalCount] != 0xFF)
                     signalCount++;
 
-                auto widget = self->widgets[widx::signal];
+                auto widget = self->widgets.get()[widx::signal];
                 auto xPos = widget.left + self->x;
                 auto yPos = widget.top + self->y;
                 auto width = widget.width() + 2;
@@ -146,7 +146,7 @@ namespace OpenLoco::Ui::Windows::Construction::Signal
 
         auto trainSignalObject = ObjectManager::get<TrainSignalObject>(_lastSelectedSignal);
 
-        self->widgets[widx::signal].text = trainSignalObject->name;
+        self->widgets.get()[widx::signal].text = trainSignalObject->name;
 
         Common::repositionTabs(self);
     }
@@ -172,15 +172,15 @@ namespace OpenLoco::Ui::Windows::Construction::Signal
 
         auto imageId = trainSignalObject->image;
 
-        xPos = self->widgets[widx::both_directions].mid_x() + self->x;
-        yPos = self->widgets[widx::both_directions].bottom + self->y - 4;
+        xPos = self->widgets.get()[widx::both_directions].mid_x() + self->x;
+        yPos = self->widgets.get()[widx::both_directions].bottom + self->y - 4;
 
         Gfx::drawImage(dpi, xPos - 8, yPos, imageId);
 
         Gfx::drawImage(dpi, xPos + 8, yPos, imageId + 4);
 
-        xPos = self->widgets[widx::single_direction].mid_x() + self->x;
-        yPos = self->widgets[widx::single_direction].bottom + self->y - 4;
+        xPos = self->widgets.get()[widx::single_direction].mid_x() + self->x;
+        yPos = self->widgets.get()[widx::single_direction].bottom + self->y - 4;
 
         Gfx::drawImage(dpi, xPos, yPos, imageId);
 
@@ -190,7 +190,7 @@ namespace OpenLoco::Ui::Windows::Construction::Signal
             args.push<uint32_t>(_signalCost);
 
             xPos = self->x + 69;
-            yPos = self->widgets[widx::single_direction].bottom + self->y + 5;
+            yPos = self->widgets.get()[widx::single_direction].bottom + self->y + 5;
 
             Gfx::drawStringCentred(*dpi, xPos, yPos, Colour::black, StringIds::build_cost, &args);
         }

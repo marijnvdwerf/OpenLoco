@@ -17,7 +17,7 @@ using namespace OpenLoco::Interop;
 
 namespace OpenLoco::Ui::ViewportManager
 {
-    static std::vector<std::unique_ptr<viewport>> _viewports;
+    static std::vector<viewport*> _viewports;
 
     static loco_global<int32_t, 0x00E3F0B8> currentRotation;
 
@@ -35,7 +35,7 @@ namespace OpenLoco::Ui::ViewportManager
             std::remove_if(
                 _viewports.begin(),
                 _viewports.end(),
-                [](std::unique_ptr<viewport>& viewport) {
+                [](viewport* viewport) {
                     return viewport->width == 0;
                 }),
             _viewports.end());
@@ -43,7 +43,7 @@ namespace OpenLoco::Ui::ViewportManager
 
     static viewport* initViewport(Gfx::point_t origin, Gfx::ui_size_t size, ZoomLevel zoom)
     {
-        auto vp = _viewports.emplace_back(std::make_unique<viewport>()).get();
+        auto vp = _viewports.emplace_back((viewport*)malloc(sizeof(viewport)));
 
         vp->x = origin.x;
         vp->y = origin.y;
@@ -67,7 +67,7 @@ namespace OpenLoco::Ui::ViewportManager
     static void focusViewportOn(window* w, int index, thing_id_t dx)
     {
         assert(index >= 0 && index < viewportsPerWindow);
-        viewport* viewport = w->viewports[index];
+        viewport* viewport = w->viewports[index].get();
 
         w->viewport_configurations[index].viewport_target_sprite = dx;
 
@@ -84,7 +84,7 @@ namespace OpenLoco::Ui::ViewportManager
     static void focusViewportOn(window* w, int index, Map::map_pos3 tile)
     {
         assert(index >= 0 && index < viewportsPerWindow);
-        viewport* viewport = w->viewports[index];
+        viewport* viewport = w->viewports[index].get();
 
         w->viewport_configurations[index].viewport_target_sprite = 0xFFFF;
 

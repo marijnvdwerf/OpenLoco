@@ -95,9 +95,9 @@ namespace OpenLoco::Ui::Windows::LandscapeGenerationConfirm
 
         window->var_846 = prompt_type;
         if (prompt_type == 0)
-            window->widgets[widx::caption].text = StringIds::title_generate_new_landscape;
+            window->widgets.get()[widx::caption].text = StringIds::title_generate_new_landscape;
         else
-            window->widgets[widx::caption].text = StringIds::title_random_landscape_option;
+            window->widgets.get()[widx::caption].text = StringIds::title_random_landscape_option;
 
         return window;
     }

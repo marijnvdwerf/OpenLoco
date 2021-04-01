@@ -25,7 +25,7 @@ namespace OpenLoco::Ui::ViewportInteraction
     InteractionArg::InteractionArg(const Paint::PaintStruct& ps)
         : x(ps.map_x)
         , y(ps.map_y)
-        , object(ps.thing)
+        , object(ps.thing.get())
         , type(ps.type)
         , unkBh(ps.var_29)
     {
@@ -367,7 +367,7 @@ namespace OpenLoco::Ui::ViewportInteraction
         if (window == nullptr)
             return InteractionArg{};
 
-        auto viewport = window->viewports[0];
+        auto viewport = window->viewports[0].get();
         if (viewport == nullptr)
             return InteractionArg{};
 
@@ -422,8 +422,9 @@ namespace OpenLoco::Ui::ViewportInteraction
         auto w = WindowManager::findAt(screenPos);
         if (w != nullptr)
         {
-            for (auto vp : w->viewports)
+            for (auto vp1 : w->viewports)
             {
+                auto vp = vp1.get();
                 if (vp != nullptr && vp->containsUi({ screenPos.x, screenPos.y }))
                 {
                     if (vp->flags & ViewportFlags::hide_foreground_scenery_buildings)
@@ -468,8 +469,10 @@ namespace OpenLoco::Ui::ViewportInteraction
         }
 
         viewport* chosenV = nullptr;
-        for (auto vp : w->viewports)
+        for (auto vp1 : w->viewports)
         {
+            auto vp = vp1.get();
+
             if (vp == nullptr)
                 continue;
 

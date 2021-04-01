@@ -126,12 +126,12 @@ namespace OpenLoco::Ui::Windows::TileInspector
         // Coord X/Y labels
         {
             auto args = FormatArguments::common(StringIds::tile_inspector_x_coord);
-            auto& widget = self->widgets[widx::xPos];
+            auto& widget = self->widgets.get()[widx::xPos];
             Gfx::drawString_494B3F(*context, self->x + widget.left - 15, self->y + widget.top + 1, Colour::black, StringIds::wcolour2_stringid, &args);
         }
         {
             auto args = FormatArguments::common(StringIds::tile_inspector_y_coord);
-            auto& widget = self->widgets[widx::yPos];
+            auto& widget = self->widgets.get()[widx::yPos];
             Gfx::drawString_494B3F(*context, self->x + widget.left - 15, self->y + widget.top + 1, Colour::black, StringIds::wcolour2_stringid, &args);
         }
 
@@ -139,13 +139,13 @@ namespace OpenLoco::Ui::Windows::TileInspector
         {
             FormatArguments args = {};
             args.push<int16_t>(_currentPosition.x / OpenLoco::Map::tile_size);
-            auto& widget = self->widgets[widx::xPos];
+            auto& widget = self->widgets.get()[widx::xPos];
             Gfx::drawString_494B3F(*context, self->x + widget.left + 2, self->y + widget.top + 1, Colour::black, StringIds::tile_inspector_coord, &args);
         }
         {
             FormatArguments args = {};
             args.push<int16_t>(_currentPosition.y / OpenLoco::Map::tile_size);
-            auto& widget = self->widgets[widx::yPos];
+            auto& widget = self->widgets.get()[widx::yPos];
             Gfx::drawString_494B3F(*context, self->x + widget.left + 2, self->y + widget.top + 1, Colour::black, StringIds::tile_inspector_coord, &args);
         }
 
@@ -159,7 +159,7 @@ namespace OpenLoco::Ui::Windows::TileInspector
             buffer[0] = ControlCodes::window_colour_2;
             snprintf(&buffer[1], std::size(buffer) - 1, "Data: %02x %02x %02x %02x %02x %02x %02x %02x", data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
 
-            auto widget = self->widgets[widx::detailsGroup];
+            auto widget = self->widgets.get()[widx::detailsGroup];
             Gfx::drawString(context, self->x + widget.left + 7, self->y + widget.top + 14, Colour::black, buffer);
         }
     }

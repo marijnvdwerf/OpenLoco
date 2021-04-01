@@ -1,6 +1,7 @@
 #include "VehicleManager.h"
 #include "../Company.h"
 #include "../Interop/Interop.hpp"
+#include "../OpenLoco.h"
 
 using namespace OpenLoco::Interop;
 

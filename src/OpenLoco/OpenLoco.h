@@ -61,6 +61,39 @@ namespace OpenLoco
     };
 #pragma pack(pop)
 
+    template<typename T>
+    class loco_ptr2
+    {
+    public:
+        uint32_t ptr;
+        loco_ptr2(uint32_t ptr)
+            : ptr(ptr)
+        {
+        }
+        loco_ptr2(T* ptr = nullptr)
+        {
+            assert((uintptr_t)ptr < UINT32_MAX);
+            this->ptr = static_cast<uint32_t>((uintptr_t)ptr);
+        }
+
+        T* get()
+        {
+            return (T*)(uintptr_t)ptr;
+        }
+
+        T* get() const
+        {
+            return (T*)(uintptr_t)ptr;
+        }
+
+        T* operator*() const
+        {
+            return this->get();
+        }
+    };
+
+    static_assert(sizeof(loco_ptr2<void>) == 4);
+
     extern const char version[];
 
     std::string getVersionInfo();
@@ -97,3 +130,12 @@ namespace OpenLoco
     void promptTickLoop(std::function<bool()> tickAction);
     void exitWithError(OpenLoco::string_id message, uint32_t errorCode);
 }
+
+#ifndef __i386__
+namespace compat
+{
+    void* malloc(size_t size);
+    void free(void* ptr);
+    void* realloc(void* ptr, size_t size);
+}
+#endif

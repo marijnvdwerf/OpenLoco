@@ -255,7 +255,7 @@ namespace OpenLoco::Ui::Windows::Construction
         auto mainWindow = WindowManager::getMainWindow();
         if (mainWindow)
         {
-            auto viewport = mainWindow->viewports[0];
+            auto viewport = mainWindow->viewports[0].get();
             _word_1135F86 = viewport->flags;
         }
 
@@ -298,7 +298,7 @@ namespace OpenLoco::Ui::Windows::Construction
 
         if (mainWindow)
         {
-            auto viewport = mainWindow->viewports[0];
+            auto viewport = mainWindow->viewports[0].get();
             viewport->flags = _word_1135F86;
         }
 
@@ -371,7 +371,7 @@ namespace OpenLoco::Ui::Windows::Construction
         {
             // Reset tab widgets if needed
             const auto& tabWidgets = tabInformationByTabOffset[self->current_tab].widgets;
-            if (self->widgets != tabWidgets)
+            if (self->widgets.get() != tabWidgets)
             {
                 self->widgets = tabWidgets;
                 self->initScrollWidgets();
@@ -426,8 +426,8 @@ namespace OpenLoco::Ui::Windows::Construction
 
             self->invalidate();
 
-            self->width = self->widgets[widx::frame].right + 1;
-            self->height = self->widgets[widx::frame].bottom + 1;
+            self->width = self->widgets.get()[widx::frame].right + 1;
+            self->height = self->widgets.get()[widx::frame].bottom + 1;
 
             self->callOnResize();
             self->callPrepareDraw();
@@ -459,8 +459,8 @@ namespace OpenLoco::Ui::Windows::Construction
                 Widget::draw_tab(self, dpi, ImageIds::null, widx::tab_station);
                 if (!self->isDisabled(widx::tab_station))
                 {
-                    auto x = self->widgets[widx::tab_station].left + self->x + 1;
-                    auto y = self->widgets[widx::tab_station].top + self->y + 1;
+                    auto x = self->widgets.get()[widx::tab_station].left + self->x + 1;
+                    auto y = self->widgets.get()[widx::tab_station].top + self->y + 1;
                     auto width = 29;
                     auto height = 25;
                     if (self->current_tab == widx::tab_station - widx::tab_construction)
@@ -495,8 +495,8 @@ namespace OpenLoco::Ui::Windows::Construction
                 Widget::draw_tab(self, dpi, ImageIds::null, widx::tab_overhead);
                 if (!self->isDisabled(widx::tab_station))
                 {
-                    auto x = self->widgets[widx::tab_overhead].left + self->x + 2;
-                    auto y = self->widgets[widx::tab_overhead].top + self->y + 2;
+                    auto x = self->widgets.get()[widx::tab_overhead].left + self->x + 2;
+                    auto y = self->widgets.get()[widx::tab_overhead].top + self->y + 2;
 
                     for (auto i = 0; i < 2; i++)
                     {
@@ -551,8 +551,8 @@ namespace OpenLoco::Ui::Windows::Construction
                         Widget::draw_tab(self, dpi, ImageIds::null, widx::tab_station);
                         if (!self->isDisabled(widx::tab_station))
                         {
-                            auto x = self->widgets[widx::tab_station].left + self->x + 1;
-                            auto y = self->widgets[widx::tab_station].top + self->y + 1;
+                            auto x = self->widgets.get()[widx::tab_station].left + self->x + 1;
+                            auto y = self->widgets.get()[widx::tab_station].top + self->y + 1;
                             auto width = 29;
                             auto height = 25;
                             if (self->current_tab == widx::tab_station - widx::tab_construction)
@@ -589,8 +589,8 @@ namespace OpenLoco::Ui::Windows::Construction
                 Widget::draw_tab(self, dpi, ImageIds::null, widx::tab_signal);
                 if (!self->isDisabled(widx::tab_signal))
                 {
-                    auto x = self->widgets[widx::tab_signal].left + self->x + 1;
-                    auto y = self->widgets[widx::tab_signal].top + self->y + 1;
+                    auto x = self->widgets.get()[widx::tab_signal].left + self->x + 1;
+                    auto y = self->widgets.get()[widx::tab_signal].top + self->y + 1;
                     auto width = 29;
                     auto height = 25;
                     if (self->current_tab == widx::tab_station - widx::tab_construction)
@@ -622,8 +622,8 @@ namespace OpenLoco::Ui::Windows::Construction
                 Widget::draw_tab(self, dpi, ImageIds::null, widx::tab_overhead);
                 if (!self->isDisabled(widx::tab_station))
                 {
-                    auto x = self->widgets[widx::tab_overhead].left + self->x + 2;
-                    auto y = self->widgets[widx::tab_overhead].top + self->y + 2;
+                    auto x = self->widgets.get()[widx::tab_overhead].left + self->x + 2;
+                    auto y = self->widgets.get()[widx::tab_overhead].top + self->y + 2;
 
                     for (auto i = 0; i < 4; i++)
                     {
@@ -658,21 +658,21 @@ namespace OpenLoco::Ui::Windows::Construction
         // 0x004A09DE
         void repositionTabs(window* self)
         {
-            int16_t xPos = self->widgets[widx::tab_construction].left;
-            const int16_t tabWidth = self->widgets[widx::tab_construction].right - xPos;
+            int16_t xPos = self->widgets.get()[widx::tab_construction].left;
+            const int16_t tabWidth = self->widgets.get()[widx::tab_construction].right - xPos;
 
             for (uint8_t i = widx::tab_construction; i <= widx::tab_overhead; i++)
             {
                 if (self->isDisabled(i))
                 {
-                    self->widgets[i].type = widget_type::none;
+                    self->widgets.get()[i].type = widget_type::none;
                     continue;
                 }
 
-                self->widgets[i].type = widget_type::wt_8;
-                self->widgets[i].left = xPos;
-                self->widgets[i].right = xPos + tabWidth;
-                xPos = self->widgets[i].right + 1;
+                self->widgets.get()[i].type = widget_type::wt_8;
+                self->widgets.get()[i].left = xPos;
+                self->widgets.get()[i].right = xPos + tabWidth;
+                xPos = self->widgets.get()[i].right + 1;
             }
         }
 
@@ -1240,7 +1240,7 @@ namespace OpenLoco::Ui::Windows::Construction
                 break;
 
             case Common::widx::tab_station - Common::widx::tab_construction:
-                if (self->widgets[Station::widx::rotate].type != widget_type::none)
+                if (self->widgets.get()[Station::widx::rotate].type != widget_type::none)
                 {
                     self->callOnMouseUp(Station::widx::rotate);
                 }

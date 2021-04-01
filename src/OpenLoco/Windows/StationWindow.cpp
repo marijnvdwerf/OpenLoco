@@ -99,17 +99,17 @@ namespace OpenLoco::Ui::Windows::Station
         {
             Common::prepareDraw(self);
 
-            self->widgets[widx::viewport].right = self->width - 4;
-            self->widgets[widx::viewport].bottom = self->height - 14;
+            self->widgets.get()[widx::viewport].right = self->width - 4;
+            self->widgets.get()[widx::viewport].bottom = self->height - 14;
 
-            self->widgets[widx::status_bar].top = self->height - 12;
-            self->widgets[widx::status_bar].bottom = self->height - 3;
-            self->widgets[widx::status_bar].right = self->width - 14;
+            self->widgets.get()[widx::status_bar].top = self->height - 12;
+            self->widgets.get()[widx::status_bar].bottom = self->height - 3;
+            self->widgets.get()[widx::status_bar].right = self->width - 14;
 
-            self->widgets[widx::centre_on_viewport].right = self->widgets[widx::viewport].right - 1;
-            self->widgets[widx::centre_on_viewport].bottom = self->widgets[widx::viewport].bottom - 1;
-            self->widgets[widx::centre_on_viewport].left = self->widgets[widx::viewport].right - 24;
-            self->widgets[widx::centre_on_viewport].top = self->widgets[widx::viewport].bottom - 24;
+            self->widgets.get()[widx::centre_on_viewport].right = self->widgets.get()[widx::viewport].right - 1;
+            self->widgets.get()[widx::centre_on_viewport].bottom = self->widgets.get()[widx::viewport].bottom - 1;
+            self->widgets.get()[widx::centre_on_viewport].left = self->widgets.get()[widx::viewport].right - 24;
+            self->widgets.get()[widx::centre_on_viewport].top = self->widgets.get()[widx::viewport].bottom - 24;
 
             Common::repositionTabs(self);
         }
@@ -129,7 +129,7 @@ namespace OpenLoco::Ui::Windows::Station
             auto args = FormatArguments();
             args.push(StringIds::buffer_1250);
 
-            const auto& widget = self->widgets[widx::status_bar];
+            const auto& widget = self->widgets.get()[widx::status_bar];
             const auto x = self->x + widget.left - 1;
             const auto y = self->y + widget.top - 1;
             const auto width = widget.width() - 1;
@@ -171,12 +171,12 @@ namespace OpenLoco::Ui::Windows::Station
 
             self->setSize(windowSize, Common::maxWindowSize);
 
-            if (self->viewports[0] != nullptr)
+            if (self->viewports[0].get() != nullptr)
             {
                 uint16_t newWidth = self->height - 8;
                 uint16_t newHeight = self->height - 59;
 
-                auto& viewport = self->viewports[0];
+                auto viewport = self->viewports[0].get();
                 if (newWidth != viewport->width || newHeight != viewport->height)
                 {
                     viewport->width = newWidth;
@@ -207,18 +207,18 @@ namespace OpenLoco::Ui::Windows::Station
                 station->x,
                 station->y,
                 ZoomLevel::half,
-                static_cast<int8_t>(self->viewports[0]->getRotation()),
+                static_cast<int8_t>(self->viewports[0].get()->getRotation()),
                 station->z,
             };
             view.flags |= (1 << 14);
 
             uint16_t flags = 0;
-            if (self->viewports[0] != nullptr)
+            if (self->viewports[0].get() != nullptr)
             {
                 if (self->saved_view == view)
                     return;
 
-                flags = self->viewports[0]->flags;
+                flags = self->viewports[0].get()->flags;
                 self->viewportRemove(0);
                 ViewportManager::collectGarbage();
             }
@@ -233,9 +233,9 @@ namespace OpenLoco::Ui::Windows::Station
             self->saved_view = view;
 
             // 0x0048F1CB start
-            if (self->viewports[0] == nullptr)
+            if (self->viewports[0].get() == nullptr)
             {
-                auto widget = &self->widgets[widx::viewport];
+                auto widget = &self->widgets.get()[widx::viewport];
                 auto tile = OpenLoco::Map::map_pos3({ station->x, station->y, station->z });
                 auto origin = Gfx::point_t(widget->left + self->x + 1, widget->top + self->y + 1);
                 auto size = Gfx::ui_size_t(widget->width() - 2, widget->height() - 2);
@@ -245,9 +245,9 @@ namespace OpenLoco::Ui::Windows::Station
             }
             // 0x0048F1CB end
 
-            if (self->viewports[0] != nullptr)
+            if (self->viewports[0].get() != nullptr)
             {
-                self->viewports[0]->flags = flags;
+                self->viewports[0].get()->flags = flags;
                 self->invalidate();
             }
         }
@@ -339,15 +339,15 @@ namespace OpenLoco::Ui::Windows::Station
         {
             Common::prepareDraw(self);
 
-            self->widgets[widx::scrollview].right = self->width - 24;
-            self->widgets[widx::scrollview].bottom = self->height - 14;
+            self->widgets.get()[widx::scrollview].right = self->width - 24;
+            self->widgets.get()[widx::scrollview].bottom = self->height - 14;
 
-            self->widgets[widx::status_bar].top = self->height - 12;
-            self->widgets[widx::status_bar].bottom = self->height - 3;
-            self->widgets[widx::status_bar].right = self->width - 14;
+            self->widgets.get()[widx::status_bar].top = self->height - 12;
+            self->widgets.get()[widx::status_bar].bottom = self->height - 3;
+            self->widgets.get()[widx::status_bar].right = self->width - 14;
 
-            self->widgets[widx::station_catchment].right = self->width - 2;
-            self->widgets[widx::station_catchment].left = self->width - 25;
+            self->widgets.get()[widx::station_catchment].right = self->width - 2;
+            self->widgets.get()[widx::station_catchment].left = self->width - 25;
 
             Common::repositionTabs(self);
 
@@ -390,7 +390,7 @@ namespace OpenLoco::Ui::Windows::Station
 
             *buffer++ = '\0';
 
-            const auto& widget = self->widgets[widx::status_bar];
+            const auto& widget = self->widgets.get()[widx::status_bar];
             const auto x = self->x + widget.left - 1;
             const auto y = self->y + widget.top - 1;
             const auto width = widget.width();
@@ -508,7 +508,7 @@ namespace OpenLoco::Ui::Windows::Station
 
                 if (cargo.origin != self->number)
                     cargoStr = StringIds::station_cargo_en_route_start;
-                const auto& widget = self->widgets[widx::scrollview];
+                const auto& widget = self->widgets.get()[widx::scrollview];
                 auto xPos = widget.width() - 14;
 
                 Gfx::drawString_494C78(*dpi, xPos, y, Colour::outline(Colour::black), cargoStr, &args);
@@ -589,12 +589,12 @@ namespace OpenLoco::Ui::Windows::Station
         {
             Common::prepareDraw(self);
 
-            self->widgets[widx::scrollview].right = self->width - 4;
-            self->widgets[widx::scrollview].bottom = self->height - 14;
+            self->widgets.get()[widx::scrollview].right = self->width - 4;
+            self->widgets.get()[widx::scrollview].bottom = self->height - 14;
 
-            self->widgets[widx::status_bar].top = self->height - 12;
-            self->widgets[widx::status_bar].bottom = self->height - 3;
-            self->widgets[widx::status_bar].right = self->width - 14;
+            self->widgets.get()[widx::status_bar].top = self->height - 12;
+            self->widgets.get()[widx::status_bar].bottom = self->height - 3;
+            self->widgets.get()[widx::status_bar].right = self->width - 14;
 
             Common::repositionTabs(self);
         }
@@ -793,7 +793,7 @@ namespace OpenLoco::Ui::Windows::Station
         {
             // Reset tab widgets if needed.
             auto tabWidgets = tabInformationByTabOffset[self->current_tab].widgets;
-            if (self->widgets != tabWidgets)
+            if (self->widgets.get() != tabWidgets)
             {
                 self->widgets = tabWidgets;
                 self->initScrollWidgets();
@@ -831,16 +831,16 @@ namespace OpenLoco::Ui::Windows::Station
             args.push(stationTypeImages[(station->flags & 0xF)]);
 
             // Resize common widgets.
-            self->widgets[Common::widx::frame].right = self->width - 1;
-            self->widgets[Common::widx::frame].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::frame].right = self->width - 1;
+            self->widgets.get()[Common::widx::frame].bottom = self->height - 1;
 
-            self->widgets[Common::widx::caption].right = self->width - 2;
+            self->widgets.get()[Common::widx::caption].right = self->width - 2;
 
-            self->widgets[Common::widx::close_button].left = self->width - 15;
-            self->widgets[Common::widx::close_button].right = self->width - 3;
+            self->widgets.get()[Common::widx::close_button].left = self->width - 15;
+            self->widgets.get()[Common::widx::close_button].right = self->width - 3;
 
-            self->widgets[Common::widx::panel].right = self->width - 1;
-            self->widgets[Common::widx::panel].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::panel].right = self->width - 1;
+            self->widgets.get()[Common::widx::panel].bottom = self->height - 1;
         }
 
         // 0x0048E5DF
@@ -883,17 +883,17 @@ namespace OpenLoco::Ui::Windows::Station
         // 0x0048EF82, 0x0048EF88
         static void repositionTabs(window* self)
         {
-            int16_t xPos = self->widgets[widx::tab_station].left;
-            const int16_t tabWidth = self->widgets[widx::tab_station].right - xPos;
+            int16_t xPos = self->widgets.get()[widx::tab_station].left;
+            const int16_t tabWidth = self->widgets.get()[widx::tab_station].right - xPos;
 
             for (uint8_t i = widx::tab_station; i <= widx::tab_cargo_ratings; i++)
             {
                 if (self->isDisabled(i))
                     continue;
 
-                self->widgets[i].left = xPos;
-                self->widgets[i].right = xPos + tabWidth;
-                xPos = self->widgets[i].right + 1;
+                self->widgets.get()[i].left = xPos;
+                self->widgets.get()[i].right = xPos + tabWidth;
+                xPos = self->widgets.get()[i].right + 1;
             }
         }
 
@@ -976,7 +976,7 @@ namespace OpenLoco::Ui::Windows::Station
                 const uint32_t imageId = skin->img + InterfaceSkin::ImageIds::tab_cargo_ratings;
                 Widget::draw_tab(self, dpi, imageId, widx::tab_cargo_ratings);
 
-                auto widget = self->widgets[widx::tab_cargo_ratings];
+                auto widget = self->widgets.get()[widx::tab_cargo_ratings];
                 auto yOffset = widget.top + self->y + 14;
                 auto xOffset = widget.left + self->x + 4;
                 auto totalRatingBars = 0;

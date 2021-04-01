@@ -203,6 +203,16 @@ namespace OpenLoco::Ui
         palette = SDL_AllocPalette(256);
         set_palette_callback = updatePalette;
 
+        SDL_Color base[256];
+        for (int i = 0; i < 256; i++)
+        {
+            base[i].r = i*10;
+            base[i].g = i*10;
+            base[i].b = i*10;
+            base[i].a = 0;
+        }
+        SDL_SetPaletteColors(palette, base, 0, 256);
+
         update(desc.width, desc.height);
 #endif
     }
@@ -360,7 +370,7 @@ namespace OpenLoco::Ui
         int32_t pitch = surface->pitch;
 
         Gfx::drawpixelinfo_t dpi{};
-        dpi.bits = new uint8_t[surface->pitch * height];
+        dpi.bits = (uint8_t *)malloc(surface->pitch * height);
         dpi.width = width;
         dpi.height = height;
         dpi.pitch = pitch - width;
@@ -441,9 +451,9 @@ namespace OpenLoco::Ui
 
             // Copy pixels from the virtual screen buffer to the surface
             auto& dpi = Gfx::screenDpi();
-            if (dpi.bits != nullptr)
+            if (dpi.bits.get() != nullptr)
             {
-                std::memcpy(surface->pixels, dpi.bits, surface->pitch * surface->h);
+                std::memcpy(surface->pixels, dpi.bits.get(), surface->pitch * surface->h);
             }
 
             // Unlock the surface

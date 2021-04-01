@@ -62,7 +62,7 @@ namespace OpenLoco::Ui::Windows::ScenarioSelect
         uint16_t xPos = 3;
         for (int i = 0; i < 5; i++)
         {
-            widget_t& widget = self->widgets[widx::tab0 + i];
+            widget_t& widget = self->widgets.get()[widx::tab0 + i];
             if (ScenarioManager::hasScenariosForCategory(i))
             {
                 widget.type = widget_type::wt_8;
@@ -122,12 +122,12 @@ namespace OpenLoco::Ui::Windows::ScenarioSelect
 
         // Select the last tab used, or the first available one.
         uint8_t selectedTab = Config::get().scenario_selected_tab;
-        if (self->widgets[widx::tab0 + selectedTab].type == widget_type::none)
+        if (self->widgets.get()[widx::tab0 + selectedTab].type == widget_type::none)
         {
             selectedTab = 0;
             for (int i = 0; i < 5; i++)
             {
-                if (self->widgets[widx::tab0 + i].type == widget_type::none)
+                if (self->widgets.get()[widx::tab0 + i].type == widget_type::none)
                 {
                     selectedTab = i;
                     break;
@@ -168,7 +168,7 @@ namespace OpenLoco::Ui::Windows::ScenarioSelect
         // Draw tab captions.
         for (int i = 0; i < 5; i++)
         {
-            widget_t& widget = self->widgets[widx::tab0 + i];
+            widget_t& widget = self->widgets.get()[widx::tab0 + i];
             if (widget.type == widget_type::none)
                 continue;
 
@@ -203,9 +203,9 @@ namespace OpenLoco::Ui::Windows::ScenarioSelect
             call(0x0046E07B); // load currency gfx
         }
 
-        const int16_t baseX = self->x + self->widgets[widx::list].right + 4;
-        const int16_t baseY = self->y + self->widgets[widx::panel].top + 5;
-        const int16_t colWidth = self->widgets[widx::panel].right - self->widgets[widx::list].right - 6;
+        const int16_t baseX = self->x + self->widgets.get()[widx::list].right + 4;
+        const int16_t baseY = self->y + self->widgets.get()[widx::panel].top + 5;
+        const int16_t colWidth = self->widgets.get()[widx::panel].right - self->widgets.get()[widx::list].right - 6;
 
         int16_t x = baseX, y = baseY;
 
@@ -374,7 +374,7 @@ namespace OpenLoco::Ui::Windows::ScenarioSelect
             }
 
             // Draw checkmark to indicate completion
-            Gfx::drawImage(dpi, self->widgets[widx::list].width() - ScrollView::barWidth - 25, y + 1, ImageIds::scenario_completed_tick);
+            Gfx::drawImage(dpi, self->widgets.get()[widx::list].width() - ScrollView::barWidth - 25, y + 1, ImageIds::scenario_completed_tick);
 
             // 'Completed by' info
             {
@@ -387,7 +387,7 @@ namespace OpenLoco::Ui::Windows::ScenarioSelect
                 args.push<uint16_t>(scenarioInfo->completedMonths / 12);
                 args.push<uint16_t>(scenarioInfo->completedMonths % 12);
 
-                const int16_t x = (self->widgets[widx::list].width() - ScrollView::barWidth) / 2;
+                const int16_t x = (self->widgets.get()[widx::list].width() - ScrollView::barWidth) / 2;
                 Gfx::drawStringCentred(*dpi, x, y + 10, Colour::black, formatStringId, &args);
             }
 

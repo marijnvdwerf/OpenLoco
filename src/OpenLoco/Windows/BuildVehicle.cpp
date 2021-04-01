@@ -601,9 +601,9 @@ namespace OpenLoco::Ui::BuildVehicle
                     WindowManager::invalidate(WindowType::topToolbar, 0);
                 }
 
-                auto curViewport = window->viewports[0];
-                window->viewports[0] = 0;
-                if (curViewport != 0)
+                auto curViewport = window->viewports[0].get();
+                window->viewports[0] = nullptr;
+                if (curViewport != nullptr)
                 {
                     curViewport->width = 0;
                 }
@@ -679,8 +679,8 @@ namespace OpenLoco::Ui::BuildVehicle
         }
 
         auto scrollPosition = window->scroll_areas[scrollIdx::vehicle_selection].contentHeight;
-        scrollPosition -= window->widgets[widx::scrollview_vehicle_selection].bottom;
-        scrollPosition += window->widgets[widx::scrollview_vehicle_selection].top;
+        scrollPosition -= window->widgets.get()[widx::scrollview_vehicle_selection].bottom;
+        scrollPosition += window->widgets.get()[widx::scrollview_vehicle_selection].top;
         if (scrollPosition < 0)
         {
             scrollPosition = 0;
@@ -863,7 +863,7 @@ namespace OpenLoco::Ui::BuildVehicle
     // 0x4C2E5C
     static void prepareDraw(Ui::window* window)
     {
-        if (window->widgets != _widgets)
+        if (window->widgets.get() != _widgets)
         {
             window->widgets = _widgets;
             window->initScrollWidgets();
@@ -876,27 +876,27 @@ namespace OpenLoco::Ui::BuildVehicle
         activeWidgets |= 1ULL << (window->current_secondary_tab + widx::tab_track_type_0);
         window->activated_widgets = activeWidgets;
 
-        window->widgets[widx::caption].text = window->current_tab + StringIds::build_trains;
+        window->widgets.get()[widx::caption].text = window->current_tab + StringIds::build_trains;
 
         auto width = window->width;
         auto height = window->height;
 
-        window->widgets[widx::frame].right = width - 1;
-        window->widgets[widx::frame].bottom = height - 1;
+        window->widgets.get()[widx::frame].right = width - 1;
+        window->widgets.get()[widx::frame].bottom = height - 1;
 
-        window->widgets[widx::panel].right = width - 1;
-        window->widgets[widx::panel].bottom = height - 1;
+        window->widgets.get()[widx::panel].right = width - 1;
+        window->widgets.get()[widx::panel].bottom = height - 1;
 
-        window->widgets[widx::caption].right = width - 2;
+        window->widgets.get()[widx::caption].right = width - 2;
 
-        window->widgets[widx::close_button].left = width - 15;
-        window->widgets[widx::close_button].right = width - 3;
+        window->widgets.get()[widx::close_button].left = width - 15;
+        window->widgets.get()[widx::close_button].right = width - 3;
 
-        window->widgets[widx::scrollview_vehicle_preview].right = width - 4;
-        window->widgets[widx::scrollview_vehicle_preview].left = width - 184;
+        window->widgets.get()[widx::scrollview_vehicle_preview].right = width - 4;
+        window->widgets.get()[widx::scrollview_vehicle_preview].left = width - 184;
 
-        window->widgets[widx::scrollview_vehicle_selection].right = width - 187;
-        window->widgets[widx::scrollview_vehicle_selection].bottom = height - 14;
+        window->widgets.get()[widx::scrollview_vehicle_selection].right = width - 187;
+        window->widgets.get()[widx::scrollview_vehicle_selection].bottom = height - 14;
 
         setTransportTypeTabs(window);
     }
@@ -1027,8 +1027,8 @@ namespace OpenLoco::Ui::BuildVehicle
 
         vehicleObj->getCargoString(buffer);
 
-        auto x = window->widgets[widx::scrollview_vehicle_selection].right + window->x + 2;
-        auto y = window->widgets[widx::scrollview_vehicle_preview].bottom + window->y + 2;
+        auto x = window->widgets.get()[widx::scrollview_vehicle_selection].right + window->x + 2;
+        auto y = window->widgets.get()[widx::scrollview_vehicle_preview].bottom + window->y + 2;
         Gfx::drawString_495224(*dpi, x, y, 180, Colour::black, StringIds::buffer_1250);
     }
 
@@ -1053,7 +1053,7 @@ namespace OpenLoco::Ui::BuildVehicle
                         args.push(vehicle->var_44);
                     }
 
-                    auto widget = window->widgets[widx::scrollview_vehicle_selection];
+                    auto widget = window->widgets.get()[widx::scrollview_vehicle_selection];
                     auto width = widget.right - widget.left - 17;
                     auto y = (window->row_height - 10) / 2;
                     Gfx::drawString_495224(*dpi, 3, y, width, Colour::black, defaultMessage, &args);
@@ -1174,10 +1174,10 @@ namespace OpenLoco::Ui::BuildVehicle
             {
                 // Reset the tabs
                 _TrackTypesForTab[0] = -1;
-                window->widgets[tab_track_type_0].type = widget_type::wt_8;
+                window->widgets.get()[tab_track_type_0].type = widget_type::wt_8;
                 for (widget_index j = tab_track_type_1; j <= tab_track_type_7; ++j)
                 {
-                    window->widgets[j].type = widget_type::none;
+                    window->widgets.get()[j].type = widget_type::none;
                 }
                 return;
             }
@@ -1188,7 +1188,7 @@ namespace OpenLoco::Ui::BuildVehicle
         for (trackType = Utility::bitScanForward(railTrackTypes); trackType != -1 && trackTypeTab <= tab_track_type_7; trackType = Utility::bitScanForward(railTrackTypes))
         {
             railTrackTypes &= ~(1 << trackType);
-            window->widgets[trackTypeTab].type = widget_type::wt_8;
+            window->widgets.get()[trackTypeTab].type = widget_type::wt_8;
             _TrackTypesForTab[widxToTrackTypeTab(trackTypeTab)] = trackType;
             trackTypeTab++;
         }
@@ -1198,7 +1198,7 @@ namespace OpenLoco::Ui::BuildVehicle
             for (trackType = Utility::bitScanForward(roadTrackTypes); trackType != -1 && trackTypeTab <= tab_track_type_7; trackType = Utility::bitScanForward(roadTrackTypes))
             {
                 roadTrackTypes &= ~(1 << trackType);
-                window->widgets[trackTypeTab].type = widget_type::wt_8;
+                window->widgets.get()[trackTypeTab].type = widget_type::wt_8;
                 _TrackTypesForTab[widxToTrackTypeTab(trackTypeTab)] = trackType | (1 << 7);
                 trackTypeTab++;
             }
@@ -1208,7 +1208,7 @@ namespace OpenLoco::Ui::BuildVehicle
 
         for (; trackTypeTab <= tab_track_type_7; ++trackTypeTab)
         {
-            window->widgets[trackTypeTab].type = widget_type::none;
+            window->widgets.get()[trackTypeTab].type = widget_type::none;
         }
     }
 
@@ -1285,7 +1285,7 @@ namespace OpenLoco::Ui::BuildVehicle
     static void setTransportTypeTabs(Ui::window* window)
     {
         auto disabledWidgets = window->disabled_widgets >> widx::tab_build_new_trains;
-        auto widget = window->widgets + widx::tab_build_new_trains;
+        auto widget = window->widgets.get() + widx::tab_build_new_trains;
         auto tabWidth = widget->right - widget->left;
         auto tabX = widget->left;
         for (auto i = 0; i <= widx::tab_build_new_ships - widx::tab_build_new_trains; ++i, ++widget)
@@ -1342,7 +1342,7 @@ namespace OpenLoco::Ui::BuildVehicle
 
         for (uint32_t tab = 0; tab < _numTrackTypeTabs; ++tab)
         {
-            const auto widget = window->widgets[tab + widx::tab_track_type_0];
+            const auto widget = window->widgets.get()[tab + widx::tab_track_type_0];
             if (window->current_secondary_tab == tab)
             {
                 left = widget.left + window->x + 1;

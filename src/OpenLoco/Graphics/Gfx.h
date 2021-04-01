@@ -18,7 +18,7 @@ namespace OpenLoco::Gfx
 
     struct drawpixelinfo_t
     {
-        uint8_t* bits;       // 0x00
+        loco_ptr2<uint8_t> bits;       // 0x00
         int16_t x;           // 0x04
         int16_t y;           // 0x06
         int16_t width;       // 0x08
@@ -29,6 +29,8 @@ namespace OpenLoco::Gfx
         Ui::Rect getUiRect() const;
         Ui::Rect getDrawableRect() const;
     };
+
+    static_assert(sizeof(drawpixelinfo_t) == 0x10);
 
     drawpixelinfo_t& screenDpi();
 
@@ -52,7 +54,7 @@ namespace OpenLoco::Gfx
     // A version that can be 64-bit when ready...
     struct g1_element
     {
-        uint8_t* offset = nullptr;
+        loco_ptr2<uint8_t> offset = nullptr;
         int16_t width = 0;
         int16_t height = 0;
         int16_t x_offset = 0;
@@ -72,6 +74,7 @@ namespace OpenLoco::Gfx
         {
         }
     };
+    static_assert(sizeof (g1_element) == sizeof (g1_element32_t));
 
 #pragma pack(pop)
     namespace ImageIdFlags

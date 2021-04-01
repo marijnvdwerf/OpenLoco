@@ -54,7 +54,7 @@ namespace OpenLoco::Ui::Windows::Tutorial
     // 0x00439B3D
     static void prepareDraw(window* self)
     {
-        self->widgets[Widx::frame].right = self->width - 1;
+        self->widgets.get()[Widx::frame].right = self->width - 1;
     }
 
     // 0x00439B4A
@@ -69,7 +69,7 @@ namespace OpenLoco::Ui::Windows::Tutorial
         auto tutorialNumber = OpenLoco::Tutorial::getTutorialNumber();
         auto args = FormatArguments::common(titleStringIds[tutorialNumber]);
 
-        auto& widget = self->widgets[Widx::frame];
+        auto& widget = self->widgets.get()[Widx::frame];
         auto yPos = self->y + widget.top + 4;
         Gfx::drawStringCentred(*dpi, self->x + widget.mid_x(), yPos, Colour::black, StringIds::tutorial_text, &args);
 

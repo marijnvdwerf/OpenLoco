@@ -327,109 +327,109 @@ namespace OpenLoco::Ui::Windows::Construction::Construction
         auto trackType = _trackType & ~(1 << 7);
         auto roadObj = ObjectManager::get<RoadObject>(trackType);
 
-        window->widgets[widx::s_bend_left].type = widget_type::none;
-        window->widgets[widx::s_bend_right].type = widget_type::none;
-        window->widgets[widx::left_hand_curve_large].type = widget_type::none;
-        window->widgets[widx::right_hand_curve_large].type = widget_type::none;
-        window->widgets[widx::left_hand_curve].type = widget_type::none;
-        window->widgets[widx::right_hand_curve].type = widget_type::none;
-        window->widgets[widx::left_hand_curve_small].type = widget_type::none;
-        window->widgets[widx::right_hand_curve_small].type = widget_type::none;
-        window->widgets[widx::left_hand_curve_very_small].type = widget_type::none;
-        window->widgets[widx::right_hand_curve_very_small].type = widget_type::none;
+        window->widgets.get()[widx::s_bend_left].type = widget_type::none;
+        window->widgets.get()[widx::s_bend_right].type = widget_type::none;
+        window->widgets.get()[widx::left_hand_curve_large].type = widget_type::none;
+        window->widgets.get()[widx::right_hand_curve_large].type = widget_type::none;
+        window->widgets.get()[widx::left_hand_curve].type = widget_type::none;
+        window->widgets.get()[widx::right_hand_curve].type = widget_type::none;
+        window->widgets.get()[widx::left_hand_curve_small].type = widget_type::none;
+        window->widgets.get()[widx::right_hand_curve_small].type = widget_type::none;
+        window->widgets.get()[widx::left_hand_curve_very_small].type = widget_type::none;
+        window->widgets.get()[widx::right_hand_curve_very_small].type = widget_type::none;
 
-        window->widgets[widx::left_hand_curve_small].left = 3;
-        window->widgets[widx::left_hand_curve_small].right = 24;
-        window->widgets[widx::right_hand_curve_small].left = 113;
-        window->widgets[widx::right_hand_curve_small].right = 134;
-        window->widgets[widx::left_hand_curve].left = 25;
-        window->widgets[widx::left_hand_curve].right = 46;
-        window->widgets[widx::right_hand_curve].left = 91;
-        window->widgets[widx::right_hand_curve].right = 112;
+        window->widgets.get()[widx::left_hand_curve_small].left = 3;
+        window->widgets.get()[widx::left_hand_curve_small].right = 24;
+        window->widgets.get()[widx::right_hand_curve_small].left = 113;
+        window->widgets.get()[widx::right_hand_curve_small].right = 134;
+        window->widgets.get()[widx::left_hand_curve].left = 25;
+        window->widgets.get()[widx::left_hand_curve].right = 46;
+        window->widgets.get()[widx::right_hand_curve].left = 91;
+        window->widgets.get()[widx::right_hand_curve].right = 112;
 
         if (roadObj->road_pieces & RoadPieceFlags::track)
         {
-            window->widgets[widx::left_hand_curve_small].left = 25;
-            window->widgets[widx::left_hand_curve_small].right = 46;
-            window->widgets[widx::right_hand_curve_small].left = 91;
-            window->widgets[widx::right_hand_curve_small].right = 112;
-            window->widgets[widx::left_hand_curve].left = 47;
-            window->widgets[widx::left_hand_curve].right = 68;
-            window->widgets[widx::right_hand_curve].left = 69;
-            window->widgets[widx::right_hand_curve].right = 90;
+            window->widgets.get()[widx::left_hand_curve_small].left = 25;
+            window->widgets.get()[widx::left_hand_curve_small].right = 46;
+            window->widgets.get()[widx::right_hand_curve_small].left = 91;
+            window->widgets.get()[widx::right_hand_curve_small].right = 112;
+            window->widgets.get()[widx::left_hand_curve].left = 47;
+            window->widgets.get()[widx::left_hand_curve].right = 68;
+            window->widgets.get()[widx::right_hand_curve].left = 69;
+            window->widgets.get()[widx::right_hand_curve].right = 90;
 
-            window->widgets[widx::left_hand_curve_very_small].type = widget_type::wt_9;
-            window->widgets[widx::right_hand_curve_very_small].type = widget_type::wt_9;
+            window->widgets.get()[widx::left_hand_curve_very_small].type = widget_type::wt_9;
+            window->widgets.get()[widx::right_hand_curve_very_small].type = widget_type::wt_9;
         }
 
         if (roadObj->road_pieces & RoadPieceFlags::one_way)
         {
-            window->widgets[widx::left_hand_curve_small].type = widget_type::wt_9;
-            window->widgets[widx::right_hand_curve_small].type = widget_type::wt_9;
+            window->widgets.get()[widx::left_hand_curve_small].type = widget_type::wt_9;
+            window->widgets.get()[widx::right_hand_curve_small].type = widget_type::wt_9;
         }
 
-        window->widgets[widx::s_bend_dual_track_left].type = widget_type::none;
-        window->widgets[widx::s_bend_dual_track_right].type = widget_type::none;
+        window->widgets.get()[widx::s_bend_dual_track_left].type = widget_type::none;
+        window->widgets.get()[widx::s_bend_dual_track_right].type = widget_type::none;
 
         if (roadObj->road_pieces & RoadPieceFlags::one_sided)
         {
-            window->widgets[widx::s_bend_dual_track_left].type = widget_type::wt_9;
-            window->widgets[widx::s_bend_dual_track_left].image = ImageIds::construction_right_turnaround;
-            window->widgets[widx::s_bend_dual_track_left].tooltip = StringIds::tooltip_turnaround;
+            window->widgets.get()[widx::s_bend_dual_track_left].type = widget_type::wt_9;
+            window->widgets.get()[widx::s_bend_dual_track_left].image = ImageIds::construction_right_turnaround;
+            window->widgets.get()[widx::s_bend_dual_track_left].tooltip = StringIds::tooltip_turnaround;
 
             if (_byte_525FAE == 0)
-                window->widgets[widx::s_bend_dual_track_left].image = ImageIds::construction_left_turnaround;
+                window->widgets.get()[widx::s_bend_dual_track_left].image = ImageIds::construction_left_turnaround;
         }
 
-        window->widgets[widx::steep_slope_down].type = widget_type::none;
-        window->widgets[widx::slope_down].type = widget_type::none;
-        window->widgets[widx::slope_up].type = widget_type::none;
-        window->widgets[widx::steep_slope_up].type = widget_type::none;
+        window->widgets.get()[widx::steep_slope_down].type = widget_type::none;
+        window->widgets.get()[widx::slope_down].type = widget_type::none;
+        window->widgets.get()[widx::slope_up].type = widget_type::none;
+        window->widgets.get()[widx::steep_slope_up].type = widget_type::none;
 
         if (roadObj->road_pieces & RoadPieceFlags::slope)
         {
-            window->widgets[widx::slope_down].type = widget_type::wt_9;
-            window->widgets[widx::slope_up].type = widget_type::wt_9;
+            window->widgets.get()[widx::slope_down].type = widget_type::wt_9;
+            window->widgets.get()[widx::slope_up].type = widget_type::wt_9;
         }
 
         if (roadObj->road_pieces & RoadPieceFlags::steep_slope)
         {
-            window->widgets[widx::steep_slope_down].type = widget_type::wt_9;
-            window->widgets[widx::steep_slope_up].type = widget_type::wt_9;
+            window->widgets.get()[widx::steep_slope_down].type = widget_type::wt_9;
+            window->widgets.get()[widx::steep_slope_up].type = widget_type::wt_9;
         }
 
-        window->widgets[widx::bridge].type = widget_type::wt_18;
-        window->widgets[widx::bridge_dropdown].type = widget_type::wt_11;
+        window->widgets.get()[widx::bridge].type = widget_type::wt_18;
+        window->widgets.get()[widx::bridge_dropdown].type = widget_type::wt_11;
 
         if (_lastSelectedBridge == 0xFF || (_constructionHover != 1 && !(_byte_1136076 & 1)))
         {
-            window->widgets[widx::bridge].type = widget_type::none;
-            window->widgets[widx::bridge_dropdown].type = widget_type::none;
+            window->widgets.get()[widx::bridge].type = widget_type::none;
+            window->widgets.get()[widx::bridge_dropdown].type = widget_type::none;
         }
 
         auto activatedWidgets = window->activated_widgets;
         activatedWidgets &= ~(Construction::allTrack);
 
-        window->widgets[widx::construct].type = widget_type::none;
-        window->widgets[widx::remove].type = widget_type::wt_9;
-        window->widgets[widx::rotate_90].type = widget_type::none;
+        window->widgets.get()[widx::construct].type = widget_type::none;
+        window->widgets.get()[widx::remove].type = widget_type::wt_9;
+        window->widgets.get()[widx::rotate_90].type = widget_type::none;
 
         if (_constructionHover == 1)
         {
-            window->widgets[widx::construct].type = widget_type::wt_5;
-            window->widgets[widx::construct].tooltip = StringIds::tooltip_start_construction;
-            window->widgets[widx::remove].type = widget_type::none;
-            window->widgets[widx::rotate_90].type = widget_type::wt_9;
-            window->widgets[widx::rotate_90].image = ImageIds::rotate_object;
-            window->widgets[widx::rotate_90].tooltip = StringIds::rotate_90;
+            window->widgets.get()[widx::construct].type = widget_type::wt_5;
+            window->widgets.get()[widx::construct].tooltip = StringIds::tooltip_start_construction;
+            window->widgets.get()[widx::remove].type = widget_type::none;
+            window->widgets.get()[widx::rotate_90].type = widget_type::wt_9;
+            window->widgets.get()[widx::rotate_90].image = ImageIds::rotate_object;
+            window->widgets.get()[widx::rotate_90].tooltip = StringIds::rotate_90;
         }
         else if (_constructionHover == 0)
         {
-            window->widgets[widx::construct].type = widget_type::wt_3;
-            window->widgets[widx::construct].tooltip = StringIds::tooltip_construct;
-            window->widgets[widx::rotate_90].type = widget_type::wt_9;
-            window->widgets[widx::rotate_90].image = ImageIds::construction_new_position;
-            window->widgets[widx::rotate_90].tooltip = StringIds::new_construction_position;
+            window->widgets.get()[widx::construct].type = widget_type::wt_3;
+            window->widgets.get()[widx::construct].tooltip = StringIds::tooltip_construct;
+            window->widgets.get()[widx::rotate_90].type = widget_type::wt_9;
+            window->widgets.get()[widx::rotate_90].image = ImageIds::construction_new_position;
+            window->widgets.get()[widx::rotate_90].tooltip = StringIds::new_construction_position;
         }
         if (_constructionHover == 0 || _constructionHover == 1)
         {
@@ -519,142 +519,142 @@ namespace OpenLoco::Ui::Windows::Construction::Construction
 
         auto trackObj = ObjectManager::get<TrackObject>(_trackType);
 
-        window->widgets[widx::s_bend_left].type = widget_type::wt_9;
-        window->widgets[widx::s_bend_right].type = widget_type::wt_9;
-        window->widgets[widx::left_hand_curve_large].type = widget_type::none;
-        window->widgets[widx::right_hand_curve_large].type = widget_type::none;
-        window->widgets[widx::left_hand_curve].type = widget_type::none;
-        window->widgets[widx::right_hand_curve].type = widget_type::none;
-        window->widgets[widx::left_hand_curve_small].type = widget_type::none;
-        window->widgets[widx::right_hand_curve_small].type = widget_type::none;
-        window->widgets[widx::left_hand_curve_very_small].type = widget_type::none;
-        window->widgets[widx::right_hand_curve_very_small].type = widget_type::none;
+        window->widgets.get()[widx::s_bend_left].type = widget_type::wt_9;
+        window->widgets.get()[widx::s_bend_right].type = widget_type::wt_9;
+        window->widgets.get()[widx::left_hand_curve_large].type = widget_type::none;
+        window->widgets.get()[widx::right_hand_curve_large].type = widget_type::none;
+        window->widgets.get()[widx::left_hand_curve].type = widget_type::none;
+        window->widgets.get()[widx::right_hand_curve].type = widget_type::none;
+        window->widgets.get()[widx::left_hand_curve_small].type = widget_type::none;
+        window->widgets.get()[widx::right_hand_curve_small].type = widget_type::none;
+        window->widgets.get()[widx::left_hand_curve_very_small].type = widget_type::none;
+        window->widgets.get()[widx::right_hand_curve_very_small].type = widget_type::none;
 
-        window->widgets[widx::left_hand_curve_small].left = 3;
-        window->widgets[widx::left_hand_curve_small].right = 24;
-        window->widgets[widx::right_hand_curve_small].left = 113;
-        window->widgets[widx::right_hand_curve_small].right = 134;
-        window->widgets[widx::left_hand_curve].left = 25;
-        window->widgets[widx::left_hand_curve].right = 46;
-        window->widgets[widx::right_hand_curve].left = 91;
-        window->widgets[widx::right_hand_curve].right = 112;
+        window->widgets.get()[widx::left_hand_curve_small].left = 3;
+        window->widgets.get()[widx::left_hand_curve_small].right = 24;
+        window->widgets.get()[widx::right_hand_curve_small].left = 113;
+        window->widgets.get()[widx::right_hand_curve_small].right = 134;
+        window->widgets.get()[widx::left_hand_curve].left = 25;
+        window->widgets.get()[widx::left_hand_curve].right = 46;
+        window->widgets.get()[widx::right_hand_curve].left = 91;
+        window->widgets.get()[widx::right_hand_curve].right = 112;
 
         if (trackObj->track_pieces & TrackPieceFlags::very_small_curve)
         {
-            window->widgets[widx::left_hand_curve_small].left = 25;
-            window->widgets[widx::left_hand_curve_small].right = 46;
-            window->widgets[widx::right_hand_curve_small].left = 91;
-            window->widgets[widx::right_hand_curve_small].right = 112;
-            window->widgets[widx::left_hand_curve].left = 47;
-            window->widgets[widx::left_hand_curve].right = 68;
-            window->widgets[widx::right_hand_curve].left = 69;
-            window->widgets[widx::right_hand_curve].right = 90;
+            window->widgets.get()[widx::left_hand_curve_small].left = 25;
+            window->widgets.get()[widx::left_hand_curve_small].right = 46;
+            window->widgets.get()[widx::right_hand_curve_small].left = 91;
+            window->widgets.get()[widx::right_hand_curve_small].right = 112;
+            window->widgets.get()[widx::left_hand_curve].left = 47;
+            window->widgets.get()[widx::left_hand_curve].right = 68;
+            window->widgets.get()[widx::right_hand_curve].left = 69;
+            window->widgets.get()[widx::right_hand_curve].right = 90;
 
-            window->widgets[widx::left_hand_curve_very_small].type = widget_type::wt_9;
-            window->widgets[widx::right_hand_curve_very_small].type = widget_type::wt_9;
+            window->widgets.get()[widx::left_hand_curve_very_small].type = widget_type::wt_9;
+            window->widgets.get()[widx::right_hand_curve_very_small].type = widget_type::wt_9;
         }
 
         if (trackObj->track_pieces & TrackPieceFlags::large_curve)
         {
-            window->widgets[widx::left_hand_curve_large].type = widget_type::wt_9;
-            window->widgets[widx::right_hand_curve_large].type = widget_type::wt_9;
+            window->widgets.get()[widx::left_hand_curve_large].type = widget_type::wt_9;
+            window->widgets.get()[widx::right_hand_curve_large].type = widget_type::wt_9;
         }
 
         if (trackObj->track_pieces & TrackPieceFlags::normal_curve)
         {
-            window->widgets[widx::left_hand_curve].type = widget_type::wt_9;
-            window->widgets[widx::right_hand_curve].type = widget_type::wt_9;
+            window->widgets.get()[widx::left_hand_curve].type = widget_type::wt_9;
+            window->widgets.get()[widx::right_hand_curve].type = widget_type::wt_9;
         }
 
         if (trackObj->track_pieces & TrackPieceFlags::small_curve)
         {
-            window->widgets[widx::left_hand_curve_small].type = widget_type::wt_9;
-            window->widgets[widx::right_hand_curve_small].type = widget_type::wt_9;
+            window->widgets.get()[widx::left_hand_curve_small].type = widget_type::wt_9;
+            window->widgets.get()[widx::right_hand_curve_small].type = widget_type::wt_9;
         }
 
-        window->widgets[widx::s_bend_dual_track_left].type = widget_type::none;
-        window->widgets[widx::s_bend_dual_track_right].type = widget_type::none;
+        window->widgets.get()[widx::s_bend_dual_track_left].type = widget_type::none;
+        window->widgets.get()[widx::s_bend_dual_track_right].type = widget_type::none;
 
         if (trackObj->track_pieces & TrackPieceFlags::one_sided)
         {
-            window->widgets[widx::s_bend_dual_track_left].type = widget_type::wt_9;
-            window->widgets[widx::s_bend_dual_track_right].type = widget_type::wt_9;
-            window->widgets[widx::s_bend_dual_track_left].image = ImageIds::construction_s_bend_dual_track_left;
-            window->widgets[widx::s_bend_dual_track_right].image = ImageIds::construction_s_bend_dual_track_right;
-            window->widgets[widx::s_bend_dual_track_left].tooltip = StringIds::tooltip_s_bend_left_dual_track;
-            window->widgets[widx::s_bend_dual_track_right].tooltip = StringIds::tooltip_s_bend_right_dual_track;
+            window->widgets.get()[widx::s_bend_dual_track_left].type = widget_type::wt_9;
+            window->widgets.get()[widx::s_bend_dual_track_right].type = widget_type::wt_9;
+            window->widgets.get()[widx::s_bend_dual_track_left].image = ImageIds::construction_s_bend_dual_track_left;
+            window->widgets.get()[widx::s_bend_dual_track_right].image = ImageIds::construction_s_bend_dual_track_right;
+            window->widgets.get()[widx::s_bend_dual_track_left].tooltip = StringIds::tooltip_s_bend_left_dual_track;
+            window->widgets.get()[widx::s_bend_dual_track_right].tooltip = StringIds::tooltip_s_bend_right_dual_track;
 
             _byte_522090 = 16;
             _byte_522091 = 20;
 
             if (_constructionRotation >= 4 && _constructionRotation < 12)
             {
-                window->widgets[widx::s_bend_dual_track_left].image = ImageIds::construction_right_turnaround;
-                window->widgets[widx::s_bend_dual_track_right].image = ImageIds::construction_s_bend_to_single_track_left;
-                window->widgets[widx::s_bend_dual_track_left].tooltip = StringIds::tooltip_turnaround;
-                window->widgets[widx::s_bend_dual_track_right].tooltip = StringIds::tooltip_s_bend_to_single_track;
+                window->widgets.get()[widx::s_bend_dual_track_left].image = ImageIds::construction_right_turnaround;
+                window->widgets.get()[widx::s_bend_dual_track_right].image = ImageIds::construction_s_bend_to_single_track_left;
+                window->widgets.get()[widx::s_bend_dual_track_left].tooltip = StringIds::tooltip_turnaround;
+                window->widgets.get()[widx::s_bend_dual_track_right].tooltip = StringIds::tooltip_s_bend_to_single_track;
                 _byte_522090 = 20;
                 _byte_522092 = 16;
                 if (_constructionRotation >= 8)
                 {
-                    window->widgets[widx::s_bend_dual_track_left].image = ImageIds::construction_s_bend_to_single_track_right;
-                    window->widgets[widx::s_bend_dual_track_right].image = ImageIds::construction_left_turnaround;
-                    window->widgets[widx::s_bend_dual_track_left].tooltip = StringIds::tooltip_s_bend_to_single_track;
-                    window->widgets[widx::s_bend_dual_track_right].tooltip = StringIds::tooltip_turnaround;
+                    window->widgets.get()[widx::s_bend_dual_track_left].image = ImageIds::construction_s_bend_to_single_track_right;
+                    window->widgets.get()[widx::s_bend_dual_track_right].image = ImageIds::construction_left_turnaround;
+                    window->widgets.get()[widx::s_bend_dual_track_left].tooltip = StringIds::tooltip_s_bend_to_single_track;
+                    window->widgets.get()[widx::s_bend_dual_track_right].tooltip = StringIds::tooltip_turnaround;
                     _byte_522091 = 16;
                     _byte_522092 = 20;
                 }
             }
         }
-        window->widgets[widx::steep_slope_down].type = widget_type::none;
-        window->widgets[widx::slope_down].type = widget_type::none;
-        window->widgets[widx::slope_up].type = widget_type::none;
-        window->widgets[widx::steep_slope_up].type = widget_type::none;
+        window->widgets.get()[widx::steep_slope_down].type = widget_type::none;
+        window->widgets.get()[widx::slope_down].type = widget_type::none;
+        window->widgets.get()[widx::slope_up].type = widget_type::none;
+        window->widgets.get()[widx::steep_slope_up].type = widget_type::none;
 
         if (trackObj->track_pieces & TrackPieceFlags::slope)
         {
-            window->widgets[widx::slope_down].type = widget_type::wt_9;
-            window->widgets[widx::slope_up].type = widget_type::wt_9;
+            window->widgets.get()[widx::slope_down].type = widget_type::wt_9;
+            window->widgets.get()[widx::slope_up].type = widget_type::wt_9;
         }
 
         if (trackObj->track_pieces & TrackPieceFlags::steep_slope)
         {
-            window->widgets[widx::steep_slope_down].type = widget_type::wt_9;
-            window->widgets[widx::steep_slope_up].type = widget_type::wt_9;
+            window->widgets.get()[widx::steep_slope_down].type = widget_type::wt_9;
+            window->widgets.get()[widx::steep_slope_up].type = widget_type::wt_9;
         }
 
-        window->widgets[widx::bridge].type = widget_type::wt_18;
-        window->widgets[widx::bridge_dropdown].type = widget_type::wt_11;
+        window->widgets.get()[widx::bridge].type = widget_type::wt_18;
+        window->widgets.get()[widx::bridge_dropdown].type = widget_type::wt_11;
 
         if (_lastSelectedBridge == 0xFF || (_constructionHover != 1 && !(_byte_1136076 & 1)))
         {
-            window->widgets[widx::bridge].type = widget_type::none;
-            window->widgets[widx::bridge_dropdown].type = widget_type::none;
+            window->widgets.get()[widx::bridge].type = widget_type::none;
+            window->widgets.get()[widx::bridge_dropdown].type = widget_type::none;
         }
 
         auto activatedWidgets = window->activated_widgets;
         activatedWidgets &= ~(Construction::allTrack);
 
-        window->widgets[widx::construct].type = widget_type::none;
-        window->widgets[widx::remove].type = widget_type::wt_9;
-        window->widgets[widx::rotate_90].type = widget_type::none;
+        window->widgets.get()[widx::construct].type = widget_type::none;
+        window->widgets.get()[widx::remove].type = widget_type::wt_9;
+        window->widgets.get()[widx::rotate_90].type = widget_type::none;
 
         if (_constructionHover == 1)
         {
-            window->widgets[widx::construct].type = widget_type::wt_5;
-            window->widgets[widx::construct].tooltip = StringIds::tooltip_start_construction;
-            window->widgets[widx::remove].type = widget_type::none;
-            window->widgets[widx::rotate_90].type = widget_type::wt_9;
-            window->widgets[widx::rotate_90].image = ImageIds::rotate_object;
-            window->widgets[widx::rotate_90].tooltip = StringIds::rotate_90;
+            window->widgets.get()[widx::construct].type = widget_type::wt_5;
+            window->widgets.get()[widx::construct].tooltip = StringIds::tooltip_start_construction;
+            window->widgets.get()[widx::remove].type = widget_type::none;
+            window->widgets.get()[widx::rotate_90].type = widget_type::wt_9;
+            window->widgets.get()[widx::rotate_90].image = ImageIds::rotate_object;
+            window->widgets.get()[widx::rotate_90].tooltip = StringIds::rotate_90;
         }
         else if (_constructionHover == 0)
         {
-            window->widgets[widx::construct].type = widget_type::wt_3;
-            window->widgets[widx::construct].tooltip = StringIds::tooltip_construct;
-            window->widgets[widx::rotate_90].type = widget_type::wt_9;
-            window->widgets[widx::rotate_90].image = ImageIds::construction_new_position;
-            window->widgets[widx::rotate_90].tooltip = StringIds::new_construction_position;
+            window->widgets.get()[widx::construct].type = widget_type::wt_3;
+            window->widgets.get()[widx::construct].tooltip = StringIds::tooltip_construct;
+            window->widgets.get()[widx::rotate_90].type = widget_type::wt_9;
+            window->widgets.get()[widx::rotate_90].image = ImageIds::construction_new_position;
+            window->widgets.get()[widx::rotate_90].tooltip = StringIds::new_construction_position;
         }
         if (_constructionHover == 0 || _constructionHover == 1)
         {
@@ -1231,7 +1231,7 @@ namespace OpenLoco::Ui::Windows::Construction::Construction
         }
 
         uint8_t flags = (1 << 7) | (1 << 6);
-        auto widget = self->widgets[widx::bridge];
+        auto widget = self->widgets.get()[widx::bridge];
         auto x = widget.left + self->x;
         auto y = widget.top + self->y;
         auto width = 155;
@@ -1327,12 +1327,12 @@ namespace OpenLoco::Ui::Windows::Construction::Construction
                 Common::sub_49FEC7();
                 _lastSelectedTrackPiece = TrackPiece::s_bend_to_dual_track;
                 _trackCost = 0x80000000;
-                if (self->widgets[widx::s_bend_dual_track_left].image != ImageIds::construction_s_bend_dual_track_left)
+                if (self->widgets.get()[widx::s_bend_dual_track_left].image != ImageIds::construction_s_bend_dual_track_left)
                 {
                     _lastSelectedTrackPiece = TrackPiece::turnaround;
-                    if (self->widgets[widx::s_bend_dual_track_left].image != ImageIds::construction_right_turnaround)
+                    if (self->widgets.get()[widx::s_bend_dual_track_left].image != ImageIds::construction_right_turnaround)
                     {
-                        if (self->widgets[widx::s_bend_dual_track_left].image != ImageIds::construction_left_turnaround)
+                        if (self->widgets.get()[widx::s_bend_dual_track_left].image != ImageIds::construction_left_turnaround)
                             _lastSelectedTrackPiece = TrackPiece::s_bend_to_single_track;
                     }
                 }
@@ -1346,10 +1346,10 @@ namespace OpenLoco::Ui::Windows::Construction::Construction
                 Common::sub_49FEC7();
                 _lastSelectedTrackPiece = TrackPiece::s_bend_to_single_track;
                 _trackCost = 0x80000000;
-                if (self->widgets[widx::s_bend_dual_track_right].image != ImageIds::construction_s_bend_dual_track_right)
+                if (self->widgets.get()[widx::s_bend_dual_track_right].image != ImageIds::construction_s_bend_dual_track_right)
                 {
                     _lastSelectedTrackPiece = TrackPiece::turnaround;
-                    if (self->widgets[widx::s_bend_dual_track_left].image != ImageIds::construction_left_turnaround)
+                    if (self->widgets.get()[widx::s_bend_dual_track_left].image != ImageIds::construction_left_turnaround)
                         _lastSelectedTrackPiece = TrackPiece::s_bend_to_dual_track;
                 }
                 activateSelectedConstructionWidgets();
@@ -1907,9 +1907,9 @@ namespace OpenLoco::Ui::Windows::Construction::Construction
     // 0x0049D38A and 0x0049D16B
     static void drawCostString(window* self, Gfx::drawpixelinfo_t* dpi)
     {
-        auto x = self->widgets[widx::construct].mid_x();
+        auto x = self->widgets.get()[widx::construct].mid_x();
         x += self->x;
-        auto y = self->widgets[widx::construct].bottom + self->y - 23;
+        auto y = self->widgets.get()[widx::construct].bottom + self->y - 23;
 
         if (_constructionHover != 1)
             Gfx::drawStringCentred(*dpi, x, y, Colour::black, StringIds::build_this);
@@ -1975,7 +1975,7 @@ namespace OpenLoco::Ui::Windows::Construction::Construction
         self->draw(dpi);
         Common::drawTabs(self, dpi);
 
-        if (self->widgets[widx::bridge].type != widget_type::none)
+        if (self->widgets.get()[widx::bridge].type != widget_type::none)
         {
             if (_lastSelectedBridge != 0xFF)
             {
@@ -1984,15 +1984,15 @@ namespace OpenLoco::Ui::Windows::Construction::Construction
                 {
                     auto company = CompanyManager::get(_playerCompany);
                     auto imageId = Gfx::recolour(bridgeObj->image, company->mainColours.primary);
-                    auto x = self->x + self->widgets[widx::bridge].left + 2;
-                    auto y = self->y + self->widgets[widx::bridge].top + 1;
+                    auto x = self->x + self->widgets.get()[widx::bridge].left + 2;
+                    auto y = self->y + self->widgets.get()[widx::bridge].top + 1;
 
                     Gfx::drawImage(dpi, x, y, imageId);
                 }
             }
         }
 
-        if (self->widgets[widx::construct].type == widget_type::none)
+        if (self->widgets.get()[widx::construct].type == widget_type::none)
             return;
 
         if (_trackType & (1 << 7))
@@ -2009,10 +2009,10 @@ namespace OpenLoco::Ui::Windows::Construction::Construction
             _lastSelectedTrackPieceId = road->id;
             _word_1135FD6 = (_lastSelectedBridge << 8) & 0x1F;
 
-            auto x = self->x + self->widgets[widx::construct].left + 1;
-            auto y = self->y + self->widgets[widx::construct].top + 1;
-            auto width = self->widgets[widx::construct].width();
-            auto height = self->widgets[widx::construct].height();
+            auto x = self->x + self->widgets.get()[widx::construct].left + 1;
+            auto y = self->y + self->widgets.get()[widx::construct].top + 1;
+            auto width = self->widgets.get()[widx::construct].width();
+            auto height = self->widgets.get()[widx::construct].height();
 
             Gfx::drawpixelinfo_t* clipped = nullptr;
 
@@ -2059,10 +2059,10 @@ namespace OpenLoco::Ui::Windows::Construction::Construction
             _lastSelectedTrackPieceId = track->id;
             _word_1135FD6 = (_lastSelectedBridge << 8) & 0x1F;
 
-            auto x = self->x + self->widgets[widx::construct].left + 1;
-            auto y = self->y + self->widgets[widx::construct].top + 1;
-            auto width = self->widgets[widx::construct].width();
-            auto height = self->widgets[widx::construct].height();
+            auto x = self->x + self->widgets.get()[widx::construct].left + 1;
+            auto y = self->y + self->widgets.get()[widx::construct].top + 1;
+            auto width = self->widgets.get()[widx::construct].width();
+            auto height = self->widgets.get()[widx::construct].height();
 
             Gfx::drawpixelinfo_t* clipped = nullptr;
 

@@ -43,7 +43,7 @@ namespace OpenLoco::Ui::Windows::DragVehiclePart
         Gfx::ui_size_t size = { width, 60 };
         auto self = WindowManager::createWindow(WindowType::dragVehiclePart, pos, size, WindowFlags::transparent | WindowFlags::stick_to_front, &events);
         self->widgets = widgets;
-        self->widgets[widx::frame].right = width - 1;
+        self->widgets.get()[widx::frame].right = width - 1;
         Input::windowPositionBegin(Input::getTooltipMouseLocation().x, Input::getTooltipMouseLocation().y, self, widx::frame);
     }
 

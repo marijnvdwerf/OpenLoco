@@ -645,7 +645,7 @@ namespace OpenLoco::Ui::Dropdown
         _pressedWindowNumber = window->number;
         WindowManager::invalidateWidget(_pressedWindowType, _pressedWindowNumber, _pressedWidgetIndex);
 
-        auto widget = window->widgets[widgetIndex];
+        auto widget = window->widgets.get()[widgetIndex];
         auto colour = window->colours[widget.colour];
         colour = Colour::translucent(colour);
 

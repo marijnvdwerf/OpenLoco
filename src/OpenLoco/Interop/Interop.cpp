@@ -1,7 +1,9 @@
+#include "emu.h"
 #include <algorithm>
 #include <cinttypes>
 #include <cstring>
 #include <stdexcept>
+#include <unicorn/unicorn.h>
 
 #ifdef _WIN32
 #ifndef NOMINMAX
@@ -15,7 +17,9 @@
 #include "Interop.hpp"
 
 #pragma warning(disable : 4731) // frame pointer register 'ebp' modified by inline assembly code
+#ifdef __i386__
 #define PLATFORM_X86
+#endif
 
 #if defined(__GNUC__)
 #ifdef __clang__
@@ -86,7 +90,13 @@ namespace OpenLoco::Interop
             );
 // clang-format on
 #endif
-#endif // PLATFORM_X86
+#else // PLATFORM_X86
+        console::log("===");
+
+        emu::call(address, _eax, _ebx, _ecx, _edx, _esi, _edi, _ebp);
+
+        console::log("===");
+#endif
         _originalAddress = 0;
         // lahf only modifies ah, zero out the rest
         return result & 0xFF00;
@@ -95,6 +105,7 @@ namespace OpenLoco::Interop
 
     static int32_t DISABLE_OPT callByRef(int32_t address, int32_t* _eax, int32_t* _ebx, int32_t* _ecx, int32_t* _edx, int32_t* _esi, int32_t* _edi, int32_t* _ebp)
     {
+        printf("Calling %x\n", address);
 #ifdef _LOG_INTEROP_CALLS_
         OpenLoco::Console::group("0x%x", address);
 #endif
@@ -249,7 +260,15 @@ namespace OpenLoco::Interop
             );
 // clang-format on
 #endif
-#endif // PLATFORM_X86
+#else // PLATFORM_X86
+
+        Console::log("===");
+
+        emu::call(address, _eax, _ebx, _ecx, _edx, _esi, _edi, _ebp);
+
+        Console::log("===");
+#endif
+        printf("Returning %x\n", address);
         _originalAddress = 0;
 
 #ifdef _LOG_INTEROP_CALLS_
@@ -302,7 +321,7 @@ namespace OpenLoco::Interop
         }
 #else
         // We own the pages with PROT_WRITE | PROT_EXEC, we can simply just memcpy the data
-        std::memcpy(data, (void*)address, size);
+        std::memcpy(data, (void*)(uintptr_t)address, size);
 #endif // _WIN32
     }
 
@@ -315,7 +334,7 @@ namespace OpenLoco::Interop
         }
 #else
         // We own the pages with PROT_WRITE | PROT_EXEC, we can simply just memcpy the data
-        std::memcpy((void*)address, data, size);
+        std::memcpy((void*)(uintptr_t)address, data, size);
 #endif // _WIN32
     }
 

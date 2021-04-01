@@ -688,10 +688,10 @@ namespace OpenLoco::Ui::Windows::ToolbarTop::Game
 
         uint32_t company_colour = CompanyManager::getPlayerCompanyColour();
 
-        if (window->widgets[Common::Widx::railroad_menu].type != widget_type::none)
+        if (window->widgets.get()[Common::Widx::railroad_menu].type != widget_type::none)
         {
-            uint32_t x = window->widgets[Common::Widx::railroad_menu].left + window->x;
-            uint32_t y = window->widgets[Common::Widx::railroad_menu].top + window->y;
+            uint32_t x = window->widgets.get()[Common::Widx::railroad_menu].left + window->x;
+            uint32_t y = window->widgets.get()[Common::Widx::railroad_menu].top + window->y;
             uint32_t fg_image = 0;
 
             // Figure out what icon to show on the button face.
@@ -720,13 +720,13 @@ namespace OpenLoco::Ui::Windows::ToolbarTop::Game
 
             Gfx::drawImage(dpi, x, y, fg_image);
 
-            y = window->widgets[Common::Widx::railroad_menu].top + window->y;
+            y = window->widgets.get()[Common::Widx::railroad_menu].top + window->y;
             Gfx::drawImage(dpi, x, y, bg_image);
         }
 
         {
-            uint32_t x = window->widgets[Common::Widx::vehicles_menu].left + window->x;
-            uint32_t y = window->widgets[Common::Widx::vehicles_menu].top + window->y;
+            uint32_t x = window->widgets.get()[Common::Widx::vehicles_menu].left + window->x;
+            uint32_t y = window->widgets.get()[Common::Widx::vehicles_menu].top + window->y;
 
             static const uint32_t button_face_image_ids[] = {
                 InterfaceSkin::ImageIds::vehicle_train_frame_0,
@@ -750,13 +750,13 @@ namespace OpenLoco::Ui::Windows::ToolbarTop::Game
 
             Gfx::drawImage(dpi, x, y, fg_image);
 
-            y = window->widgets[Common::Widx::vehicles_menu].top + window->y;
+            y = window->widgets.get()[Common::Widx::vehicles_menu].top + window->y;
             Gfx::drawImage(dpi, x, y, bg_image);
         }
 
         {
-            uint32_t x = window->widgets[Common::Widx::build_vehicles_menu].left + window->x;
-            uint32_t y = window->widgets[Common::Widx::build_vehicles_menu].top + window->y;
+            uint32_t x = window->widgets.get()[Common::Widx::build_vehicles_menu].left + window->x;
+            uint32_t y = window->widgets.get()[Common::Widx::build_vehicles_menu].top + window->y;
 
             static const uint32_t build_vehicle_images[] = {
                 InterfaceSkin::ImageIds::toolbar_build_vehicle_train,
@@ -786,90 +786,90 @@ namespace OpenLoco::Ui::Windows::ToolbarTop::Game
         if (!Audio::isAudioEnabled())
         {
             window->activated_widgets |= (1 << Common::Widx::audio_menu);
-            window->widgets[Common::Widx::audio_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_audio_inactive, window->colours[0]);
+            window->widgets.get()[Common::Widx::audio_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_audio_inactive, window->colours[0]);
         }
         else
         {
             window->activated_widgets &= ~(1 << Common::Widx::audio_menu);
-            window->widgets[Common::Widx::audio_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_audio_active, window->colours[0]);
+            window->widgets.get()[Common::Widx::audio_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_audio_active, window->colours[0]);
         }
 
         if (Config::getNew().cheats_menu_enabled)
         {
-            window->widgets[Widx::cheats_menu].type = widget_type::wt_7;
-            auto& baseWidget = window->widgets[Widx::cheats_menu];
-            window->widgets[Common::Widx::zoom_menu].left = baseWidget.left + 14 + (baseWidget.width() * 1);
-            window->widgets[Common::Widx::rotate_menu].left = baseWidget.left + 14 + (baseWidget.width() * 2);
-            window->widgets[Common::Widx::view_menu].left = baseWidget.left + 14 + (baseWidget.width() * 3);
+            window->widgets.get()[Widx::cheats_menu].type = widget_type::wt_7;
+            auto& baseWidget = window->widgets.get()[Widx::cheats_menu];
+            window->widgets.get()[Common::Widx::zoom_menu].left = baseWidget.left + 14 + (baseWidget.width() * 1);
+            window->widgets.get()[Common::Widx::rotate_menu].left = baseWidget.left + 14 + (baseWidget.width() * 2);
+            window->widgets.get()[Common::Widx::view_menu].left = baseWidget.left + 14 + (baseWidget.width() * 3);
         }
         else
         {
-            window->widgets[Widx::cheats_menu].type = widget_type::none;
-            auto& baseWidget = window->widgets[Common::Widx::audio_menu];
-            window->widgets[Common::Widx::zoom_menu].left = baseWidget.left + 14 + (baseWidget.width() * 1);
-            window->widgets[Common::Widx::rotate_menu].left = baseWidget.left + 14 + (baseWidget.width() * 2);
-            window->widgets[Common::Widx::view_menu].left = baseWidget.left + 14 + (baseWidget.width() * 3);
+            window->widgets.get()[Widx::cheats_menu].type = widget_type::none;
+            auto& baseWidget = window->widgets.get()[Common::Widx::audio_menu];
+            window->widgets.get()[Common::Widx::zoom_menu].left = baseWidget.left + 14 + (baseWidget.width() * 1);
+            window->widgets.get()[Common::Widx::rotate_menu].left = baseWidget.left + 14 + (baseWidget.width() * 2);
+            window->widgets.get()[Common::Widx::view_menu].left = baseWidget.left + 14 + (baseWidget.width() * 3);
         }
 
         if (last_port_option == 0 && addr<0x00525FAC, int8_t>() != -1 && addr<0x00525FAD, int8_t>() == -1)
             last_port_option = 1;
 
-        window->widgets[Common::Widx::loadsave_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_loadsave, 0);
-        window->widgets[Widx::cheats_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_cogwheels, 0);
-        window->widgets[Common::Widx::zoom_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_zoom, 0);
-        window->widgets[Common::Widx::rotate_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_rotate, 0);
-        window->widgets[Common::Widx::view_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_view, 0);
+        window->widgets.get()[Common::Widx::loadsave_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_loadsave, 0);
+        window->widgets.get()[Widx::cheats_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_cogwheels, 0);
+        window->widgets.get()[Common::Widx::zoom_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_zoom, 0);
+        window->widgets.get()[Common::Widx::rotate_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_rotate, 0);
+        window->widgets.get()[Common::Widx::view_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_view, 0);
 
-        window->widgets[Common::Widx::terraform_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_terraform, 0);
-        window->widgets[Common::Widx::railroad_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_empty_opaque, 0);
-        window->widgets[Common::Widx::road_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_empty_opaque, 0);
-        window->widgets[Common::Widx::port_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_empty_opaque, 0);
-        window->widgets[Common::Widx::build_vehicles_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_empty_opaque, 0);
+        window->widgets.get()[Common::Widx::terraform_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_terraform, 0);
+        window->widgets.get()[Common::Widx::railroad_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_empty_opaque, 0);
+        window->widgets.get()[Common::Widx::road_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_empty_opaque, 0);
+        window->widgets.get()[Common::Widx::port_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_empty_opaque, 0);
+        window->widgets.get()[Common::Widx::build_vehicles_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_empty_opaque, 0);
 
-        window->widgets[Common::Widx::vehicles_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_empty_opaque, 0);
-        window->widgets[Common::Widx::stations_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_stations, 0);
+        window->widgets.get()[Common::Widx::vehicles_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_empty_opaque, 0);
+        window->widgets.get()[Common::Widx::stations_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_stations, 0);
 
         if (last_town_option == 0)
-            window->widgets[Common::Widx::towns_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_towns, 0);
+            window->widgets.get()[Common::Widx::towns_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_towns, 0);
         else
-            window->widgets[Common::Widx::towns_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_industries, 0);
+            window->widgets.get()[Common::Widx::towns_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_industries, 0);
 
         if (last_port_option == 0)
-            window->widgets[Common::Widx::port_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_airports, 0);
+            window->widgets.get()[Common::Widx::port_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_airports, 0);
         else
-            window->widgets[Common::Widx::port_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_ports, 0);
+            window->widgets.get()[Common::Widx::port_menu].image = Gfx::recolour(interface->img + InterfaceSkin::ImageIds::toolbar_ports, 0);
 
         if (last_road_option != 0xFF)
-            window->widgets[Common::Widx::road_menu].type = widget_type::wt_7;
+            window->widgets.get()[Common::Widx::road_menu].type = widget_type::wt_7;
         else
-            window->widgets[Common::Widx::road_menu].type = widget_type::none;
+            window->widgets.get()[Common::Widx::road_menu].type = widget_type::none;
 
         if (last_railroad_option != 0xFF)
-            window->widgets[Common::Widx::railroad_menu].type = widget_type::wt_7;
+            window->widgets.get()[Common::Widx::railroad_menu].type = widget_type::wt_7;
         else
-            window->widgets[Common::Widx::railroad_menu].type = widget_type::none;
+            window->widgets.get()[Common::Widx::railroad_menu].type = widget_type::none;
 
         if (addr<0x00525FAC, int8_t>() != -1 || addr<0x00525FAD, int8_t>() != -1)
-            window->widgets[Common::Widx::port_menu].type = widget_type::wt_7;
+            window->widgets.get()[Common::Widx::port_menu].type = widget_type::wt_7;
         else
-            window->widgets[Common::Widx::port_menu].type = widget_type::none;
+            window->widgets.get()[Common::Widx::port_menu].type = widget_type::none;
 
         uint32_t x = std::max(640, Ui::width()) - 1;
         Common::rightAlignTabs(window, x, { Common::Widx::towns_menu, Common::Widx::stations_menu, Common::Widx::vehicles_menu });
         x -= 11;
         Common::rightAlignTabs(window, x, { Common::Widx::build_vehicles_menu });
 
-        if (window->widgets[Common::Widx::port_menu].type != widget_type::none)
+        if (window->widgets.get()[Common::Widx::port_menu].type != widget_type::none)
         {
             Common::rightAlignTabs(window, x, { Common::Widx::port_menu });
         }
 
-        if (window->widgets[Common::Widx::road_menu].type != widget_type::none)
+        if (window->widgets.get()[Common::Widx::road_menu].type != widget_type::none)
         {
             Common::rightAlignTabs(window, x, { Common::Widx::road_menu });
         }
 
-        if (window->widgets[Common::Widx::railroad_menu].type != widget_type::none)
+        if (window->widgets.get()[Common::Widx::railroad_menu].type != widget_type::none)
         {
             Common::rightAlignTabs(window, x, { Common::Widx::railroad_menu });
         }

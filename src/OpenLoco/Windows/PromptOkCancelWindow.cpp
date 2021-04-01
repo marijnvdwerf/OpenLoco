@@ -70,7 +70,7 @@ namespace OpenLoco::Ui::Windows
             return false;
 
         window->widgets = _widgets;
-        window->widgets[okButton].text = okButtonStringId;
+        window->widgets.get()[okButton].text = okButtonStringId;
 
         window->enabled_widgets = (1 << widx::closeButton) | (1 << widx::okButton) | (1 << widx::cancelButton);
         window->initScrollWidgets();

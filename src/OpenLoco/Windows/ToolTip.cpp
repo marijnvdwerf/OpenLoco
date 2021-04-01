@@ -113,7 +113,7 @@ namespace OpenLoco::Ui::ToolTip
         }
 
         window->callPrepareDraw();
-        if (window->widgets[widgetIndex].tooltip == StringIds::null)
+        if (window->widgets.get()[widgetIndex].tooltip == StringIds::null)
         {
             return;
         }
@@ -136,7 +136,7 @@ namespace OpenLoco::Ui::ToolTip
 
         _currentTooltipStringId = -1;
 
-        common(window, widgetIndex, window->widgets[widgetIndex].tooltip, cursorX, cursorY, *toolArgs);
+        common(window, widgetIndex, window->widgets.get()[widgetIndex].tooltip, cursorX, cursorY, *toolArgs);
     }
 
     // 0x004C9216

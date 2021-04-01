@@ -209,7 +209,7 @@ namespace OpenLoco::Ui::PromptBrowse
 
             addr<0x009DA285, uint8_t>() = 0;
 
-            auto& widget = window->widgets[widx::text_filename];
+            auto& widget = window->widgets.get()[widx::text_filename];
             inputSession.calculateTextOffset(widget.width());
 
             window->colours[0] = Colour::black;
@@ -359,46 +359,46 @@ namespace OpenLoco::Ui::PromptBrowse
         char* buffer = (char*)StringManager::getString(StringIds::buffer_2039);
         strcpy(buffer, _title);
 
-        self->widgets[widx::frame].right = self->width - 1;
-        self->widgets[widx::frame].bottom = self->height - 1;
+        self->widgets.get()[widx::frame].right = self->width - 1;
+        self->widgets.get()[widx::frame].bottom = self->height - 1;
 
-        self->widgets[widx::panel].right = self->width - 1;
-        self->widgets[widx::panel].bottom = self->height - 1;
+        self->widgets.get()[widx::panel].right = self->width - 1;
+        self->widgets.get()[widx::panel].bottom = self->height - 1;
 
-        self->widgets[widx::caption].right = self->width - 2;
+        self->widgets.get()[widx::caption].right = self->width - 2;
 
-        self->widgets[widx::close_button].left = self->width - 15;
-        self->widgets[widx::close_button].right = self->width - 3;
+        self->widgets.get()[widx::close_button].left = self->width - 15;
+        self->widgets.get()[widx::close_button].right = self->width - 3;
 
         if (*_type == browse_type::save)
         {
-            self->widgets[widx::ok_button].left = self->width - 86;
-            self->widgets[widx::ok_button].right = self->width - 16;
-            self->widgets[widx::ok_button].top = self->height - 15;
-            self->widgets[widx::ok_button].bottom = self->height - 4;
-            self->widgets[widx::ok_button].type = widget_type::wt_11;
+            self->widgets.get()[widx::ok_button].left = self->width - 86;
+            self->widgets.get()[widx::ok_button].right = self->width - 16;
+            self->widgets.get()[widx::ok_button].top = self->height - 15;
+            self->widgets.get()[widx::ok_button].bottom = self->height - 4;
+            self->widgets.get()[widx::ok_button].type = widget_type::wt_11;
 
-            self->widgets[widx::text_filename].right = self->width - 4;
-            self->widgets[widx::text_filename].top = self->height - 31;
-            self->widgets[widx::text_filename].bottom = self->height - 18;
-            self->widgets[widx::text_filename].type = widget_type::wt_17;
+            self->widgets.get()[widx::text_filename].right = self->width - 4;
+            self->widgets.get()[widx::text_filename].top = self->height - 31;
+            self->widgets.get()[widx::text_filename].bottom = self->height - 18;
+            self->widgets.get()[widx::text_filename].type = widget_type::wt_17;
 
-            self->widgets[widx::scrollview].bottom = self->height - 34;
+            self->widgets.get()[widx::scrollview].bottom = self->height - 34;
         }
         else
         {
-            self->widgets[widx::ok_button].type = widget_type::none;
-            self->widgets[widx::text_filename].type = widget_type::none;
+            self->widgets.get()[widx::ok_button].type = widget_type::none;
+            self->widgets.get()[widx::text_filename].type = widget_type::none;
 
-            self->widgets[widx::scrollview].bottom = self->height - 4;
+            self->widgets.get()[widx::scrollview].bottom = self->height - 4;
         }
 
-        self->widgets[widx::scrollview].right = self->width - 259;
+        self->widgets.get()[widx::scrollview].right = self->width - 259;
         if (*_fileType != browse_file_type::saved_game)
-            self->widgets[widx::scrollview].right += 122;
+            self->widgets.get()[widx::scrollview].right += 122;
 
-        self->widgets[widx::parent_button].left = self->width - 26;
-        self->widgets[widx::parent_button].right = self->width - 3;
+        self->widgets.get()[widx::parent_button].left = self->width - 26;
+        self->widgets.get()[widx::parent_button].right = self->width - 3;
 
         // Resume the original prepare_draw routine beyond the widget repositioning.
         registers regs;
@@ -425,7 +425,7 @@ namespace OpenLoco::Ui::PromptBrowse
 
         auto folder = (const char*)0x9DA084;
         setCommonArgsStringptr(folder);
-        Gfx::drawString_494B3F(*dpi, window->x + 3, window->y + window->widgets[widx::parent_button].top + 6, 0, StringIds::window_browse_folder, _commonFormatArgs);
+        Gfx::drawString_494B3F(*dpi, window->x + 3, window->y + window->widgets.get()[widx::parent_button].top + 6, 0, StringIds::window_browse_folder, _commonFormatArgs);
 
         auto selectedIndex = window->var_85A;
         if (selectedIndex != -1)
@@ -433,7 +433,7 @@ namespace OpenLoco::Ui::PromptBrowse
             auto& selectedFile = _files[selectedIndex];
             if (!selectedFile.is_directory())
             {
-                const auto& widget = window->widgets[widx::scrollview];
+                const auto& widget = window->widgets.get()[widx::scrollview];
 
                 auto width = window->width - widget.right - 8;
                 auto x = window->x + widget.right + 3;
@@ -467,7 +467,7 @@ namespace OpenLoco::Ui::PromptBrowse
             }
         }
 
-        const auto& filenameBox = window->widgets[widx::text_filename];
+        const auto& filenameBox = window->widgets.get()[widx::text_filename];
         if (filenameBox.type != widget_type::none)
         {
             // Draw filename label
@@ -509,7 +509,7 @@ namespace OpenLoco::Ui::PromptBrowse
         }
         y += 207;
 
-        uint16_t maxWidth = window.width - window.widgets[widx::scrollview].right;
+        uint16_t maxWidth = window.width - window.widgets.get()[widx::scrollview].right;
 
         // Company
         setCommonArgsStringptr(saveInfo.company);
@@ -676,7 +676,7 @@ namespace OpenLoco::Ui::PromptBrowse
         }
 
         // 0x00446A6E
-        auto containerWidth = w->widgets[widx::text_filename].width() - 2;
+        auto containerWidth = w->widgets.get()[widx::text_filename].width() - 2;
         if (inputSession.needsReoffsetting(containerWidth))
         {
             inputSession.calculateTextOffset(containerWidth);

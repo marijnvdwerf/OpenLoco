@@ -52,7 +52,7 @@ namespace OpenLoco::Input
     // 0x00406FEC
     void enqueueMouseButton(int32_t button)
     {
-        ((void (*)(int))0x00406FEC)(button);
+        //        ((void (*)(int))0x00406FEC)(button);
     }
 
     void sub_407218()

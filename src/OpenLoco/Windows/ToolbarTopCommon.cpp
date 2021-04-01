@@ -42,10 +42,10 @@ namespace OpenLoco::Ui::Windows::ToolbarTop::Common
 
         uint32_t company_colour = CompanyManager::getPlayerCompanyColour();
 
-        if (self->widgets[Widx::road_menu].type != widget_type::none && last_road_option != 0xFF)
+        if (self->widgets.get()[Widx::road_menu].type != widget_type::none && last_road_option != 0xFF)
         {
-            uint32_t x = self->widgets[Widx::road_menu].left + self->x;
-            uint32_t y = self->widgets[Widx::road_menu].top + self->y;
+            uint32_t x = self->widgets.get()[Widx::road_menu].left + self->x;
+            uint32_t y = self->widgets.get()[Widx::road_menu].top + self->y;
             uint32_t fgImage = 0;
 
             // Figure out what icon to show on the button face.
@@ -73,7 +73,7 @@ namespace OpenLoco::Ui::Windows::ToolbarTop::Common
 
             Gfx::drawImage(dpi, x, y, fgImage);
 
-            y = self->widgets[Widx::road_menu].top + self->y;
+            y = self->widgets.get()[Widx::road_menu].top + self->y;
             Gfx::drawImage(dpi, x, y, bgImage);
         }
     }
@@ -101,19 +101,19 @@ namespace OpenLoco::Ui::Windows::ToolbarTop::Common
         Dropdown::setHighlightedItem(0);
 
         auto mainWindow = WindowManager::getMainWindow();
-        if (mainWindow->viewports[0]->zoom == 0)
+        if (mainWindow->viewports[0].get()->zoom == 0)
         {
             Dropdown::setItemDisabled(0);
             Dropdown::setHighlightedItem(1);
         }
 
-        if (mainWindow->viewports[0]->zoom == 3)
+        if (mainWindow->viewports[0].get()->zoom == 3)
         {
             Dropdown::setItemDisabled(1);
             zoom_ticks = 1000;
         }
 
-        if (mainWindow->viewports[0]->zoom != 3 && zoom_ticks <= 32)
+        if (mainWindow->viewports[0].get()->zoom != 3 && zoom_ticks <= 32)
             Dropdown::setHighlightedItem(1);
     }
 
@@ -143,7 +143,7 @@ namespace OpenLoco::Ui::Windows::ToolbarTop::Common
         Dropdown::add(9, StringIds::dropdown_without_checkmark, StringIds::menu_station_names_displayed);
         Dropdown::showBelow(window, widgetIndex, 10, 0);
 
-        uint32_t current_viewport_flags = WindowManager::getMainWindow()->viewports[0]->flags;
+        uint32_t current_viewport_flags = WindowManager::getMainWindow()->viewports[0].get()->flags;
 
         if (current_viewport_flags & ViewportFlags::underground_view)
             Dropdown::setItemSelected(0);
@@ -305,7 +305,7 @@ namespace OpenLoco::Ui::Windows::ToolbarTop::Common
             itemIndex = Dropdown::getHighlightedItem();
 
         window = WindowManager::getMainWindow();
-        auto viewport = WindowManager::getMainWindow()->viewports[0];
+        auto viewport = WindowManager::getMainWindow()->viewports[0].get();
 
         if (itemIndex == 0)
             viewport->flags ^= ViewportFlags::underground_view;
@@ -468,8 +468,8 @@ namespace OpenLoco::Ui::Windows::ToolbarTop::Common
     {
         for (const auto& widx : widxs)
         {
-            window->widgets[widx].right = x;
-            window->widgets[widx].left = x - 29;
+            window->widgets.get()[widx].right = x;
+            window->widgets.get()[widx].left = x - 29;
             x -= 30;
         }
     }

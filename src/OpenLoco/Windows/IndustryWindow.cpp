@@ -102,30 +102,30 @@ namespace OpenLoco::Ui::Windows::Industry
         {
             Common::prepareDraw(self);
 
-            self->widgets[widx::viewport].right = self->width - 26;
-            self->widgets[widx::viewport].bottom = self->height - 14;
+            self->widgets.get()[widx::viewport].right = self->width - 26;
+            self->widgets.get()[widx::viewport].bottom = self->height - 14;
 
-            self->widgets[widx::status_bar].top = self->height - 12;
-            self->widgets[widx::status_bar].bottom = self->height - 3;
-            self->widgets[widx::status_bar].right = self->width - 14;
+            self->widgets.get()[widx::status_bar].top = self->height - 12;
+            self->widgets.get()[widx::status_bar].bottom = self->height - 3;
+            self->widgets.get()[widx::status_bar].right = self->width - 14;
 
-            self->widgets[widx::demolish_industry].right = self->width - 2;
-            self->widgets[widx::demolish_industry].left = self->width - 25;
+            self->widgets.get()[widx::demolish_industry].right = self->width - 2;
+            self->widgets.get()[widx::demolish_industry].left = self->width - 25;
 
             if (isEditorMode() || isSandboxMode())
             {
-                self->widgets[widx::demolish_industry].type = widget_type::wt_9;
+                self->widgets.get()[widx::demolish_industry].type = widget_type::wt_9;
             }
             else
             {
-                self->widgets[widx::demolish_industry].type = widget_type::none;
-                self->widgets[widx::viewport].right += 22;
+                self->widgets.get()[widx::demolish_industry].type = widget_type::none;
+                self->widgets.get()[widx::viewport].right += 22;
             }
 
-            self->widgets[widx::centre_on_viewport].right = self->widgets[widx::viewport].right - 1;
-            self->widgets[widx::centre_on_viewport].bottom = self->widgets[widx::viewport].bottom - 1;
-            self->widgets[widx::centre_on_viewport].left = self->widgets[widx::viewport].right - 24;
-            self->widgets[widx::centre_on_viewport].top = self->widgets[widx::viewport].bottom - 24;
+            self->widgets.get()[widx::centre_on_viewport].right = self->widgets.get()[widx::viewport].right - 1;
+            self->widgets.get()[widx::centre_on_viewport].bottom = self->widgets.get()[widx::viewport].bottom - 1;
+            self->widgets.get()[widx::centre_on_viewport].left = self->widgets.get()[widx::viewport].right - 24;
+            self->widgets.get()[widx::centre_on_viewport].top = self->widgets.get()[widx::viewport].bottom - 24;
 
             Common::repositionTabs(self);
         }
@@ -145,7 +145,7 @@ namespace OpenLoco::Ui::Windows::Industry
             auto args = FormatArguments();
             args.push(StringIds::buffer_1250);
 
-            auto widget = &self->widgets[widx::status_bar];
+            auto widget = &self->widgets.get()[widx::status_bar];
             auto x = self->x + widget->left - 1;
             auto y = self->y + widget->top - 1;
             auto width = widget->width();
@@ -201,7 +201,7 @@ namespace OpenLoco::Ui::Windows::Industry
         {
             self->setSize(minWindowSize, maxWindowSize);
 
-            if (self->viewports[0] != nullptr)
+            if (self->viewports[0].get() != nullptr)
             {
                 uint16_t newWidth = self->width - 30;
                 if (!isEditorMode() && !isSandboxMode())
@@ -209,7 +209,7 @@ namespace OpenLoco::Ui::Windows::Industry
 
                 uint16_t newHeight = self->height - 59;
 
-                auto& viewport = self->viewports[0];
+                auto viewport = self->viewports[0].get();
                 if (newWidth != viewport->width || newHeight != viewport->height)
                 {
                     viewport->width = newWidth;
@@ -240,18 +240,18 @@ namespace OpenLoco::Ui::Windows::Industry
                 industry->x,
                 industry->y,
                 ZoomLevel::quarter,
-                static_cast<int8_t>(self->viewports[0]->getRotation()),
+                static_cast<int8_t>(self->viewports[0].get()->getRotation()),
                 tileZ,
             };
             //view.flags |= (1 << 14);
 
             uint16_t flags = 0;
-            if (self->viewports[0] != nullptr)
+            if (self->viewports[0].get() != nullptr)
             {
                 if (self->saved_view == view)
                     return;
 
-                flags = self->viewports[0]->flags;
+                flags = self->viewports[0].get()->flags;
                 self->viewportRemove(0);
                 ViewportManager::collectGarbage();
             }
@@ -263,9 +263,9 @@ namespace OpenLoco::Ui::Windows::Industry
 
             self->saved_view = view;
 
-            if (self->viewports[0] == nullptr)
+            if (self->viewports[0].get() == nullptr)
             {
-                auto widget = &self->widgets[widx::viewport];
+                auto widget = &self->widgets.get()[widx::viewport];
                 auto tile = OpenLoco::Map::map_pos3({ industry->x, industry->y, tileZ });
                 auto origin = Gfx::point_t(widget->left + self->x + 1, widget->top + self->y + 1);
                 auto size = Gfx::ui_size_t(widget->width() - 2, widget->height() - 2);
@@ -274,9 +274,9 @@ namespace OpenLoco::Ui::Windows::Industry
                 self->flags |= WindowFlags::viewport_no_scrolling;
             }
 
-            if (self->viewports[0] != nullptr)
+            if (self->viewports[0].get() != nullptr)
             {
-                self->viewports[0]->flags = flags;
+                self->viewports[0].get()->flags = flags;
                 self->invalidate();
             }
         }
@@ -691,7 +691,7 @@ namespace OpenLoco::Ui::Windows::Industry
         {
             // Reset tab widgets if needed.
             auto tabWidgets = tabInformationByTabOffset[self->current_tab].widgets;
-            if (self->widgets != tabWidgets)
+            if (self->widgets.get() != tabWidgets)
             {
                 self->widgets = tabWidgets;
                 self->initScrollWidgets();
@@ -709,16 +709,16 @@ namespace OpenLoco::Ui::Windows::Industry
             args.push(industry->town);
 
             // Resize common widgets.
-            self->widgets[Common::widx::frame].right = self->width - 1;
-            self->widgets[Common::widx::frame].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::frame].right = self->width - 1;
+            self->widgets.get()[Common::widx::frame].bottom = self->height - 1;
 
-            self->widgets[Common::widx::caption].right = self->width - 2;
+            self->widgets.get()[Common::widx::caption].right = self->width - 2;
 
-            self->widgets[Common::widx::close_button].left = self->width - 15;
-            self->widgets[Common::widx::close_button].right = self->width - 3;
+            self->widgets.get()[Common::widx::close_button].left = self->width - 15;
+            self->widgets.get()[Common::widx::close_button].right = self->width - 3;
 
-            self->widgets[Common::widx::panel].right = self->width - 1;
-            self->widgets[Common::widx::panel].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::panel].right = self->width - 1;
+            self->widgets.get()[Common::widx::panel].bottom = self->height - 1;
         }
 
         // 0x00455CBC
@@ -768,17 +768,17 @@ namespace OpenLoco::Ui::Windows::Industry
         // 0x00456A5E, 0x00456A64
         static void repositionTabs(window* self)
         {
-            int16_t xPos = self->widgets[widx::tab_industry].left;
-            const int16_t tabWidth = self->widgets[widx::tab_industry].right - xPos;
+            int16_t xPos = self->widgets.get()[widx::tab_industry].left;
+            const int16_t tabWidth = self->widgets.get()[widx::tab_industry].right - xPos;
 
             for (uint8_t i = widx::tab_industry; i <= widx::tab_transported; i++)
             {
                 if (self->isDisabled(i))
                     continue;
 
-                self->widgets[i].left = xPos;
-                self->widgets[i].right = xPos + tabWidth;
-                xPos = self->widgets[i].right + 1;
+                self->widgets.get()[i].left = xPos;
+                self->widgets.get()[i].right = xPos + tabWidth;
+                xPos = self->widgets.get()[i].right + 1;
             }
         }
 
@@ -842,7 +842,7 @@ namespace OpenLoco::Ui::Windows::Industry
             auto tab = productionTabIds[productionTabNumber];
 
             uint32_t imageId = 0xFFFFFFFF;
-            auto widget = self->widgets[tab];
+            auto widget = self->widgets.get()[tab];
 
             if (industryObj->produced_cargo_type[productionTabNumber] != 0xFF)
             {

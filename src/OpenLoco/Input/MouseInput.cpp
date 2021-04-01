@@ -405,7 +405,7 @@ namespace OpenLoco::Input
         Ui::widget_t* widget = nullptr;
         if (widgetIndex != -1)
         {
-            widget = &window->widgets[widgetIndex];
+            widget = &window->widgets.get()[widgetIndex];
         }
 
         registers regs;
@@ -478,10 +478,10 @@ namespace OpenLoco::Input
             case mouse_button::released:
             {
                 // 0x4C735D
-                auto viewport = window->viewports[0];
+                auto viewport = window->viewports[0].get();
                 if (viewport == nullptr)
                 {
-                    viewport = window->viewports[1];
+                    viewport = window->viewports[1].get();
                 }
                 if (viewport == nullptr)
                 {
@@ -705,10 +705,10 @@ namespace OpenLoco::Input
             {
                 // 4C74E4
                 _ticksSinceDragStart += time_since_last_tick;
-                auto vp = window->viewports[0];
+                auto vp = window->viewports[0].get();
                 if (vp == nullptr)
                 {
-                    vp = window->viewports[1];
+                    vp = window->viewports[1].get();
                 }
                 if (vp == nullptr)
                 {
@@ -990,7 +990,7 @@ namespace OpenLoco::Input
                 if (x != 0 || y != 0)
                 {
                     _ticksSinceDragStart = 1000;
-                    Ui::widget_t* widget = &window->widgets[_dragWidgetIndex];
+                    Ui::widget_t* widget = &window->widgets.get()[_dragWidgetIndex];
                     Ui::ScrollView::horizontalDragFollow(window, widget, _dragWidgetIndex, _dragScrollIndex, x);
                     Ui::ScrollView::verticalDragFollow(window, widget, _dragWidgetIndex, _dragScrollIndex, y);
                 }
@@ -1176,7 +1176,7 @@ namespace OpenLoco::Input
                     {
                         if (dragWindow->isEnabled(_pressedWidgetIndex))
                         {
-                            auto pressedWidget = &dragWindow->widgets[_pressedWidgetIndex];
+                            auto pressedWidget = &dragWindow->widgets.get()[_pressedWidgetIndex];
 
                             Audio::playSound(Audio::sound_id::click_press, dragWindow->x + pressedWidget->mid_x());
                             dragWindow->callOnMouseUp(_pressedWidgetIndex);
@@ -1361,7 +1361,7 @@ namespace OpenLoco::Input
                 {
                     if (window != nullptr && widgetIndex != -1)
                     {
-                        auto buttonWidget = &window->widgets[widgetIndex];
+                        auto buttonWidget = &window->widgets.get()[widgetIndex];
                         Audio::playSound(Audio::sound_id::click_up, window->x + buttonWidget->mid_x());
                     }
                 }
@@ -1852,7 +1852,7 @@ namespace OpenLoco::Input
         {
             oldWindow->callPrepareDraw();
 
-            Ui::widget_t* oldWidget = &oldWindow->widgets[widgetIdx];
+            Ui::widget_t* oldWidget = &oldWindow->widgets.get()[widgetIdx];
             if (oldWidget->type == Ui::widget_type::wt_10 || oldWidget->type == Ui::widget_type::wt_9)
             {
                 WindowManager::invalidateWidget(windowType, windowNumber, widgetIdx);
@@ -1888,7 +1888,7 @@ namespace OpenLoco::Input
 
             if (widgetIdx != -1)
             {
-                Ui::widget_t& widget = window->widgets[widgetIdx];
+                Ui::widget_t& widget = window->widgets.get()[widgetIdx];
                 switch (widget.type)
                 {
                     case Ui::widget_type::panel:
@@ -1920,7 +1920,7 @@ namespace OpenLoco::Input
                         int16_t scroll_x, scroll_y;
                         Ui::ScrollView::getPart(
                             window,
-                            &window->widgets[widgetIdx],
+                            &window->widgets.get()[widgetIdx],
                             x,
                             y,
                             &scroll_x,

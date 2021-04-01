@@ -19,8 +19,8 @@ namespace OpenLoco::ObjectManager
 
     struct object_repository_item
     {
-        object** objects;
-        ObjectEntry2* object_entry_extendeds;
+        loco_ptr2<loco_ptr2<object>> objects;
+        loco_ptr2<ObjectEntry2> object_entry_extendeds;
     };
     static_assert(sizeof(object_repository_item) == 8);
 #pragma pack(pop)
@@ -415,10 +415,10 @@ namespace OpenLoco::ObjectManager
             auto maxObjectsForType = getMaxObjects(objectType);
             for (size_t i = 0; i < maxObjectsForType; i++)
             {
-                auto obj = typedObjectList.objects[i];
+                auto obj = typedObjectList.objects.get()[i].get();
                 if (obj != nullptr && obj != reinterpret_cast<object*>(-1))
                 {
-                    const auto& objHeader = typedObjectList.object_entry_extendeds[i];
+                    const auto& objHeader = typedObjectList.object_entry_extendeds.get()[i];
                     if (objHeader.isCustom())
                     {
                         if (header == objHeader)

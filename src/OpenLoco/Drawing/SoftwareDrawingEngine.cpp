@@ -165,7 +165,7 @@ namespace OpenLoco::Drawing
         windowDPI.height = rect.height();
         windowDPI.x = rect.left();
         windowDPI.y = rect.top();
-        windowDPI.bits = screen_info->dpi.bits + rect.left() + ((screen_info->dpi.width + screen_info->dpi.pitch) * rect.top());
+        windowDPI.bits = screen_info->dpi.bits.get() + rect.left() + ((screen_info->dpi.width + screen_info->dpi.pitch) * rect.top());
         windowDPI.pitch = screen_info->dpi.width + screen_info->dpi.pitch - rect.width();
         windowDPI.zoom_level = 0;
 

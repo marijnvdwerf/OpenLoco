@@ -256,7 +256,7 @@ namespace OpenLoco::Ui::Windows::ObjectSelectionWindow
     // 0x0047328D
     static void drawTabs(window* self, Gfx::drawpixelinfo_t* dpi)
     {
-        auto y = self->widgets[widx::panel].top + self->y - 26;
+        auto y = self->widgets.get()[widx::panel].top + self->y - 26;
         auto x = self->x + 3;
 
         for (auto row = 1; row >= 0; row--)
@@ -505,9 +505,9 @@ namespace OpenLoco::Ui::Windows::ObjectSelectionWindow
         drawTabs(self, dpi);
 
         bool doDefault = true;
-        if (self->object != nullptr)
+        if (self->object.get() != nullptr)
         {
-            auto objectPtr = self->object;
+            auto objectPtr = self->object.get();
             auto var = ObjectManager::object_index_entry::read(&objectPtr)._header;
             if (var->getType() != object_type::town_names && var->getType() != object_type::climate)
             {
@@ -545,7 +545,7 @@ namespace OpenLoco::Ui::Windows::ObjectSelectionWindow
             return;
 
         {
-            auto objectPtr = self->object;
+            auto objectPtr = self->object.get();
 
             drawPreviewImage(
                 ObjectManager::object_index_entry::read(&objectPtr)._header,
@@ -555,15 +555,15 @@ namespace OpenLoco::Ui::Windows::ObjectSelectionWindow
                 _50D15C);
         }
 
-        auto x = self->widgets[widx::objectImage].mid_x() + self->x;
-        auto y = self->widgets[widx::objectImage].bottom + 3 + self->y;
-        auto width = self->width - self->widgets[widx::scrollview].right - 6;
+        auto x = self->widgets.get()[widx::objectImage].mid_x() + self->x;
+        auto y = self->widgets.get()[widx::objectImage].bottom + 3 + self->y;
+        auto width = self->width - self->widgets.get()[widx::scrollview].right - 6;
 
         {
             auto buffer = const_cast<char*>(StringManager::getString(StringIds::buffer_2039));
 
             *buffer++ = ControlCodes::window_colour_2;
-            auto objectPtr = self->object;
+            auto objectPtr = self->object.get();
 
             strncpy(buffer, ObjectManager::object_index_entry::read(&objectPtr)._name, 510);
 
@@ -571,13 +571,13 @@ namespace OpenLoco::Ui::Windows::ObjectSelectionWindow
         }
 
         {
-            auto objectPtr = self->object;
+            auto objectPtr = self->object.get();
 
             drawDescription(
                 ObjectManager::object_index_entry::read(&objectPtr)._header,
                 self,
                 dpi,
-                self->widgets[widx::scrollview].right + self->x + 4,
+                self->widgets.get()[widx::scrollview].right + self->x + 4,
                 y + descriptionRowHeight,
                 _50D15C);
         }
@@ -600,7 +600,7 @@ namespace OpenLoco::Ui::Windows::ObjectSelectionWindow
 
             uint8_t textColour = ControlCodes::colour_black;
 
-            auto objectPtr = self->object;
+            auto objectPtr = self->object.get();
             if (objectPtr != nullptr)
             {
                 auto windowObjectName = ObjectManager::object_index_entry::read(&objectPtr)._name;

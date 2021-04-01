@@ -101,27 +101,27 @@ namespace OpenLoco::Ui::Windows::IndustryList
         {
             Common::prepareDraw(self);
 
-            self->widgets[widx::scrollview].right = self->width - 4;
-            self->widgets[widx::scrollview].bottom = self->height - 14;
+            self->widgets.get()[widx::scrollview].right = self->width - 4;
+            self->widgets.get()[widx::scrollview].bottom = self->height - 14;
 
             // Reposition header buttons.
-            self->widgets[widx::sort_industry_name].right = std::min(self->width - 4, 203);
+            self->widgets.get()[widx::sort_industry_name].right = std::min(self->width - 4, 203);
 
-            self->widgets[widx::sort_industry_status].left = std::min(self->width - 4, 204);
-            self->widgets[widx::sort_industry_status].right = std::min(self->width - 4, 443);
+            self->widgets.get()[widx::sort_industry_status].left = std::min(self->width - 4, 204);
+            self->widgets.get()[widx::sort_industry_status].right = std::min(self->width - 4, 443);
 
-            self->widgets[widx::sort_industry_production_transported].left = std::min(self->width - 4, 444);
-            self->widgets[widx::sort_industry_production_transported].right = std::min(self->width - 4, 603);
+            self->widgets.get()[widx::sort_industry_production_transported].left = std::min(self->width - 4, 444);
+            self->widgets.get()[widx::sort_industry_production_transported].right = std::min(self->width - 4, 603);
 
             // Set header button captions.
-            self->widgets[widx::sort_industry_name].text = self->sort_mode == SortMode::Name ? StringIds::industry_table_header_desc : StringIds::industry_table_header;
-            self->widgets[widx::sort_industry_status].text = self->sort_mode == SortMode::Status ? StringIds::industry_table_header_status_desc : StringIds::industry_table_header_status;
-            self->widgets[widx::sort_industry_production_transported].text = self->sort_mode == SortMode::ProductionTransported ? StringIds::industry_table_header_production_desc : StringIds::industry_table_header_production;
+            self->widgets.get()[widx::sort_industry_name].text = self->sort_mode == SortMode::Name ? StringIds::industry_table_header_desc : StringIds::industry_table_header;
+            self->widgets.get()[widx::sort_industry_status].text = self->sort_mode == SortMode::Status ? StringIds::industry_table_header_status_desc : StringIds::industry_table_header_status;
+            self->widgets.get()[widx::sort_industry_production_transported].text = self->sort_mode == SortMode::ProductionTransported ? StringIds::industry_table_header_production_desc : StringIds::industry_table_header_production;
 
             if (isEditorMode() || isSandboxMode())
-                self->widgets[Common::widx::tab_new_industry].tooltip = StringIds::tooltip_build_new_industries;
+                self->widgets.get()[Common::widx::tab_new_industry].tooltip = StringIds::tooltip_build_new_industries;
             else
-                self->widgets[Common::widx::tab_new_industry].tooltip = StringIds::tooltip_fund_new_industries;
+                self->widgets.get()[Common::widx::tab_new_industry].tooltip = StringIds::tooltip_fund_new_industries;
         }
 
         // 0x00457CD9
@@ -596,18 +596,18 @@ namespace OpenLoco::Ui::Windows::IndustryList
         {
             Common::prepareDraw(self);
 
-            self->widgets[widx::scrollview].right = self->width - 4;
-            self->widgets[widx::scrollview].bottom = self->height - 14;
+            self->widgets.get()[widx::scrollview].right = self->width - 4;
+            self->widgets.get()[widx::scrollview].bottom = self->height - 14;
 
             if (isEditorMode() || isSandboxMode())
             {
-                self->widgets[Common::widx::caption].text = StringIds::title_build_new_industries;
-                self->widgets[Common::widx::tab_new_industry].tooltip = StringIds::tooltip_build_new_industries;
+                self->widgets.get()[Common::widx::caption].text = StringIds::title_build_new_industries;
+                self->widgets.get()[Common::widx::tab_new_industry].tooltip = StringIds::tooltip_build_new_industries;
             }
             else
             {
-                self->widgets[Common::widx::caption].text = StringIds::title_fund_new_industries;
-                self->widgets[Common::widx::tab_new_industry].tooltip = StringIds::tooltip_fund_new_industries;
+                self->widgets.get()[Common::widx::caption].text = StringIds::title_fund_new_industries;
+                self->widgets.get()[Common::widx::tab_new_industry].tooltip = StringIds::tooltip_fund_new_industries;
             }
         }
 
@@ -740,13 +740,13 @@ namespace OpenLoco::Ui::Windows::IndustryList
 
             if (StringManager::getString(StringIds::buffer_337)[0] != '\0')
             {
-                if (string == self->widgets[widx::scrollview].tooltip)
+                if (string == self->widgets.get()[widx::scrollview].tooltip)
                 {
                     if (rowInfo == self->var_85C)
                         return;
                 }
             }
-            self->widgets[widx::scrollview].tooltip = string;
+            self->widgets.get()[widx::scrollview].tooltip = string;
             self->var_85C = rowInfo;
             ToolTip::closeAndReset();
 
@@ -1107,7 +1107,7 @@ namespace OpenLoco::Ui::Windows::IndustryList
         {
             // Reset tab widgets if needed.
             auto tabWidgets = tabInformationByTabOffset[self->current_tab].widgets;
-            if (self->widgets != tabWidgets)
+            if (self->widgets.get() != tabWidgets)
             {
                 self->widgets = tabWidgets;
                 self->initScrollWidgets();
@@ -1117,16 +1117,16 @@ namespace OpenLoco::Ui::Windows::IndustryList
             self->activated_widgets &= ~((1ULL << tab_industry_list) | (1ULL << tab_new_industry));
             self->activated_widgets |= (1ULL << tabInformationByTabOffset[self->current_tab].widgetIndex);
 
-            self->widgets[Common::widx::frame].right = self->width - 1;
-            self->widgets[Common::widx::frame].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::frame].right = self->width - 1;
+            self->widgets.get()[Common::widx::frame].bottom = self->height - 1;
 
-            self->widgets[Common::widx::panel].right = self->width - 1;
-            self->widgets[Common::widx::panel].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::panel].right = self->width - 1;
+            self->widgets.get()[Common::widx::panel].bottom = self->height - 1;
 
-            self->widgets[Common::widx::caption].right = self->width - 2;
+            self->widgets.get()[Common::widx::caption].right = self->width - 2;
 
-            self->widgets[Common::widx::close_button].left = self->width - 15;
-            self->widgets[Common::widx::close_button].right = self->width - 3;
+            self->widgets.get()[Common::widx::close_button].left = self->width - 15;
+            self->widgets.get()[Common::widx::close_button].right = self->width - 3;
         }
 
         // 0x00457F27

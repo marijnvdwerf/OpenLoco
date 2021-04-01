@@ -22,6 +22,7 @@
 
 int main(int argc, const char** argv)
 {
+    OpenLoco::Interop::emu_init();
     OpenLoco::Interop::loadSections();
     OpenLoco::lpCmdLine((char*)argv[0]);
     OpenLoco::main();

@@ -61,7 +61,7 @@ namespace OpenLoco::Ui::TitleOptions
         window->draw(dpi);
 
         int16_t x = window->x + window->width / 2;
-        int16_t y = window->y + window->widgets[Widx::options_button].top + 2;
+        int16_t y = window->y + window->widgets.get()[Widx::options_button].top + 2;
         Gfx::point_t origin = { x, y };
 
         Gfx::drawStringCentredWrapped(dpi, &origin, window->width, Colour::white, StringIds::outlined_wcolour2_stringid, (const char*)&StringIds::options);

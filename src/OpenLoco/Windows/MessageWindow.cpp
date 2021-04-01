@@ -103,7 +103,7 @@ namespace OpenLoco::Ui::MessageWindow
         // 0x0042A95A
         static void onResize(window* self)
         {
-            auto scrollview = self->widgets[widx::scrollview];
+            auto scrollview = self->widgets.get()[widx::scrollview];
             auto scrollarea = self->scroll_areas[0];
 
             auto y = scrollarea.contentHeight - scrollview.height() - 1;
@@ -203,8 +203,8 @@ namespace OpenLoco::Ui::MessageWindow
         {
             Common::prepareDraw(self);
 
-            self->widgets[widx::scrollview].right = self->width - 4;
-            self->widgets[widx::scrollview].bottom = self->height - 14;
+            self->widgets.get()[widx::scrollview].right = self->width - 4;
+            self->widgets.get()[widx::scrollview].bottom = self->height - 14;
         }
 
         // 0x0042A5CC
@@ -261,7 +261,7 @@ namespace OpenLoco::Ui::MessageWindow
                     auto args = FormatArguments();
                     args.push(StringIds::buffer_2039);
 
-                    auto width = self->widgets[widx::scrollview].width() - 14;
+                    auto width = self->widgets.get()[widx::scrollview].width() - 14;
                     Gfx::drawString_495224(*dpi, 0, height + 6, width, Colour::black, stringId, &args);
                     height += messageHeight;
                 }
@@ -365,7 +365,7 @@ namespace OpenLoco::Ui::MessageWindow
         uint16_t scrollHeight = 0;
         window->callGetScrollSize(0, 0, &scrollHeight);
 
-        scrollHeight -= window->widgets[Messages::widx::scrollview].height();
+        scrollHeight -= window->widgets.get()[Messages::widx::scrollview].height();
 
         if (static_cast<int16_t>(scrollHeight) < 0)
             scrollHeight = 0;
@@ -450,7 +450,7 @@ namespace OpenLoco::Ui::MessageWindow
                 case widx::advice:
                 case widx::advice_dropdown:
                 {
-                    auto widget = self->widgets[widgetIndex - 1];
+                    auto widget = self->widgets.get()[widgetIndex - 1];
                     auto xPos = widget.left + self->x;
                     auto yPos = widget.top + self->y;
                     auto width = widget.width() - 2;
@@ -510,7 +510,7 @@ namespace OpenLoco::Ui::MessageWindow
         {
             self->draw(dpi);
             Common::drawTabs(self, dpi);
-            auto yPos = self->widgets[widx::company_major_news].top + self->y;
+            auto yPos = self->widgets.get()[widx::company_major_news].top + self->y;
 
             const string_id newsStringIds[] = {
                 StringIds::company_major_news,
@@ -537,7 +537,7 @@ namespace OpenLoco::Ui::MessageWindow
                 }
 
                 {
-                    auto xPos = self->widgets[widx::company_major_news].left + self->x + 1;
+                    auto xPos = self->widgets.get()[widx::company_major_news].left + self->x + 1;
                     auto args = FormatArguments();
                     args.push(newsDropdownStringIds[static_cast<uint8_t>(Config::get().news_settings[i])]);
 
@@ -588,7 +588,7 @@ namespace OpenLoco::Ui::MessageWindow
         {
             // Reset tab widgets if needed.
             auto tabWidgets = tabInformationByTabOffset[self->current_tab].widgets;
-            if (self->widgets != tabWidgets)
+            if (self->widgets.get() != tabWidgets)
             {
                 self->widgets = tabWidgets;
                 self->initScrollWidgets();
@@ -598,16 +598,16 @@ namespace OpenLoco::Ui::MessageWindow
             self->activated_widgets &= ~((1ULL << tab_messages) | (1ULL << tab_settings));
             self->activated_widgets |= (1ULL << tabInformationByTabOffset[self->current_tab].widgetIndex);
 
-            self->widgets[Common::widx::frame].right = self->width - 1;
-            self->widgets[Common::widx::frame].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::frame].right = self->width - 1;
+            self->widgets.get()[Common::widx::frame].bottom = self->height - 1;
 
-            self->widgets[Common::widx::panel].right = self->width - 1;
-            self->widgets[Common::widx::panel].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::panel].right = self->width - 1;
+            self->widgets.get()[Common::widx::panel].bottom = self->height - 1;
 
-            self->widgets[Common::widx::caption].right = self->width - 2;
+            self->widgets.get()[Common::widx::caption].right = self->width - 2;
 
-            self->widgets[Common::widx::close_button].left = self->width - 15;
-            self->widgets[Common::widx::close_button].right = self->width - 3;
+            self->widgets.get()[Common::widx::close_button].left = self->width - 15;
+            self->widgets.get()[Common::widx::close_button].right = self->width - 3;
         }
 
         // 0x0042A716

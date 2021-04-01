@@ -283,17 +283,17 @@ namespace OpenLoco::Ui::Vehicle
                 targetThing,
                 (1 << 15) | (1 << 14),
                 ZoomLevel::full,
-                static_cast<int8_t>(self->viewports[0]->getRotation()),
+                static_cast<int8_t>(self->viewports[0].get()->getRotation()),
                 0
             };
 
             uint16_t flags = 0;
-            if (self->viewports[0] != nullptr)
+            if (self->viewports[0].get() != nullptr)
             {
                 if (self->saved_view == view)
                     return;
 
-                flags = self->viewports[0]->flags;
+                flags = self->viewports[0].get()->flags;
                 self->viewportRemove(0);
                 ViewportManager::collectGarbage();
             }
@@ -306,9 +306,9 @@ namespace OpenLoco::Ui::Vehicle
             self->saved_view = view;
 
             // 0x004B5E88 start
-            if (self->viewports[0] == nullptr)
+            if (self->viewports[0].get() == nullptr)
             {
-                auto widget = &self->widgets[widx::viewport];
+                auto widget = &self->widgets.get()[widx::viewport];
                 auto origin = Gfx::point_t(widget->left + self->x + 1, widget->top + self->y + 1);
                 auto size = Gfx::ui_size_t(widget->width() - 2, widget->height() - 2);
                 ViewportManager::create(self, 0, origin, size, self->saved_view.zoomLevel, targetThing);
@@ -317,9 +317,9 @@ namespace OpenLoco::Ui::Vehicle
             }
             // 0x004B5E88 end
 
-            if (self->viewports[0] != nullptr)
+            if (self->viewports[0].get() != nullptr)
             {
-                self->viewports[0]->flags = flags;
+                self->viewports[0].get()->flags = flags;
                 self->invalidate();
             }
         }
@@ -411,7 +411,7 @@ namespace OpenLoco::Ui::Vehicle
             Dropdown::add(0, StringIds::dropdown_stringid, StringIds::dropdown_viewport_move);
             Dropdown::add(1, StringIds::dropdown_stringid, StringIds::dropdown_viewport_focus);
 
-            widget_t* widget = &self->widgets[widx::centreViewport];
+            widget_t* widget = &self->widgets.get()[widx::centreViewport];
             Dropdown::showText(
                 self->x + widget->left,
                 self->y + widget->top,
@@ -500,7 +500,7 @@ namespace OpenLoco::Ui::Vehicle
             Common::setCaptionEnableState(self);
             self->setSize(minWindowSize, maxWindowSize);
 
-            if (self->viewports[0] != nullptr)
+            if (self->viewports[0].get() != nullptr)
             {
                 auto head = Common::getVehicle(self);
                 uint16_t newWidth = self->width - 30;
@@ -513,7 +513,7 @@ namespace OpenLoco::Ui::Vehicle
                     newWidth -= 27;
                 }
 
-                auto& viewport = self->viewports[0];
+                auto viewport = self->viewports[0].get();
                 if (newWidth != viewport->width || newHeight != viewport->height)
                 {
                     self->invalidate();
@@ -541,7 +541,7 @@ namespace OpenLoco::Ui::Vehicle
                 dropdownCount = 3;
             }
 
-            widget_t* widget = &self->widgets[widx::stopStart];
+            widget_t* widget = &self->widgets.get()[widx::stopStart];
             Dropdown::showText(
                 self->x + widget->left,
                 self->y + widget->top,
@@ -570,7 +570,7 @@ namespace OpenLoco::Ui::Vehicle
         {
             Input::setClickRepeatTicks(31);
             auto pos = Input::getScrollLastLocation();
-            auto speed = pos.y - (self->y + self->widgets[widx::speedControl].top + 58);
+            auto speed = pos.y - (self->y + self->widgets.get()[widx::speedControl].top + 58);
             speed = -(std::clamp(speed, -40, 40));
 
             GameCommands::do_74(self->number, speed);
@@ -696,7 +696,7 @@ namespace OpenLoco::Ui::Vehicle
         // 0x004B1EB5
         static void prepareDraw(window* const self)
         {
-            if (self->widgets != widgets)
+            if (self->widgets.get() != widgets)
             {
                 self->widgets = widgets;
                 self->initScrollWidgets();
@@ -706,19 +706,19 @@ namespace OpenLoco::Ui::Vehicle
             auto head = Common::getVehicle(self);
             Vehicles::Vehicle train(head);
 
-            self->widgets[widx::stopStart].type = widget_type::wt_9;
-            self->widgets[widx::pickup].type = widget_type::wt_9;
-            self->widgets[widx::passSignal].type = widget_type::wt_9;
-            self->widgets[widx::changeDirection].type = widget_type::wt_9;
+            self->widgets.get()[widx::stopStart].type = widget_type::wt_9;
+            self->widgets.get()[widx::pickup].type = widget_type::wt_9;
+            self->widgets.get()[widx::passSignal].type = widget_type::wt_9;
+            self->widgets.get()[widx::changeDirection].type = widget_type::wt_9;
 
             if (head->mode != TransportMode::rail)
             {
-                self->widgets[widx::passSignal].type = widget_type::none;
+                self->widgets.get()[widx::passSignal].type = widget_type::none;
             }
 
             if (head->mode == TransportMode::air || head->mode == TransportMode::water)
             {
-                self->widgets[widx::changeDirection].type = widget_type::none;
+                self->widgets.get()[widx::changeDirection].type = widget_type::none;
             }
 
             self->disabled_widgets &= ~interactiveWidgets;
@@ -784,22 +784,22 @@ namespace OpenLoco::Ui::Vehicle
             {
                 stopStartImage = ImageIds::green_flag;
             }
-            self->widgets[widx::stopStart].image = stopStartImage;
+            self->widgets.get()[widx::stopStart].image = stopStartImage;
 
             bool isPlaced = head->tile_x != -1 && !(head->var_38 & OpenLoco::Vehicles::Flags38::isGhost);
             auto [pickupImage, pickupTooltip] = Common::getPickupImageIdandTooltip(*head, isPlaced);
-            self->widgets[widx::pickup].image = Gfx::recolour(pickupImage);
-            self->widgets[widx::pickup].tooltip = pickupTooltip;
+            self->widgets.get()[widx::pickup].image = Gfx::recolour(pickupImage);
+            self->widgets.get()[widx::pickup].tooltip = pickupTooltip;
 
-            self->widgets[widx::speedControl].type = widget_type::none;
+            self->widgets.get()[widx::speedControl].type = widget_type::none;
 
-            self->widgets[Common::widx::frame].right = self->width - 1;
-            self->widgets[Common::widx::frame].bottom = self->height - 1;
-            self->widgets[Common::widx::panel].right = self->width - 1;
-            self->widgets[Common::widx::panel].bottom = self->height - 1;
-            self->widgets[Common::widx::caption].right = self->width - 2;
-            self->widgets[Common::widx::closeButton].left = self->width - 15;
-            self->widgets[Common::widx::closeButton].right = self->width - 3;
+            self->widgets.get()[Common::widx::frame].right = self->width - 1;
+            self->widgets.get()[Common::widx::frame].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::panel].right = self->width - 1;
+            self->widgets.get()[Common::widx::panel].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::caption].right = self->width - 2;
+            self->widgets.get()[Common::widx::closeButton].left = self->width - 15;
+            self->widgets.get()[Common::widx::closeButton].right = self->width - 3;
 
             int viewportRight = self->width - 26;
             if (head->var_0C & Vehicles::Flags0C::manualControl)
@@ -807,43 +807,43 @@ namespace OpenLoco::Ui::Vehicle
                 if (isPlayerCompany(head->owner))
                 {
                     viewportRight -= 27;
-                    self->widgets[widx::speedControl].type = widget_type::wt_5;
+                    self->widgets.get()[widx::speedControl].type = widget_type::wt_5;
                 }
             }
 
-            self->widgets[widx::viewport].right = viewportRight;
-            self->widgets[widx::viewport].bottom = self->height - 1 - 13;
+            self->widgets.get()[widx::viewport].right = viewportRight;
+            self->widgets.get()[widx::viewport].bottom = self->height - 1 - 13;
 
-            self->widgets[widx::status].top = self->height - 1 - 13 + 2;
-            self->widgets[widx::status].bottom = self->height - 1 - 13 + 2 + 9;
-            self->widgets[widx::status].right = self->width - 14;
+            self->widgets.get()[widx::status].top = self->height - 1 - 13 + 2;
+            self->widgets.get()[widx::status].bottom = self->height - 1 - 13 + 2 + 9;
+            self->widgets.get()[widx::status].right = self->width - 14;
 
-            self->widgets[widx::stopStart].right = self->width - 2;
-            self->widgets[widx::pickup].right = self->width - 2;
-            self->widgets[widx::passSignal].right = self->width - 2;
-            self->widgets[widx::changeDirection].right = self->width - 2;
+            self->widgets.get()[widx::stopStart].right = self->width - 2;
+            self->widgets.get()[widx::pickup].right = self->width - 2;
+            self->widgets.get()[widx::passSignal].right = self->width - 2;
+            self->widgets.get()[widx::changeDirection].right = self->width - 2;
 
-            self->widgets[widx::stopStart].left = self->width - 2 - 23;
-            self->widgets[widx::pickup].left = self->width - 2 - 23;
-            self->widgets[widx::passSignal].left = self->width - 2 - 23;
-            self->widgets[widx::changeDirection].left = self->width - 2 - 23;
+            self->widgets.get()[widx::stopStart].left = self->width - 2 - 23;
+            self->widgets.get()[widx::pickup].left = self->width - 2 - 23;
+            self->widgets.get()[widx::passSignal].left = self->width - 2 - 23;
+            self->widgets.get()[widx::changeDirection].left = self->width - 2 - 23;
 
-            self->widgets[widx::speedControl].left = self->width - 2 - 23 - 26;
-            self->widgets[widx::speedControl].right = self->width - 2 - 23 - 26 + 23;
+            self->widgets.get()[widx::speedControl].left = self->width - 2 - 23 - 26;
+            self->widgets.get()[widx::speedControl].right = self->width - 2 - 23 - 26 + 23;
 
             if (!isPlayerCompany(head->owner))
             {
-                self->widgets[widx::stopStart].type = widget_type::none;
-                self->widgets[widx::pickup].type = widget_type::none;
-                self->widgets[widx::passSignal].type = widget_type::none;
-                self->widgets[widx::changeDirection].type = widget_type::none;
-                self->widgets[widx::viewport].right += 22;
+                self->widgets.get()[widx::stopStart].type = widget_type::none;
+                self->widgets.get()[widx::pickup].type = widget_type::none;
+                self->widgets.get()[widx::passSignal].type = widget_type::none;
+                self->widgets.get()[widx::changeDirection].type = widget_type::none;
+                self->widgets.get()[widx::viewport].right += 22;
             }
 
-            self->widgets[widx::centreViewport].right = self->widgets[widx::viewport].right - 1;
-            self->widgets[widx::centreViewport].bottom = self->widgets[widx::viewport].bottom - 1;
-            self->widgets[widx::centreViewport].left = self->widgets[widx::viewport].right - 1 - 23;
-            self->widgets[widx::centreViewport].top = self->widgets[widx::viewport].bottom - 1 - 23;
+            self->widgets.get()[widx::centreViewport].right = self->widgets.get()[widx::viewport].right - 1;
+            self->widgets.get()[widx::centreViewport].bottom = self->widgets.get()[widx::viewport].bottom - 1;
+            self->widgets.get()[widx::centreViewport].left = self->widgets.get()[widx::viewport].right - 1 - 23;
+            self->widgets.get()[widx::centreViewport].top = self->widgets.get()[widx::viewport].bottom - 1 - 23;
             Common::repositionTabs(self);
         }
 
@@ -876,7 +876,7 @@ namespace OpenLoco::Ui::Vehicle
             self->draw(context);
             Common::drawTabs(self, context);
 
-            widget_t& pickupButton = self->widgets[widx::pickup];
+            widget_t& pickupButton = self->widgets.get()[widx::pickup];
             if (pickupButton.type != widget_type::none)
             {
                 if ((pickupButton.image & 0x20000000) != 0 && !self->isDisabled(widx::pickup))
@@ -906,15 +906,15 @@ namespace OpenLoco::Ui::Vehicle
 
                 Gfx::drawString_494BBF(
                     *context,
-                    self->x + self->widgets[widx::status].left - 1,
-                    self->y + self->widgets[widx::status].top - 1,
-                    self->widgets[widx::status].width() - 1,
+                    self->x + self->widgets.get()[widx::status].left - 1,
+                    self->y + self->widgets.get()[widx::status].top - 1,
+                    self->widgets.get()[widx::status].width() - 1,
                     Colour::black,
                     strFormat,
                     &args);
             }
 
-            widget_t& speedWidget = self->widgets[widx::speedControl];
+            widget_t& speedWidget = self->widgets.get()[widx::speedControl];
             if (speedWidget.type != widget_type::none)
             {
                 Gfx::drawImage(
@@ -944,7 +944,7 @@ namespace OpenLoco::Ui::Vehicle
                     Gfx::recolour(ImageIds::speed_control_thumb, self->colours[1]));
             }
 
-            if (self->viewports[0] != nullptr)
+            if (self->viewports[0].get() != nullptr)
             {
                 self->drawViewports(context);
                 Widget::drawViewportCentreButton(context, self, widx::centreViewport);
@@ -954,7 +954,7 @@ namespace OpenLoco::Ui::Vehicle
                 FormatArguments args = {};
                 args.push(StringIds::getVehicleType(veh->vehicleType));
                 Gfx::point_t origin;
-                widget_t& button = self->widgets[widx::viewport];
+                widget_t& button = self->widgets.get()[widx::viewport];
                 origin.x = self->x + button.mid_x();
                 origin.y = self->y + button.mid_y();
                 Gfx::drawStringCentredWrapped(
@@ -1060,7 +1060,7 @@ namespace OpenLoco::Ui::Vehicle
             Dropdown::add(0, StringIds::dropdown_stringid, StringIds::dropdown_modify_vehicle);
             Dropdown::add(1, StringIds::dropdown_stringid, StringIds::dropdown_clone_vehicle);
 
-            widget_t* widget = &self->widgets[widx::buildNew];
+            widget_t* widget = &self->widgets.get()[widx::buildNew];
             Dropdown::showText(
                 self->x + widget->left,
                 self->y + widget->top,
@@ -1221,13 +1221,13 @@ namespace OpenLoco::Ui::Vehicle
             char* buffer = const_cast<char*>(StringManager::getString(StringIds::buffer_337));
             if (strlen(buffer) != 0)
             {
-                if (self->widgets[widx::carList].tooltip == tooltipFormat && self->var_85C == tooltipContent)
+                if (self->widgets.get()[widx::carList].tooltip == tooltipFormat && self->var_85C == tooltipContent)
                 {
                     return;
                 }
             }
 
-            self->widgets[widx::carList].tooltip = tooltipFormat;
+            self->widgets.get()[widx::carList].tooltip = tooltipFormat;
             self->var_85C = tooltipContent;
             ToolTip::closeAndReset();
 
@@ -1338,7 +1338,7 @@ namespace OpenLoco::Ui::Vehicle
         // 0x004B3300
         static void prepareDraw(window* self)
         {
-            if (self->widgets != widgets)
+            if (self->widgets.get() != widgets)
             {
                 self->widgets = widgets;
                 self->initScrollWidgets();
@@ -1351,45 +1351,45 @@ namespace OpenLoco::Ui::Vehicle
             args.push(head->var_22);
             args.push(head->var_44);
 
-            self->widgets[Common::widx::frame].right = self->width - 1;
-            self->widgets[Common::widx::frame].bottom = self->height - 1;
-            self->widgets[Common::widx::panel].right = self->width - 1;
-            self->widgets[Common::widx::panel].bottom = self->height - 1;
-            self->widgets[Common::widx::caption].right = self->width - 2;
-            self->widgets[Common::widx::closeButton].left = self->width - 15;
-            self->widgets[Common::widx::closeButton].right = self->width - 3;
+            self->widgets.get()[Common::widx::frame].right = self->width - 1;
+            self->widgets.get()[Common::widx::frame].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::panel].right = self->width - 1;
+            self->widgets.get()[Common::widx::panel].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::caption].right = self->width - 2;
+            self->widgets.get()[Common::widx::closeButton].left = self->width - 15;
+            self->widgets.get()[Common::widx::closeButton].right = self->width - 3;
             Common::repositionTabs(self);
 
-            self->widgets[widx::carList].right = self->width - 26;
-            self->widgets[widx::carList].bottom = self->height - 24;
+            self->widgets.get()[widx::carList].right = self->width - 26;
+            self->widgets.get()[widx::carList].bottom = self->height - 24;
 
-            self->widgets[widx::buildNew].right = self->width - 2;
-            self->widgets[widx::buildNew].left = self->width - 25;
-            self->widgets[widx::pickup].right = self->width - 2;
-            self->widgets[widx::pickup].left = self->width - 25;
-            self->widgets[widx::remove].right = self->width - 2;
-            self->widgets[widx::remove].left = self->width - 25;
+            self->widgets.get()[widx::buildNew].right = self->width - 2;
+            self->widgets.get()[widx::buildNew].left = self->width - 25;
+            self->widgets.get()[widx::pickup].right = self->width - 2;
+            self->widgets.get()[widx::pickup].left = self->width - 25;
+            self->widgets.get()[widx::remove].right = self->width - 2;
+            self->widgets.get()[widx::remove].left = self->width - 25;
 
-            self->widgets[widx::buildNew].type = widget_type::wt_9;
-            self->widgets[widx::pickup].type = widget_type::wt_9;
-            self->widgets[widx::remove].type = widget_type::wt_9;
+            self->widgets.get()[widx::buildNew].type = widget_type::wt_9;
+            self->widgets.get()[widx::pickup].type = widget_type::wt_9;
+            self->widgets.get()[widx::remove].type = widget_type::wt_9;
             bool isPlaced = head->tile_x != -1 && !(head->var_38 & OpenLoco::Vehicles::Flags38::isGhost);
             // Differs to main tab! Unsure why.
             if (isPlaced)
             {
-                self->widgets[widx::pickup].type = widget_type::none;
+                self->widgets.get()[widx::pickup].type = widget_type::none;
             }
             if (head->owner != CompanyManager::getControllingId())
             {
-                self->widgets[widx::buildNew].type = widget_type::none;
-                self->widgets[widx::pickup].type = widget_type::none;
-                self->widgets[widx::remove].type = widget_type::none;
-                self->widgets[widx::carList].right = self->width - 4;
+                self->widgets.get()[widx::buildNew].type = widget_type::none;
+                self->widgets.get()[widx::pickup].type = widget_type::none;
+                self->widgets.get()[widx::remove].type = widget_type::none;
+                self->widgets.get()[widx::carList].right = self->width - 4;
             }
 
             auto skin = ObjectManager::get<InterfaceSkinObject>();
             auto buildImage = skin->img + additionalVehicleButtonByVehicleType.at(head->vehicleType);
-            self->widgets[widx::buildNew].image = Gfx::recolour(buildImage, CompanyManager::getCompanyColour(self->owner));
+            self->widgets.get()[widx::buildNew].image = Gfx::recolour(buildImage, CompanyManager::getCompanyColour(self->owner));
 
             Vehicles::Vehicle train{ head };
             if (train.cars.empty())
@@ -1402,8 +1402,8 @@ namespace OpenLoco::Ui::Vehicle
             }
 
             auto [pickupImage, pickupTooltip] = Common::getPickupImageIdandTooltip(*head, isPlaced);
-            self->widgets[widx::pickup].image = Gfx::recolour(pickupImage);
-            self->widgets[widx::pickup].tooltip = pickupTooltip;
+            self->widgets.get()[widx::pickup].image = Gfx::recolour(pickupImage);
+            self->widgets.get()[widx::pickup].tooltip = pickupTooltip;
         }
 
         // 0x004B3542
@@ -1413,12 +1413,12 @@ namespace OpenLoco::Ui::Vehicle
             Common::drawTabs(self, context);
 
             // TODO: identical to main tab (doesn't appear to do anything useful)
-            if (self->widgets[widx::pickup].type != widget_type::none)
+            if (self->widgets.get()[widx::pickup].type != widget_type::none)
             {
-                if ((self->widgets[widx::pickup].image & (1 << 29)) && !self->isDisabled(widx::pickup))
+                if ((self->widgets.get()[widx::pickup].image & (1 << 29)) && !self->isDisabled(widx::pickup))
                 {
-                    auto image = Gfx::recolour(self->widgets[widx::pickup].image, CompanyManager::getCompanyColour(self->owner));
-                    Gfx::drawImage(context, self->widgets[widx::pickup].left + self->x, self->widgets[widx::pickup].top + self->y, image);
+                    auto image = Gfx::recolour(self->widgets.get()[widx::pickup].image, CompanyManager::getCompanyColour(self->owner));
+                    Gfx::drawImage(context, self->widgets.get()[widx::pickup].left + self->x, self->widgets.get()[widx::pickup].top + self->y, image);
                 }
             }
 
@@ -1544,7 +1544,7 @@ namespace OpenLoco::Ui::Vehicle
             ScrollView::scroll_part part;
             size_t scrollIndex;
             Input::setPressedWidgetIndex(widx::carList);
-            Ui::ScrollView::getPart(&self, &self.widgets[widx::carList], pos.x, pos.y, &scrollX, &scrollY, &part, &scrollIndex);
+            Ui::ScrollView::getPart(&self, &self.widgets.get()[widx::carList], pos.x, pos.y, &scrollX, &scrollY, &part, &scrollIndex);
             if (part != ScrollView::scroll_part::view)
             {
                 return nullptr;
@@ -1595,11 +1595,11 @@ namespace OpenLoco::Ui::Vehicle
                     }
 
                     // TODO: define constant for hot zone
-                    if (pos.y < vehicleWindow->widgets[widx::carList].top + vehicleWindow->y + 5)
+                    if (pos.y < vehicleWindow->widgets.get()[widx::carList].top + vehicleWindow->y + 5)
                     {
                         Ui::ScrollView::verticalNudgeUp(vehicleWindow, vehicleWindow->getScrollDataIndex(widx::carList), widx::carList);
                     }
-                    else if (pos.y > vehicleWindow->widgets[widx::carList].bottom + vehicleWindow->y - 5)
+                    else if (pos.y > vehicleWindow->widgets.get()[widx::carList].bottom + vehicleWindow->y - 5)
                     {
                         Ui::ScrollView::verticalNudgeDown(vehicleWindow, vehicleWindow->getScrollDataIndex(widx::carList), widx::carList);
                     }
@@ -1665,7 +1665,7 @@ namespace OpenLoco::Ui::Vehicle
         // 004B3DDE
         static void prepareDraw(window* const self)
         {
-            if (self->widgets != widgets)
+            if (self->widgets.get() != widgets)
             {
                 self->widgets = widgets;
                 self->initScrollWidgets();
@@ -1919,7 +1919,7 @@ namespace OpenLoco::Ui::Vehicle
                 index++;
             }
 
-            widget_t& button = self->widgets[wi];
+            widget_t& button = self->widgets.get()[wi];
 
             Dropdown::showText(
                 self->x + button.left,
@@ -2010,13 +2010,13 @@ namespace OpenLoco::Ui::Vehicle
             char* buffer = const_cast<char*>(StringManager::getString(StringIds::buffer_337));
             if (*buffer != '\0')
             {
-                if (self->widgets[widx::cargoList].tooltip == tooltipFormat && self->var_85C == tooltipContent)
+                if (self->widgets.get()[widx::cargoList].tooltip == tooltipFormat && self->var_85C == tooltipContent)
                 {
                     return;
                 }
             }
 
-            self->widgets[widx::cargoList].tooltip = tooltipFormat;
+            self->widgets.get()[widx::cargoList].tooltip = tooltipFormat;
             self->var_85C = tooltipContent;
             ToolTip::closeAndReset();
 
@@ -2080,7 +2080,7 @@ namespace OpenLoco::Ui::Vehicle
         // 0x004B56CE
         static void prepareDraw(window* self)
         {
-            if (self->widgets != widgets)
+            if (self->widgets.get() != widgets)
             {
                 self->widgets = widgets;
                 self->initScrollWidgets();
@@ -2093,13 +2093,13 @@ namespace OpenLoco::Ui::Vehicle
             args.push(vehicle->var_22);
             args.push(vehicle->var_44);
 
-            self->widgets[Common::widx::frame].right = self->width - 1;
-            self->widgets[Common::widx::frame].bottom = self->height - 1;
-            self->widgets[Common::widx::panel].right = self->width - 1;
-            self->widgets[Common::widx::panel].bottom = self->height - 1;
-            self->widgets[Common::widx::caption].right = self->width - 2;
-            self->widgets[Common::widx::closeButton].left = self->width - 15;
-            self->widgets[Common::widx::closeButton].right = self->width - 3;
+            self->widgets.get()[Common::widx::frame].right = self->width - 1;
+            self->widgets.get()[Common::widx::frame].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::panel].right = self->width - 1;
+            self->widgets.get()[Common::widx::panel].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::caption].right = self->width - 2;
+            self->widgets.get()[Common::widx::closeButton].left = self->width - 15;
+            self->widgets.get()[Common::widx::closeButton].right = self->width - 3;
 
             Common::repositionTabs(self);
         }
@@ -2483,10 +2483,10 @@ namespace OpenLoco::Ui::Vehicle
                 index++;
             }
 
-            auto x = self->widgets[i].left + self->x;
-            auto y = self->widgets[i].top + self->y;
-            auto width = self->widgets[i].width();
-            auto height = self->widgets[i].height();
+            auto x = self->widgets.get()[i].left + self->x;
+            auto y = self->widgets.get()[i].top + self->y;
+            auto width = self->widgets.get()[i].width();
+            auto height = self->widgets.get()[i].height();
             Dropdown::showText(x, y, width, height, self->colours[1], index, 0);
             Dropdown::setHighlightedItem(0);
         }
@@ -2856,7 +2856,7 @@ namespace OpenLoco::Ui::Vehicle
         // 0x004B468C
         static void prepareDraw(window* const self)
         {
-            if (self->widgets != widgets)
+            if (self->widgets.get() != widgets)
             {
                 self->widgets = widgets;
                 self->initScrollWidgets();
@@ -2868,30 +2868,30 @@ namespace OpenLoco::Ui::Vehicle
             args.push(head->var_22);
             args.push(head->var_44);
 
-            self->widgets[widx::routeList].tooltip = Input::isToolActive(self->type, self->number) ? StringIds::tooltip_route_scrollview_copy : StringIds::tooltip_route_scrollview;
+            self->widgets.get()[widx::routeList].tooltip = Input::isToolActive(self->type, self->number) ? StringIds::tooltip_route_scrollview_copy : StringIds::tooltip_route_scrollview;
 
-            self->widgets[Common::widx::frame].right = self->width - 1;
-            self->widgets[Common::widx::frame].bottom = self->height - 1;
-            self->widgets[Common::widx::panel].right = self->width - 1;
-            self->widgets[Common::widx::panel].bottom = self->height - 1;
-            self->widgets[Common::widx::caption].right = self->width - 2;
-            self->widgets[Common::widx::closeButton].left = self->width - 15;
-            self->widgets[Common::widx::closeButton].right = self->width - 3;
+            self->widgets.get()[Common::widx::frame].right = self->width - 1;
+            self->widgets.get()[Common::widx::frame].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::panel].right = self->width - 1;
+            self->widgets.get()[Common::widx::panel].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::caption].right = self->width - 2;
+            self->widgets.get()[Common::widx::closeButton].left = self->width - 15;
+            self->widgets.get()[Common::widx::closeButton].right = self->width - 3;
 
-            self->widgets[widx::routeList].right = self->width - 26;
-            self->widgets[widx::routeList].bottom = self->height - 14;
-            self->widgets[widx::orderForceUnload].right = self->width - 2;
-            self->widgets[widx::orderWait].right = self->width - 2;
-            self->widgets[widx::orderSkip].right = self->width - 2;
-            self->widgets[widx::orderDelete].right = self->width - 2;
-            self->widgets[widx::orderUp].right = self->width - 2;
-            self->widgets[widx::orderDown].right = self->width - 2;
-            self->widgets[widx::orderForceUnload].left = self->width - 25;
-            self->widgets[widx::orderWait].left = self->width - 25;
-            self->widgets[widx::orderSkip].left = self->width - 25;
-            self->widgets[widx::orderDelete].left = self->width - 25;
-            self->widgets[widx::orderUp].left = self->width - 25;
-            self->widgets[widx::orderDown].left = self->width - 25;
+            self->widgets.get()[widx::routeList].right = self->width - 26;
+            self->widgets.get()[widx::routeList].bottom = self->height - 14;
+            self->widgets.get()[widx::orderForceUnload].right = self->width - 2;
+            self->widgets.get()[widx::orderWait].right = self->width - 2;
+            self->widgets.get()[widx::orderSkip].right = self->width - 2;
+            self->widgets.get()[widx::orderDelete].right = self->width - 2;
+            self->widgets.get()[widx::orderUp].right = self->width - 2;
+            self->widgets.get()[widx::orderDown].right = self->width - 2;
+            self->widgets.get()[widx::orderForceUnload].left = self->width - 25;
+            self->widgets.get()[widx::orderWait].left = self->width - 25;
+            self->widgets.get()[widx::orderSkip].left = self->width - 25;
+            self->widgets.get()[widx::orderDelete].left = self->width - 25;
+            self->widgets.get()[widx::orderUp].left = self->width - 25;
+            self->widgets.get()[widx::orderDown].left = self->width - 25;
 
             self->disabled_widgets |= (1 << widx::orderForceUnload) | (1 << widx::orderWait) | (1 << widx::orderSkip) | (1 << widx::orderDelete);
             if (head->sizeOfOrderTable != 1)
@@ -2912,15 +2912,15 @@ namespace OpenLoco::Ui::Vehicle
                 self->activated_widgets |= (1 << widx::localMode);
 
             widget_type type = head->owner == CompanyManager::getControllingId() ? widget_type::wt_9 : widget_type::none;
-            self->widgets[widx::orderForceUnload].type = type;
-            self->widgets[widx::orderWait].type = type;
-            self->widgets[widx::orderSkip].type = type;
-            self->widgets[widx::orderDelete].type = type;
-            self->widgets[widx::orderUp].type = type;
-            self->widgets[widx::orderDown].type = type;
+            self->widgets.get()[widx::orderForceUnload].type = type;
+            self->widgets.get()[widx::orderWait].type = type;
+            self->widgets.get()[widx::orderSkip].type = type;
+            self->widgets.get()[widx::orderDelete].type = type;
+            self->widgets.get()[widx::orderUp].type = type;
+            self->widgets.get()[widx::orderDown].type = type;
             if (type == widget_type::none)
             {
-                self->widgets[widx::routeList].right += 22;
+                self->widgets.get()[widx::routeList].right += 22;
                 self->enabled_widgets &= ~(1 << widx::expressMode | 1 << widx::localMode);
             }
             else
@@ -2928,9 +2928,9 @@ namespace OpenLoco::Ui::Vehicle
                 self->enabled_widgets |= (1 << widx::expressMode | 1 << widx::localMode);
             }
 
-            self->widgets[widx::expressMode].right = self->widgets[widx::routeList].right;
-            self->widgets[widx::expressMode].left = (self->widgets[widx::expressMode].right - 3) / 2 + 3;
-            self->widgets[widx::localMode].right = self->widgets[widx::expressMode].left - 1;
+            self->widgets.get()[widx::expressMode].right = self->widgets.get()[widx::routeList].right;
+            self->widgets.get()[widx::expressMode].left = (self->widgets.get()[widx::expressMode].right - 3) / 2 + 3;
+            self->widgets.get()[widx::localMode].right = self->widgets.get()[widx::expressMode].left - 1;
 
             self->disabled_widgets |= (1 << widx::orderUp) | (1 << widx::orderDown);
             if (self->var_842 != -1)
@@ -3314,9 +3314,9 @@ namespace OpenLoco::Ui::Vehicle
             self->frame_no = 0;
             self->flags &= ~WindowFlags::flag_16;
             self->var_85C = -1;
-            if (self->viewports[0] != nullptr)
+            if (self->viewports[0].get() != nullptr)
             {
-                self->viewports[0]->width = 0;
+                self->viewports[0].get()->width = 0;
                 self->viewports[0] = nullptr;
                 ViewportManager::collectGarbage();
             }
@@ -3344,17 +3344,17 @@ namespace OpenLoco::Ui::Vehicle
         // 0x004B5ECD
         static void repositionTabs(window* const self)
         {
-            int16_t xPos = self->widgets[widx::tabMain].left;
-            const int16_t tabWidth = self->widgets[widx::tabMain].right - xPos;
+            int16_t xPos = self->widgets.get()[widx::tabMain].left;
+            const int16_t tabWidth = self->widgets.get()[widx::tabMain].right - xPos;
 
             for (uint8_t i = widx::tabMain; i <= widx::tabRoute; i++)
             {
                 if (self->isDisabled(i))
                     continue;
 
-                self->widgets[i].left = xPos;
-                self->widgets[i].right = xPos + tabWidth;
-                xPos = self->widgets[i].right + 1;
+                self->widgets.get()[i].left = xPos;
+                self->widgets.get()[i].right = xPos + tabWidth;
+                xPos = self->widgets.get()[i].right + 1;
             }
         }
 

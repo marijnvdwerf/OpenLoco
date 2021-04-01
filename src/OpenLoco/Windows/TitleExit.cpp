@@ -62,7 +62,7 @@ namespace OpenLoco::Ui::Windows
         auto exitString = StringManager::getString(StringIds::title_exit_game);
         self->width = Gfx::getStringWidthNewLined(exitString) + 10;
         self->x = Ui::width() - self->width;
-        self->widgets[Widx::exit_button].right = self->width;
+        self->widgets.get()[Widx::exit_button].right = self->width;
     }
 
     // 0x00439236
@@ -72,7 +72,7 @@ namespace OpenLoco::Ui::Windows
         window->draw(dpi);
 
         int16_t x = window->x + window->width / 2;
-        int16_t y = window->y + window->widgets[Widx::exit_button].top + 8;
+        int16_t y = window->y + window->widgets.get()[Widx::exit_button].top + 8;
         Gfx::point_t origin = { x, y };
         Gfx::drawStringCentredWrapped(dpi, &origin, window->width, Colour::black, StringIds::title_exit_game);
     }

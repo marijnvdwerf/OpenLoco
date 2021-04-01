@@ -265,7 +265,7 @@ namespace OpenLoco::Ui::Windows::ScenarioOptions
             {
                 case widx::objective_type_btn:
                 {
-                    widget_t& target = self->widgets[widx::objective_type];
+                    widget_t& target = self->widgets.get()[widx::objective_type];
                     Dropdown::show(self->x + target.left, self->y + target.top, target.width() - 4, target.height(), self->colours[1], std::size(objectiveTypeLabelIds), 0x80);
 
                     for (size_t i = 0; i < std::size(objectiveTypeLabelIds); i++)
@@ -363,7 +363,7 @@ namespace OpenLoco::Ui::Windows::ScenarioOptions
                             numCargoObjects++;
                     }
 
-                    widget_t& target = self->widgets[widx::objective_cargo];
+                    widget_t& target = self->widgets.get()[widx::objective_cargo];
                     Dropdown::show(self->x + target.left, self->y + target.top, target.width() - 4, target.height(), self->colours[1], numCargoObjects, 0x80);
 
                     uint16_t dropdownIndex = 0;
@@ -723,7 +723,7 @@ namespace OpenLoco::Ui::Windows::ScenarioOptions
 
                 case widx::preferred_intelligence_btn:
                 {
-                    widget_t& target = self->widgets[widx::preferred_intelligence];
+                    widget_t& target = self->widgets.get()[widx::preferred_intelligence];
                     Dropdown::show(self->x + target.left, self->y + target.top, target.width() - 4, target.height(), self->colours[1], std::size(preferenceLabelIds), 0x80);
 
                     for (size_t i = 0; i < std::size(preferenceLabelIds); i++)
@@ -735,7 +735,7 @@ namespace OpenLoco::Ui::Windows::ScenarioOptions
 
                 case widx::preferred_aggressiveness_btn:
                 {
-                    widget_t& target = self->widgets[widx::preferred_aggressiveness];
+                    widget_t& target = self->widgets.get()[widx::preferred_aggressiveness];
                     Dropdown::show(self->x + target.left, self->y + target.top, target.width() - 4, target.height(), self->colours[1], std::size(preferenceLabelIds), 0x80);
 
                     for (size_t i = 0; i < std::size(preferenceLabelIds); i++)
@@ -747,7 +747,7 @@ namespace OpenLoco::Ui::Windows::ScenarioOptions
 
                 case widx::preferred_competitiveness_btn:
                 {
-                    widget_t& target = self->widgets[widx::preferred_competitiveness];
+                    widget_t& target = self->widgets.get()[widx::preferred_competitiveness];
                     Dropdown::show(self->x + target.left, self->y + target.top, target.width() - 4, target.height(), self->colours[1], std::size(preferenceLabelIds), 0x80);
 
                     for (size_t i = 0; i < std::size(preferenceLabelIds); i++)
@@ -817,9 +817,9 @@ namespace OpenLoco::Ui::Windows::ScenarioOptions
             commonFormatArgs[0] = *maxCompetingCompanies;
             commonFormatArgs[1] = *competitorStartDelay;
 
-            self->widgets[widx::preferred_intelligence].text = preferenceLabelIds[*preferredAIIntelligence];
-            self->widgets[widx::preferred_aggressiveness].text = preferenceLabelIds[*preferredAIAggressiveness];
-            self->widgets[widx::preferred_competitiveness].text = preferenceLabelIds[*preferredAICompetitiveness];
+            self->widgets.get()[widx::preferred_intelligence].text = preferenceLabelIds[*preferredAIIntelligence];
+            self->widgets.get()[widx::preferred_aggressiveness].text = preferenceLabelIds[*preferredAIAggressiveness];
+            self->widgets.get()[widx::preferred_competitiveness].text = preferenceLabelIds[*preferredAICompetitiveness];
 
             self->activated_widgets &= ~((1 << widx::competitor_forbid_trains) | (1 << widx::competitor_forbid_buses) | (1 << widx::competitor_forbid_trucks) | (1 << widx::competitor_forbid_trams) | (1 << widx::competitor_forbid_aircraft) | (1 << widx::competitor_forbid_ships) | (1 << widx::player_forbid_trains) | (1 << widx::player_forbid_buses) | (1 << widx::player_forbid_trucks) | (1 << widx::player_forbid_trams) | (1 << widx::player_forbid_aircraft) | (1 << widx::player_forbid_ships));
 
@@ -1038,7 +1038,7 @@ namespace OpenLoco::Ui::Windows::ScenarioOptions
                 if (stex != nullptr)
                     commonFormatArgs[0] = stex->details;
 
-                auto& target = window->widgets[widx::change_details_btn];
+                auto& target = window->widgets.get()[widx::change_details_btn];
                 Gfx::drawString_495224(*dpi, window->x + 16, window->y + 12 + target.top, target.left - 26, Colour::black, StringIds::black_stringid, &*commonFormatArgs);
             }
         }
@@ -1066,7 +1066,7 @@ namespace OpenLoco::Ui::Windows::ScenarioOptions
         {
             if (widgetIndex == widx::scenario_group_btn)
             {
-                widget_t& target = self->widgets[widx::scenario_group];
+                widget_t& target = self->widgets.get()[widx::scenario_group];
                 Dropdown::show(self->x + target.left, self->y + target.top, target.width() - 4, target.height(), self->colours[1], std::size(scenarioGroupLabelIds), 0x80);
 
                 for (size_t i = 0; i < std::size(scenarioGroupLabelIds); i++)
@@ -1173,7 +1173,7 @@ namespace OpenLoco::Ui::Windows::ScenarioOptions
         {
             // Reset tab widgets if needed.
             auto tabWidgets = tabInformationByTabOffset[self->current_tab].widgets;
-            if (self->widgets != tabWidgets)
+            if (self->widgets.get() != tabWidgets)
             {
                 self->widgets = tabWidgets;
                 self->initScrollWidgets();
@@ -1185,13 +1185,13 @@ namespace OpenLoco::Ui::Windows::ScenarioOptions
             self->activated_widgets |= (1ULL << widgetIndex);
 
             // Resize common widgets.
-            self->widgets[Common::widx::frame].right = self->width - 1;
-            self->widgets[Common::widx::frame].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::frame].right = self->width - 1;
+            self->widgets.get()[Common::widx::frame].bottom = self->height - 1;
 
-            self->widgets[Common::widx::caption].right = self->width - 2;
+            self->widgets.get()[Common::widx::caption].right = self->width - 2;
 
-            self->widgets[Common::widx::panel].right = self->width - 1;
-            self->widgets[Common::widx::panel].bottom = self->height - 1;
+            self->widgets.get()[Common::widx::panel].right = self->width - 1;
+            self->widgets.get()[Common::widx::panel].bottom = self->height - 1;
         }
 
         // 0x0043F16B

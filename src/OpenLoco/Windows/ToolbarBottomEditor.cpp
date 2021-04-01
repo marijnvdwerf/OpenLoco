@@ -38,32 +38,32 @@ namespace OpenLoco::Ui::Windows::ToolbarBottom::Editor
     // 0x0043CE21
     static void prepareDraw(window* self)
     {
-        self->widgets[widx::next_button].type = widget_type::wt_9;
-        self->widgets[widx::next_frame].type = widget_type::wt_3;
+        self->widgets.get()[widx::next_button].type = widget_type::wt_9;
+        self->widgets.get()[widx::next_frame].type = widget_type::wt_3;
 
         if (EditorController::canGoBack())
         {
-            self->widgets[widx::previous_button].type = widget_type::wt_9;
-            self->widgets[widx::previous_frame].type = widget_type::wt_3;
+            self->widgets.get()[widx::previous_button].type = widget_type::wt_9;
+            self->widgets.get()[widx::previous_frame].type = widget_type::wt_3;
         }
         else
         {
-            self->widgets[widx::previous_button].type = widget_type::none;
-            self->widgets[widx::previous_frame].type = widget_type::none;
+            self->widgets.get()[widx::previous_button].type = widget_type::none;
+            self->widgets.get()[widx::previous_frame].type = widget_type::none;
         }
 
         // 0x0043CDD1
-        self->widgets[widx::next_frame].right = self->width - 1;
-        self->widgets[widx::next_frame].left = self->width - 1 - 2 - 195 - 2;
-        self->widgets[widx::next_button].left = self->widgets[widx::next_frame].left + 2;
-        self->widgets[widx::next_button].right = self->widgets[widx::next_frame].right - 2;
+        self->widgets.get()[widx::next_frame].right = self->width - 1;
+        self->widgets.get()[widx::next_frame].left = self->width - 1 - 2 - 195 - 2;
+        self->widgets.get()[widx::next_button].left = self->widgets.get()[widx::next_frame].left + 2;
+        self->widgets.get()[widx::next_button].right = self->widgets.get()[widx::next_frame].right - 2;
     }
 
     // 0x0043CE65
     static void draw(window* self, Gfx::drawpixelinfo_t* ctx)
     {
-        widget_t& previous = self->widgets[widx::previous_frame];
-        widget_t& next = self->widgets[widx::next_frame];
+        widget_t& previous = self->widgets.get()[widx::previous_frame];
+        widget_t& next = self->widgets.get()[widx::next_frame];
 
         if (EditorController::canGoBack())
         {
