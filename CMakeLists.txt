@@ -169,7 +169,7 @@ file(GLOB_RECURSE OLOCO_HEADERS "src/*.h" "src/*.hpp")
 
 if (APPLE)
     file(GLOB_RECURSE OLOCO_MM_SOURCES "src/*.mm")
-    set_source_files_properties(${OLOCO_MM_SOURCES} PROPERTIES COMPILE_FLAGS "-x objective-c++ -fmodules")
+    set_source_files_properties(${OLOCO_MM_SOURCES} PROPERTIES COMPILE_FLAGS "-x objective-c++")
 endif ()
 
 set(PIE_FLAG "-fno-pie")
@@ -223,6 +223,7 @@ if ("${CMAKE_SYSTEM_NAME}" MATCHES "(Free|Net|Open|DragonFly)BSD")
     include_directories(${YAML_CPP_INCLUDE_DIR})
 else()
     find_package(yaml-cpp REQUIRED HINTS /usr/lib32/cmake/yaml-cpp)
+    include_directories(${YAML_CPP_INCLUDE_DIR})
 endif()
 
 # Disable optimizations for interop.cpp for all compilers, to allow optimized
@@ -240,6 +241,11 @@ else ()
     add_executable(${PROJECT} ${OLOCO_SOURCES} ${OLOCO_MM_SOURCES} ${LOCO_SECTIONS})
     set_target_properties(${PROJECT} PROPERTIES LINK_FLAGS ${LOCO_SEGMENT_LINKER_FLAGS})
 endif ()
+
+get_target_property(SDLLIBS SDL2::SDL2-static INTERFACE_LINK_LIBRARIES)
+list(TRANSFORM SDLLIBS  REPLACE "^/System/Library/Frameworks/(.*).framework$" "-framework \\1")
+set_target_properties(SDL2::SDL2-static PROPERTIES
+        INTERFACE_LINK_LIBRARIES "${SDLLIBS}")
 
 target_link_libraries(${PROJECT} ${SDL2_LIBRARIES} ${SDL2_MIXER_LIBRARIES})
 target_link_libraries(${PROJECT} yaml-cpp ${YAML_CPP_LIBRARIES})
@@ -285,21 +291,21 @@ if (APPLE)
     set(ICON_OUTPUT "${CMAKE_BINARY_DIR}/AppIcon.icns")
     set(SOURCE_ICON_DIR "${CMAKE_CURRENT_SOURCE_DIR}/resources/logo")
 
-    add_custom_command(OUTPUT ${ICON_OUTPUT}
-        COMMAND cp icon_x16.png   ${ICON_TARGET}/icon_16x16.png
-        COMMAND cp icon_x32.png   ${ICON_TARGET}/icon_16x16@2x.png
-        COMMAND cp icon_x32.png   ${ICON_TARGET}/icon_32x32.png
-        COMMAND cp icon_x64.png   ${ICON_TARGET}/icon_32x32@2x.png
-        COMMAND cp icon_x128.png  ${ICON_TARGET}/icon_128x128.png
-        COMMAND cp icon_x256.png  ${ICON_TARGET}/icon_128x128@2x.png
-        COMMAND cp icon_x256.png  ${ICON_TARGET}/icon_256x256.png
-        COMMAND cp icon_x512.png  ${ICON_TARGET}/icon_256x256@2x.png
-        COMMAND cp icon_x512.png  ${ICON_TARGET}/icon_512x512.png
-        COMMAND cp icon_x1024.png ${ICON_TARGET}/icon_512x512@2x.png
-        COMMAND iconutil -c icns ${ICON_TARGET}
-        WORKING_DIRECTORY ${SOURCE_ICON_DIR})
+#    add_custom_command(OUTPUT ${ICON_OUTPUT}
+#        COMMAND cp icon_x16.png   ${ICON_TARGET}/icon_16x16.png
+#        COMMAND cp icon_x32.png   ${ICON_TARGET}/icon_16x16@2x.png
+#        COMMAND cp icon_x32.png   ${ICON_TARGET}/icon_32x32.png
+#        COMMAND cp icon_x64.png   ${ICON_TARGET}/icon_32x32@2x.png
+#        COMMAND cp icon_x128.png  ${ICON_TARGET}/icon_128x128.png
+#        COMMAND cp icon_x256.png  ${ICON_TARGET}/icon_128x128@2x.png
+#        COMMAND cp icon_x256.png  ${ICON_TARGET}/icon_256x256.png
+#        COMMAND cp icon_x512.png  ${ICON_TARGET}/icon_256x256@2x.png
+#        COMMAND cp icon_x512.png  ${ICON_TARGET}/icon_512x512.png
+#        COMMAND cp icon_x1024.png ${ICON_TARGET}/icon_512x512@2x.png
+#        COMMAND iconutil -c icns ${ICON_TARGET}
+#        WORKING_DIRECTORY ${SOURCE_ICON_DIR})
 
-    set(BUNDLE_RESOURCES ${ICON_OUTPUT})
+    set(BUNDLE_RESOURCES "")
     list(APPEND BUNDLE_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG.md)
     list(APPEND BUNDLE_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/CONTRIBUTORS.MD)
     set_target_properties(${PROJECT} PROPERTIES RESOURCE "${BUNDLE_RESOURCES}")
